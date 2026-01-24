@@ -60,7 +60,7 @@ export default function Home() {
       <section className="relative h-[70vh] md:h-[85vh] flex items-center justify-center text-center px-4 overflow-hidden mt-16 md:mt-20">
         <div className="absolute inset-0 z-0">
           <video autoPlay loop muted playsInline className="w-full h-full object-cover">
-            <source src="/videos/43832-437611758_small.mp4" type="video/mp4" />
+            <source src="https://res.cloudinary.com/dij7s1nbf/video/upload/v1769257304/43832-437611758_small_i7pc9s.mp4" type="video/mp4" />
           </video>
           <div className="absolute inset-0 bg-black/50 z-10" />
         </div>
@@ -126,7 +126,7 @@ export default function Home() {
             </div>
             <div className="flex-1 order-1 md:order-2 w-full max-w-[400px]">
               <div className="aspect-square rounded-2xl overflow-hidden shadow-xl relative group">
-                <img src="/images/dna.jpg" alt="ДНК" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                <img src="https://res.cloudinary.com/dij7s1nbf/image/upload/v1769258270/dna_avjavj.jpg" alt="ДНК" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                 <div className="absolute inset-0 bg-orange-900/5 group-hover:bg-transparent transition-colors" />
               </div>
             </div>
@@ -155,7 +155,7 @@ export default function Home() {
         <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-12 md:gap-16">
           <div className="flex-1 w-full max-w-[450px]">
             <div className="aspect-square rounded-2xl overflow-hidden shadow-xl relative group">
-              <img src="/images/angel.png" alt="Angel" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+              <img src="https://res.cloudinary.com/dij7s1nbf/image/upload/v1769258319/angel_x81scu.png" alt="Angel" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
             </div>
           </div>
           <div className="flex-1 space-y-6">
@@ -183,7 +183,7 @@ export default function Home() {
           </div>
           <div className="flex-1 order-1 md:order-2 w-full max-w-[450px]">
             <div className="aspect-[4/3] rounded-2xl overflow-hidden shadow-lg group">
-              <img src="/images/dna-activation.png" alt="Activation" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+              <img src="https://res.cloudinary.com/dij7s1nbf/image/upload/v1769258272/dna-activation_pmtbai.png" alt="Activation" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
             </div>
           </div>
         </div>
@@ -206,7 +206,7 @@ export default function Home() {
       <section className="relative h-[350px] md:h-[450px] overflow-hidden flex items-center justify-center">
         <div 
           className="absolute inset-0 z-0 bg-cover bg-center bg-fixed"
-          style={{ backgroundImage: 'url("/images/result.jpg")' }}
+          style={{ backgroundImage: 'url("https://res.cloudinary.com/dij7s1nbf/image/upload/v1769258260/result_xpk5or.jpg")' }}
         >
           <div className="absolute inset-0 bg-black/50" />
         </div>
@@ -271,7 +271,7 @@ export default function Home() {
             </h3>
             
             <div className="relative max-w-2xl mx-auto">
-              <img src="/images/diagram.jpg" alt="Диаграмма" className="w-full h-auto rounded-2xl" />
+              <img src="https://res.cloudinary.com/dij7s1nbf/image/upload/v1769258254/diagram_an0vin.jpg" alt="Диаграмма" className="w-full h-auto rounded-2xl" />
             </div>
 
             <div className="pt-10 space-y-8">
@@ -402,7 +402,7 @@ export default function Home() {
       <section className="relative min-h-[500px] md:h-[600px] overflow-hidden flex items-center justify-center text-white py-16">
         <div 
           className="absolute inset-0 z-0 bg-cover bg-center bg-fixed"
-          style={{ backgroundImage: 'url("/images/timer.png")' }}
+          style={{ backgroundImage: 'url("https://res.cloudinary.com/dij7s1nbf/image/upload/v1769258293/timer_rwjg15.png")' }}
         >
           <div className="absolute inset-0 bg-black/60 md:bg-black/40" />
         </div>
