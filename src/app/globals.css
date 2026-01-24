@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-black text-white selection:bg-[#c1a57b] selection:text-black;
+  }
+}
+
+@layer components {
+  .btn-accent {
+    @apply bg-[#c1a57b] text-black font-bold py-4 px-10 rounded-full transition-all duration-300 hover:bg-[#d4bc96] hover:scale-105 active:scale-95;
+  }
+  .input-field {
+    @apply w-full bg-transparent border-b border-zinc-800 py-4 outline-none focus:border-[#c1a57b] transition-all text-lg placeholder:text-zinc-600;
+  }
+  .section-title {
+    @apply text-4xl md:text-5xl font-bold mb-8 text-white tracking-tight;
+  }
+}
