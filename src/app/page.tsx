@@ -1,21 +1,44 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Link from "next/link";
 import { supabase } from "../lib/supabase";
 import { ChevronDown, Sparkles, Zap, Check, User, MessageCircle, ChevronLeft, ChevronRight, Plus, X, Mail, Phone, MapPin, Menu } from "lucide-react";
 
 export default function Home() {
   const [loading, setLoading] = useState(false);
+  const [exchangeRate, setExchangeRate] = useState<number | null>(null);
   const [openEnergy, setOpenEnergy] = useState<number | null>(null);
   const [formData, setFormData] = useState({
     full_name: "",
     phone: "",
     email: "",
     city: "",
+    age: "",
   });
+  const [agreed, setAgreed] = useState(false);
+
+  useEffect(() => {
+    const fetchRate = async () => {
+      try {
+        const res = await fetch('https://api.exchangerate-api.com/v4/latest/KZT');
+        const data = await res.json();
+        if (data && data.rates && data.rates.RUB) {
+          setExchangeRate(data.rates.RUB);
+        }
+      } catch (err) {
+        console.error("Failed to fetch exchange rate:", err);
+      }
+    };
+    fetchRate();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!agreed) {
+      alert("Пожалуйста, подтвердите согласие с условиями");
+      return;
+    }
     setLoading(true);
     try {
       const { error } = await supabase.from("participants").insert([formData]);
@@ -35,8 +58,12 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 md:px-6">
           <div className="flex items-center justify-between h-16 md:h-20">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-gradient-to-br from-[#ffa600] to-[#ff8c00] flex items-center justify-center shadow-lg">
-                <span className="text-white font-black text-sm md:text-base">И</span>
+              <div className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border-2 border-[#ffa600]/30 shadow-lg">
+                <img 
+                  src="https://res.cloudinary.com/dij7s1nbf/image/upload/v1769356927/5453934422802501391_wfkxhr.jpg" 
+                  alt="Logo" 
+                  className="w-full h-full object-cover"
+                />
               </div>
               <span className="text-white font-black text-sm md:text-base uppercase tracking-tight">Ирина Головатова</span>
             </div>
@@ -162,9 +189,13 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            <div className="flex-1 order-1 md:order-2 w-full max-w-[400px]">
-              <div className="aspect-square rounded-2xl overflow-hidden shadow-xl relative group">
-                <img src="https://res.cloudinary.com/dij7s1nbf/image/upload/v1769258270/dna_avjavj.jpg" alt="ДНК" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+            <div className="flex-1 order-1 md:order-2 w-full max-w-[450px]">
+              <div className="h-full min-h-[400px] md:min-h-[600px] rounded-[32px] overflow-hidden shadow-2xl relative group border-2 border-[#ffa600]/5">
+                <img 
+                  src="https://res.cloudinary.com/dij7s1nbf/image/upload/v1769357650/ai-generated-9400220_1920_ylobuk.jpg" 
+                  alt="ДНК" 
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                />
                 <div className="absolute inset-0 bg-orange-900/5 group-hover:bg-transparent transition-colors" />
               </div>
             </div>
@@ -220,8 +251,13 @@ export default function Home() {
             </p>
           </div>
           <div className="flex-1 order-1 md:order-2 w-full max-w-[450px]">
-            <div className="aspect-[4/3] rounded-2xl overflow-hidden shadow-lg group">
-              <img src="https://res.cloudinary.com/dij7s1nbf/image/upload/v1769258272/dna-activation_pmtbai.png" alt="Activation" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+            <div className="aspect-square rounded-[32px] overflow-hidden shadow-2xl relative group border-2 border-[#ffa600]/10">
+              <img 
+                src="https://res.cloudinary.com/dij7s1nbf/image/upload/v1769358347/DALL_E-2024-01-08-16.33.27-A-balanced-and-spiritual-depiction-of-Kundalini-activation-featuring-both-a-man-and-a-woman-meditating-in-lotus-positions.-They-are-each-surrounded-b_zxqmze.webp" 
+                alt="Клеточное Пробуждение" 
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             </div>
           </div>
         </div>
@@ -263,30 +299,51 @@ export default function Home() {
           <div className="text-center mb-10">
             <h2 className="text-2xl md:text-3xl font-bold uppercase tracking-tight">Выберите свой пакет участия</h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-16">
-            {[
-              { title: "Курс «Маа'За'Тамее»", price: "3600р.", oldPrice: "4000р.", note: "Скидка до 30 января" },
-              { title: "Курс «Здоровый позвоночник»", price: "6200р.", oldPrice: "6650р.", note: "Скидка до 13 февраля", popular: true },
-              { title: "«Маа'За'Тамее» + «Здоровый позвоночник»", price: "8900р.", oldPrice: "10650р.", note: "Скидка до 30 января" }
-            ].map((pkg, i) => (
-              <div key={i} className={`relative bg-white p-6 md:p-8 rounded-[32px] shadow-[0_20px_40px_rgba(0,0,0,0.05)] border ${pkg.popular ? 'border-[#ffa600] z-10' : 'border-zinc-100'} text-center flex flex-col transition-all hover:shadow-xl`}>
-                {pkg.popular && <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#ffa600] text-white px-3 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-widest">Популярный</div>}
-                <h3 className="text-sm md:text-base font-bold mb-3 uppercase min-h-[40px] flex items-center justify-center leading-tight">{pkg.title}</h3>
-                <p className="text-[9px] text-orange-500 font-bold uppercase mb-4">{pkg.note}</p>
-                <div className="mb-6 flex flex-col items-center">
-                  <span className="text-zinc-300 line-through text-xs mb-0.5">{pkg.oldPrice}</span>
-                  <span className="text-3xl font-black text-black tracking-tighter">{pkg.price}</span>
+          
+          <div className="max-w-6xl mx-auto mb-10">
+            <div className="relative bg-white p-5 md:p-7 rounded-[32px] shadow-[0_30px_60px_rgba(0,0,0,0.08)] border-2 border-[#ffa600] text-center flex flex-col items-center transition-all hover:shadow-2xl">
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#ffa600] text-white px-6 py-1 rounded-full text-[10px] font-black uppercase tracking-[0.2em] shadow-lg">Полный цикл</div>
+              
+              <h3 className="text-base md:text-xl font-black mb-3 uppercase leading-tight max-w-4xl">
+                Энергетические сессии "Энергия первоначальности" и 
+                "Энергетическое выравнивание всех тел и позвоночника"
+              </h3>
+              
+              <p className="text-[10px] md:text-xs text-orange-500 font-black uppercase tracking-widest mb-5">
+                с 2 по 27 февраля
+              </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl mb-6">
+                <div className="bg-zinc-50 p-4 rounded-2xl border border-zinc-100 flex flex-col items-center justify-center">
+                  <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-widest mb-1">Стоимость в Тенге</span>
+                  <span className="text-3xl md:text-4xl font-black text-black tracking-tighter">25.000 <span className="text-lg md:text-xl ml-1">тг</span></span>
                 </div>
-                <a href="#register" className="mt-auto bg-[#ffa600] text-white py-2.5 rounded-lg text-[11px] font-extrabold uppercase tracking-widest hover:bg-black transition-all shadow-md">
-                  Записаться
-                </a>
+                
+                <div className="bg-zinc-900 p-4 rounded-2xl border border-zinc-800 flex flex-col items-center justify-center relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-[#ffa600]/10 rounded-full blur-2xl -mr-12 -mt-12 transition-all group-hover:bg-[#ffa600]/20" />
+                  <span className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest mb-1 relative z-10">Приблизительно в Рублях</span>
+                  <div className="flex items-center gap-2 relative z-10">
+                    {exchangeRate ? (
+                      <span className="text-3xl md:text-4xl font-black text-[#ffa600] tracking-tighter">
+                        ~{Math.round(25000 * exchangeRate).toLocaleString()} <span className="text-lg md:text-xl ml-1">₽</span>
+                      </span>
+                    ) : (
+                      <div className="h-8 w-24 bg-zinc-800 animate-pulse rounded-lg" />
+                    )}
+                  </div>
+                  <span className="text-[7px] text-zinc-600 uppercase tracking-widest mt-1 relative z-10">Курс обновляется в реальном времени</span>
+                </div>
               </div>
-            ))}
+
+              <a href="#register" className="w-full max-w-xs bg-[#ffa600] text-white py-3.5 rounded-xl text-xs font-black uppercase tracking-[0.3em] hover:bg-black hover:scale-[1.02] transition-all shadow-[0_10px_20px_rgba(255,166,0,0.3)]">
+                Записаться на курс
+              </a>
+            </div>
           </div>
           
           <div className="text-center">
             <p className="text-[9px] md:text-[10px] text-zinc-400 uppercase tracking-widest leading-relaxed max-w-3xl mx-auto px-4">
-              Нажимая кнопку выше, я подтверждаю, что ознакомлен с <a href="#" className="underline hover:text-[#ffa600]">Договором оферты</a> и принимаю его условия, даю <a href="#" className="underline hover:text-[#ffa600]">Согласие на обработку</a> моих персональных данных на условиях <a href="#" className="underline hover:text-[#ffa600]">Политики конфиденциальности</a>
+              Нажимая кнопку выше, я подтверждаю, что ознакомлен с <Link href="/offer" className="underline hover:text-[#ffa600]">Договором оферты</Link> и принимаю его условия, даю <Link href="/consent" className="underline hover:text-[#ffa600]">Согласие на обработку</Link> моих персональных данных на условиях <Link href="/privacy" className="underline hover:text-[#ffa600]">Политики конфиденциальности</Link>
             </p>
           </div>
         </div>
@@ -447,12 +504,12 @@ export default function Home() {
         
         <div className="relative z-10 max-w-5xl mx-auto px-6 text-center space-y-10">
           <h2 className="text-2xl md:text-4xl font-black uppercase tracking-tight leading-tight">
-            Успей прийти на курс "МааЗаТамее" по цене со <br className="hidden md:block" /> скидкой <span className="text-zinc-400/50 line-through">4000р.</span> <span className="text-[#ffa600]">3600р.</span>
+            Успей прийти на сессии по цене со <br className="hidden md:block" /> скидкой <span className="text-zinc-400/50 line-through">30.000 тг</span> <span className="text-[#ffa600]">25.000 тг</span>
           </h2>
           
           <div className="space-y-4">
             <p className="text-sm md:text-lg font-bold uppercase tracking-widest opacity-90">
-              Курс заочных ЭнергоМедитаций будет проходить по будням с 2 по 13 февраля.
+              Цикл энергетических сессий будет проходить по будням с 2 по 27 февраля.
             </p>
             <div className="text-xs md:text-sm font-medium space-y-1 opacity-80 uppercase tracking-widest">
               <p>Закрытие регистрации 30 января в 15.00 мск.</p>
@@ -479,18 +536,18 @@ export default function Home() {
               Принять участие
             </a>
             <p className="mt-8 text-[9px] md:text-[10px] text-zinc-400 uppercase tracking-widest leading-relaxed max-w-3xl mx-auto opacity-80">
-              Нажимая кнопку выше, я подтверждаю, что ознакомлен с <a href="#" className="underline hover:text-[#ffa600]">Договором оферты</a> и принимаю его условия, даю <a href="#" className="underline hover:text-[#ffa600]">Согласие на обработку</a> моих персональных данных на условиях <a href="#" className="underline hover:text-[#ffa600]">Политики конфиденциальности</a>
+              Нажимая кнопку выше, я подтверждаю, что ознакомлен с <Link href="/offer" className="underline hover:text-[#ffa600]">Договором оферты</Link> и принимаю его условия, даю <Link href="/consent" className="underline hover:text-[#ffa600]">Согласие на обработку</Link> моих персональных данных на условиях <Link href="/privacy" className="underline hover:text-[#ffa600]">Политики конфиденциальности</Link>
             </p>
           </div>
         </div>
       </section>
-      {/* --- НОВЫЙ БЛОК: ЗНАКОМСТВО (Оксана Войнова) --- */}
+      {/* --- НОВЫЙ БЛОК: ЗНАКОМСТВО (Ирина Головатова) --- */}
       <section id="about" className="py-16 md:py-20 px-4 bg-white overflow-hidden">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row items-start gap-12 md:gap-20">
             <div className="flex-[1.3] space-y-8">
               <h2 className="text-2xl md:text-3xl font-black text-zinc-900 tracking-tight leading-tight">
-                Давайте знакомиться, меня зовут Оксана Войнова (Sija'Maa)
+                Давайте знакомиться, меня зовут Ирина Головатова
               </h2>
               
               <div className="space-y-6 text-sm md:text-base text-zinc-600 font-light leading-relaxed">
@@ -516,11 +573,13 @@ export default function Home() {
             </div>
 
             <div className="flex-1 w-full max-w-[450px] sticky top-24">
-              <div className="aspect-[3/4] bg-zinc-50 rounded-[40px] border border-zinc-100 flex items-center justify-center relative overflow-hidden shadow-sm">
-                <div className="text-zinc-300 font-black uppercase text-xs tracking-widest text-center px-10">
-                  Место для фото Оксаны
-                </div>
-                <User size={120} className="absolute bottom-[-20px] text-zinc-100" />
+              <div className="aspect-[3/4] rounded-[40px] overflow-hidden shadow-2xl relative group border-2 border-[#ffa600]/10">
+                <img 
+                  src="https://res.cloudinary.com/dij7s1nbf/image/upload/v1769361079/5453934422802501709_LE_upscale_prime_bzudzh.jpg" 
+                  alt="Ирина Головатова" 
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               </div>
             </div>
           </div>
@@ -572,6 +631,7 @@ export default function Home() {
             <form onSubmit={handleSubmit} className="w-full space-y-3">
               {[
                 { id: "full_name", placeholder: "ФИО полностью", icon: <User size={18} /> },
+                { id: "age", placeholder: "Ваш возраст", icon: <Sparkles size={18} /> },
                 { id: "phone", placeholder: "Ваш Телефон", icon: <Phone size={18} /> },
                 { id: "email", placeholder: "Ваш Email", icon: <Mail size={18} /> },
                 { id: "city", placeholder: "Ваш Город", icon: <MapPin size={18} /> }
@@ -582,7 +642,7 @@ export default function Home() {
                   </div>
                   <input 
                     required 
-                    type={field.id === 'email' ? 'email' : (field.id === 'phone' ? 'tel' : 'text')}
+                    type={field.id === 'email' ? 'email' : (field.id === 'phone' ? 'tel' : (field.id === 'age' ? 'number' : 'text'))}
                     placeholder={field.placeholder} 
                     className="w-full bg-zinc-800/50 border-2 border-zinc-700/50 p-3.5 pl-12 rounded-2xl text-white outline-none focus:border-[#ffa600] focus:ring-2 focus:ring-orange-500/20 focus:bg-zinc-800 transition-all duration-300 text-sm placeholder:text-zinc-400 shadow-[0_4px_12px_rgba(0,0,0,0.3)] group-hover:border-zinc-600"
                     value={(formData as any)[field.id]} 
@@ -600,10 +660,20 @@ export default function Home() {
                   {loading ? "ПОДОЖДИТЕ..." : "ЗАПИСАТЬСЯ И ОПЛАТИТЬ"}
                 </button>
                 
-                <div className="bg-zinc-800/40 backdrop-blur-sm p-4 rounded-2xl border-2 border-zinc-700/30 shadow-[0_4px_12px_rgba(0,0,0,0.3)]">
-                  <p className="text-[8px] md:text-[9px] text-zinc-300 text-center leading-relaxed font-medium">
-                    Нажимая кнопку выше, я подтверждаю, что ознакомлен с <a href="#" className="text-zinc-200 underline hover:text-[#ffa600] font-semibold">Договором оферты</a> и принимаю его условия, даю <a href="#" className="text-zinc-200 underline hover:text-[#ffa600] font-semibold">Согласие на обработку</a> моих персональных данных на условиях <a href="#" className="text-zinc-200 underline hover:text-[#ffa600] font-semibold">Политики конфиденциальности</a>
-                  </p>
+                <div className="bg-zinc-800/40 backdrop-blur-sm p-4 rounded-2xl border-2 border-zinc-700/30 shadow-[0_4px_12px_rgba(0,0,0,0.3)] flex items-start gap-3">
+                  <div className="pt-0.5">
+                    <input 
+                      required
+                      type="checkbox" 
+                      id="agreed"
+                      className="w-4 h-4 rounded border-zinc-700 text-[#ffa600] focus:ring-[#ffa600] cursor-pointer"
+                      checked={agreed}
+                      onChange={(e) => setAgreed(e.target.checked)}
+                    />
+                  </div>
+                  <label htmlFor="agreed" className="text-[8px] md:text-[9px] text-zinc-300 leading-relaxed font-medium cursor-pointer">
+                    Я подтверждаю, что ознакомлен с <Link href="/offer" className="text-zinc-200 underline hover:text-[#ffa600] font-semibold">Договором оферты</Link> и принимаю его условия, даю <Link href="/consent" className="text-zinc-200 underline hover:text-[#ffa600] font-semibold">Согласие на обработку</Link> моих персональных данных на условиях <Link href="/privacy" className="text-zinc-200 underline hover:text-[#ffa600] font-semibold">Политики конфиденциальности</Link>
+                  </label>
                 </div>
               </div>
             </form>
@@ -616,14 +686,14 @@ export default function Home() {
         <div className="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center md:items-start gap-12">
           <div className="text-center md:text-left space-y-8">
             <div className="flex justify-center md:justify-start gap-10">
-              <a href="#" className="group flex flex-col items-center md:items-start gap-3 transition-all">
+              <a href="https://www.instagram.com/accessbars.irina/" target="_blank" rel="noopener noreferrer" className="group flex flex-col items-center md:items-start gap-3 transition-all">
                 <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
                 </div>
                 <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 group-hover:text-black">Instagram</span>
               </a>
               
-              <a href="#" className="group flex flex-col items-center md:items-start gap-3 transition-all">
+              <a href="https://t.me/+7WoSGeS2y6JhNzQy" target="_blank" rel="noopener noreferrer" className="group flex flex-col items-center md:items-start gap-3 transition-all">
                 <div className="w-12 h-12 rounded-2xl bg-[#0088cc] flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6"><path d="m22 2-7 20-4-9-9-4Z"></path><path d="M22 2 11 13"></path></svg>
                 </div>
@@ -639,19 +709,15 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4 text-[9px] md:text-[10px] text-zinc-400 uppercase tracking-widest font-medium">
             <div className="flex items-center gap-3 group">
               <div className="w-1.5 h-1.5 rounded-full bg-zinc-200 group-hover:bg-[#ffa600] transition-colors" />
-              <a href="#" className="hover:text-black transition-colors">Согласие на получение рассылки</a>
+              <Link href="/consent" className="hover:text-black transition-colors">Согласие на обработку персональных данных</Link>
             </div>
             <div className="flex items-center gap-3 group">
               <div className="w-1.5 h-1.5 rounded-full bg-zinc-200 group-hover:bg-[#ffa600] transition-colors" />
-              <a href="#" className="hover:text-black transition-colors">Согласие на обработку персональных данных</a>
+              <Link href="/privacy" className="hover:text-black transition-colors">Политика конфиденциальности</Link>
             </div>
             <div className="flex items-center gap-3 group">
               <div className="w-1.5 h-1.5 rounded-full bg-zinc-200 group-hover:bg-[#ffa600] transition-colors" />
-              <a href="#" className="hover:text-black transition-colors">Политика конфиденциальности</a>
-            </div>
-            <div className="flex items-center gap-3 group">
-              <div className="w-1.5 h-1.5 rounded-full bg-zinc-200 group-hover:bg-[#ffa600] transition-colors" />
-              <a href="#" className="hover:text-black transition-colors">Договор оферты</a>
+              <Link href="/offer" className="hover:text-black transition-colors">Договор оферты</Link>
             </div>
           </div>
         </div>

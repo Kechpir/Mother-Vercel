@@ -5,8 +5,11 @@ import { Inter } from "next/font/google";
 const inter = Inter({ subsets: ["latin", "cyrillic"] });
 
 export const metadata: Metadata = {
-  title: "Маа'За'Тамее | Курс заочных ЭнергоМедитаций",
+  title: "Ирина Головатова | Энергия Первоначальности",
   description: "Энергетическое Клеточное Пробуждение и исцеление на уровне ДНК",
+  icons: {
+    icon: "https://res.cloudinary.com/dij7s1nbf/image/upload/v1769356927/5453934422802501391_wfkxhr.jpg",
+  },
 };
 
 export default function RootLayout({
