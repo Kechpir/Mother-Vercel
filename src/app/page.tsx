@@ -36,16 +36,17 @@ export default function Home() {
           <div className="flex items-center justify-between h-16 md:h-20">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-gradient-to-br from-[#ffa600] to-[#ff8c00] flex items-center justify-center shadow-lg">
-                <span className="text-white font-black text-sm md:text-base">М</span>
+                <span className="text-white font-black text-sm md:text-base">И</span>
               </div>
-              <span className="text-white font-black text-sm md:text-base uppercase tracking-tight">Маа'За'Тамее</span>
+              <span className="text-white font-black text-sm md:text-base uppercase tracking-tight">Ирина Головатова</span>
             </div>
             
-            <nav className="hidden md:flex items-center gap-8">
-              <a href="#packages" className="text-zinc-300 hover:text-[#ffa600] transition-colors text-sm font-medium uppercase tracking-widest">Пакеты</a>
-              <a href="#register" className="text-zinc-300 hover:text-[#ffa600] transition-colors text-sm font-medium uppercase tracking-widest">Регистрация</a>
-              <a href="#" className="bg-[#ffa600] text-white px-5 py-2 rounded-full text-xs font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all shadow-lg">
-                Записаться
+            <nav className="hidden md:flex items-center gap-6">
+              <a href="#about" className="text-zinc-300 hover:text-[#ffa600] transition-colors text-sm font-medium uppercase tracking-widest">О мне</a>
+              <a href="#packages" className="text-zinc-300 hover:text-[#ffa600] transition-colors text-sm font-medium uppercase tracking-widest">Энергии</a>
+              <a href="#social" className="text-zinc-300 hover:text-[#ffa600] transition-colors text-sm font-medium uppercase tracking-widest">Соц сети</a>
+              <a href="#register" className="bg-[#ffa600] text-white px-5 py-2 rounded-full text-xs font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all shadow-lg">
+                Оплата
               </a>
             </nav>
 
@@ -66,12 +67,12 @@ export default function Home() {
         </div>
         <div className="relative z-20 max-w-4xl mx-auto text-white px-4">
           <h1 className="text-3xl md:text-5xl font-bold mb-6 leading-tight drop-shadow-lg uppercase tracking-tight">
-            Заочные курсы «Маа'За'Тамее» и <br /> «Здоровый позвоночник»
+            Энергетические сессии "Энергия первоначальности" и <br /> "Энергетическое выравнивание всех тел и позвоночника"
           </h1>
           <p className="text-lg md:text-xl mb-10 opacity-90 font-light tracking-wide">
-            С 2 по 27 февраля
+            с 2 по 27 февраля
           </p>
-          <a href="#packages" className="bg-[#ffa600] text-white px-10 py-4 rounded-full text-base font-bold hover:bg-white hover:text-black hover:scale-105 transition-all shadow-xl inline-block uppercase tracking-widest">
+          <a href="#register" className="bg-[#ffa600] text-white px-10 py-4 rounded-full text-base font-bold hover:bg-white hover:text-black hover:scale-105 transition-all shadow-xl inline-block uppercase tracking-widest">
             ПРИНЯТЬ УЧАСТИЕ
           </a>
         </div>
@@ -84,18 +85,18 @@ export default function Home() {
       <section className="py-10 md:py-12 px-4 bg-white">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-2xl md:text-3xl font-bold mb-6 leading-tight uppercase tracking-tighter">
-            Курс заочных ЭнергоМедитаций <br /> «Маа'За'Тамее»
+            Цикл энергетического погружения <br /> "Энергия Первоначальности"
           </h2>
           <div className="space-y-1 text-sm md:text-base text-zinc-500 mb-8 font-light italic">
             <p>с 2 по 13 февраля | 10 сеансов по будням</p>
-            <p>Сеанс в группе в 8.00 мск. Доступен 24 часа.</p>
+            <p>Сеанс в группе в 22:00 по Астане. Сеансы проводятся в Zoom</p>
           </div>
           
           <div className="relative py-6 mt-6">
             <div className="absolute top-0 left-0 w-full h-[1px] bg-[#ffa600] opacity-20" />
             <div className="mb-4">
               <div className="inline-block bg-[#ffa600] text-white px-6 py-1.5 font-black text-[9px] tracking-[0.2em] uppercase">
-                ЭНЕРГИЯ МАА'ЗА'ТАМЕЕ
+                ЭНЕРГИЯ ПЕРВОИСКОННОСТИ
               </div>
             </div>
             <p className="text-base md:text-lg leading-relaxed text-zinc-700 font-light max-w-2xl mx-auto px-4">
@@ -110,17 +111,54 @@ export default function Home() {
       <section className="py-12 md:py-16 px-4 bg-white">
         <div className="max-w-5xl mx-auto">
           <div className="flex flex-col md:flex-row items-center gap-10 md:gap-14">
-            <div className="flex-[1.2] space-y-4 order-2 md:order-1">
-              <h2 className="text-2xl md:text-3xl font-bold text-zinc-900 tracking-tight">Энергия Маа'За'Тамее</h2>
-              <div className="space-y-3 text-base text-zinc-600 leading-relaxed font-light">
-                <p>На протяжении многих инкарнаций, включая нынешнюю, в нас набралось огромное количество информации и энергетических образцов, которые ограничивают продолжительность нашей физической жизни.</p>
-                <p>Это такие образцы воспоминаний, которые укорачивают время нашей жизни в рамках нашего физического тела – старение, боль, болезни, умирание.</p>
-                <p className="text-black font-bold italic">Маа'За'Тамее способна точно нацелиться на эти энергетические образцы и вытащить их из наших клеток, как мощный энергетический магнит.</p>
-              </div>
-              <div className="pt-4 border-t border-zinc-50 text-base text-zinc-700 leading-relaxed font-light">
-                <p>
-                  Данными сеансами мы сможем энергетически воздействовать на клетки человека, <span className="font-bold text-black uppercase">очищать</span> их, 
-                  <span className="font-bold text-black uppercase"> перепрограммировать</span> и <span className="font-bold text-black uppercase">наполнять</span> Первозданной Энергией.
+            <div className="flex-[1.2] space-y-6 order-2 md:order-1">
+              <h2 className="text-2xl md:text-3xl font-bold text-zinc-900 tracking-tight">Энергия Первоначальности</h2>
+              <div className="space-y-4 text-base text-zinc-600 leading-relaxed font-light">
+                <p>На протяжении множества воплощений — включая нынешнее — в человеке накапливались слои информации и энергетических паттернов. Эти записи хранятся не только в памяти, но и в клетках тела, в его структуре и полях.</p>
+                <p>Именно они со временем начинают ограничивать жизненный ресурс физического тела: запускают программы старения, боли, болезней, истощения и страха завершения жизни.</p>
+                <p>Речь идёт не о событиях как таковых, а о застрявших энергетических образах и отпечатках опыта, которые продолжают воспроизводиться снова и снова, даже когда сознательно человек уже давно «пошёл дальше».</p>
+                <p className="text-black font-bold italic">Энергия Первоначальности работает адресно и точно.</p>
+                <p>Она словно мощный энергетический магнит, способный выявлять и вытягивать из клеточной памяти те искажения, которые больше не поддерживают жизнь, здоровье и расширение.</p>
+                <p>Во время сеансов происходит не просто очищение. Идёт глубокое взаимодействие с клетками тела:</p>
+                <ul className="space-y-2 pl-4">
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#ffa600] mt-1.5 w-1.5 h-1.5 rounded-full bg-[#ffa600] shrink-0" />
+                    <span>высвобождение старых энергетических записей,</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#ffa600] mt-1.5 w-1.5 h-1.5 rounded-full bg-[#ffa600] shrink-0" />
+                    <span>распаковка зафиксированных программ боли и ограничения,</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#ffa600] mt-1.5 w-1.5 h-1.5 rounded-full bg-[#ffa600] shrink-0" />
+                    <span>мягкая перезапись информации на более исходный, чистый уровень.</span>
+                  </li>
+                </ul>
+                <p>Клетки начинают вспоминать своё первоисконное состояние — то, каким они были до вмешательства чуждых шаблонов и искажений.</p>
+                <p>Это состояние, где человек:</p>
+                <ul className="space-y-2 pl-4">
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#ffa600] mt-1.5 w-1.5 h-1.5 rounded-full bg-[#ffa600] shrink-0" />
+                    <span>не отделён от энергии,</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#ffa600] mt-1.5 w-1.5 h-1.5 rounded-full bg-[#ffa600] shrink-0" />
+                    <span>не живёт в борьбе с телом,</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#ffa600] mt-1.5 w-1.5 h-1.5 rounded-full bg-[#ffa600] shrink-0" />
+                    <span>не существует в постоянном режиме выживания.</span>
+                  </li>
+                </ul>
+                <p>В основе этой энергии лежит напоминание о простом и фундаментальном:</p>
+                <p className="font-medium text-zinc-800">
+                  мы — Свет, <br />
+                  мы — энергия, <br />
+                  мы — божественны по своей природе, <br />
+                  мы — Создатели и Творцы своей реальности.
+                </p>
+                <p className="pt-4 border-t border-zinc-100 text-black font-bold italic">
+                  Эта сессия возвращение к себе настоящему, к той точке, где тело и сознание снова начинают работать в согласии, а жизнь перестаёт сжиматься и начинает расширяться.
                 </p>
               </div>
             </div>
@@ -139,12 +177,12 @@ export default function Home() {
         <div className="max-w-4xl mx-auto">
           <div className="border border-[#ffa600] rounded-2xl p-6 md:p-10 text-center space-y-6">
             <h3 className="text-lg md:text-xl font-bold leading-relaxed text-zinc-900 tracking-tight">
-              Сеансы воздействуя на клетку и ДНК закладывают информацию о возможности безгранично расширяться в своем Свете. Происходит <span className="text-[#ffa600]">глубочайший спиритуальный процесс – Клеточное Пробуждение</span>.
+              Во время сессий активируется работа на уровне клеток и ДНК, запуская процессы обновления, витальности и естественного омоложения тела.
             </h3>
             <p className="text-base md:text-lg font-medium text-zinc-800 italic">
-              Благодаря глубокому осознанию, что мы Творцы — наша жизнь может стать легче, радостней и счастливей.
+              Клетки выходят из программ выживания и начинают функционировать в режиме живости и творчества. Происходит освобождение от глубинных сценариев — болеть, стареть, умирать, нуждаться и быть должным.
               <br />
-              <span className="mt-3 inline-block uppercase tracking-widest not-italic font-black text-black text-sm">Ведь мы начнём жить так, как хочется нам!</span>
+              <span className="mt-3 inline-block uppercase tracking-widest not-italic font-black text-black text-sm">Возвращается энергия жизни, желание создавать и проживать реальность из свободы, а не из ограничений.</span>
             </p>
           </div>
         </div>
@@ -159,13 +197,13 @@ export default function Home() {
             </div>
           </div>
           <div className="flex-1 space-y-6">
-            <h2 className="text-3xl font-bold text-zinc-900 uppercase tracking-tight">Энергия Маа'За'Тамее</h2>
+            <h2 className="text-3xl font-bold text-zinc-900 uppercase tracking-tight">Энергия Первоначальности</h2>
             <div className="space-y-4 text-base md:text-lg text-zinc-600 leading-relaxed font-light">
               <p className="italic border-l-4 border-[#ffa600] pl-5 py-1">
-                Энергия Маа'За'Тамее может продлить время нашей жизни, которое мы проведём в своем физическом теле.
+                Эта энергия способна увеличивать период активной и полноценной жизни в физическом теле, позволяя проживать его без боли, напряжения и страдания.
               </p>
               <p className="text-zinc-800 font-medium">
-                Ангел Рафаэль поддержит нас во время сеанса, чтобы каждая клетка смогла принять и вспомнить эту истину и стабилизироваться.
+                Во время сеанса поддержка Ангела Рафаэля сопровождает процесс интеграции исконной Энергии Первоначальности. Благодаря этому каждая клетка получает возможность вспомнить своё изначальное состояние, принять его и обрести устойчивость и баланс.
               </p>
             </div>
           </div>
@@ -178,7 +216,7 @@ export default function Home() {
           <div className="flex-1 space-y-4 order-2 md:order-1">
             <h2 className="text-3xl font-bold text-zinc-900 tracking-tight">Клеточное Пробуждение</h2>
             <p className="text-lg text-zinc-600 leading-relaxed font-light">
-              Энергия Маа'За'Тамее запустит процесс Клеточного Пробуждения, что благотворно скажется на нашем глубоком осознании своей Божественности.
+              Энергия Первоначальности активирует глубинные процессы на уровне клеточной памяти, усиливая осознание своей божественной природы. Эти изменения отражаются не только внутри, но и во всех сферах жизни, постепенно трансформируя её и направляя в сторону большего качества, гармонии и целостности.
             </p>
           </div>
           <div className="flex-1 order-1 md:order-2 w-full max-w-[450px]">
@@ -192,12 +230,12 @@ export default function Home() {
       {/* --- БЛОК 8: РЕЗУЛЬТАТЫ --- */}
       <section className="py-12 md:py-16 px-4 bg-white">
         <div className="max-w-4xl mx-auto text-center space-y-6">
-          <h2 className="text-2xl md:text-3xl font-bold uppercase tracking-tight">Какие результаты вы получите?</h2>
+          <h2 className="text-2xl md:text-3xl font-bold uppercase tracking-tight">Результаты, которые вы сможете ощутить?</h2>
           <p className="text-sm md:text-base text-zinc-600 font-light leading-relaxed">
-            Заметите, что снова можете чувствовать себя в своем теле комфортно, что тело может начать избавляться от симптомов, и со временем чувствовать себя моложе, сильнее и красивее.
+            Вы начнёте замечать, что возвращается ощущение комфорта и присутствия в собственном теле. Со временем тело может естественным образом освобождаться от симптомов, а состояние — меняться в сторону большей лёгкости, силы, молодости и внешней привлекательности.
           </p>
           <p className="text-sm md:text-base text-zinc-700 font-medium leading-relaxed max-w-3xl mx-auto">
-            Ведь первоначальной информацией, заложенной в ваших клетках, была информация о том, что мы не должны болеть, что <span className="font-black">нашим Первоначальным состоянием является состояние здоровья</span>, что мы не должны стареть и физически умирать, что мы являемся Светом и что Свет в наших клетках снабжает нас всем, в чем мы нуждаемся.
+            На уровне клеточной памяти активируется изначальная информация: здоровье является базовым состоянием, а боль и разрушение — не норма. Тело вспоминает состояние целостности, в котором отсутствует необходимость стареть, разрушаться или существовать в режиме выживания. Клетки наполняются живой энергией, которая поддерживает жизненную силу и обеспечивает всё необходимое для полноценной, насыщенной жизни.
           </p>
         </div>
       </section>
@@ -213,7 +251,7 @@ export default function Home() {
         <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
           <div className="backdrop-blur-md bg-black/30 py-10 px-8 rounded-[32px] border border-white/10 shadow-[0_32px_64px_-15px_rgba(0,0,0,0.7)]">
             <p className="text-base md:text-lg font-bold text-white leading-relaxed uppercase tracking-widest drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] opacity-95">
-              Техника Маа'За'Тамее рассчитана на длительную регулярную работу, так как это серьезный процесс. Трех-пяти сеансов недостаточно. Чтобы перепрограммировать и очистить клетки нужно работать несколько месяцев. Это глубокая работа на уровне ДНК.
+              Сессии с энергией Первоначальности предполагает длительную и регулярную работу, так как процесс затрагивает глубинные уровни. Для обновления и очищения клеточной памяти требуется до 4-5 месяцев. Это работа на уровне ДНК!
             </p>
           </div>
         </div>
@@ -447,7 +485,7 @@ export default function Home() {
         </div>
       </section>
       {/* --- НОВЫЙ БЛОК: ЗНАКОМСТВО (Оксана Войнова) --- */}
-      <section className="py-16 md:py-20 px-4 bg-white overflow-hidden">
+      <section id="about" className="py-16 md:py-20 px-4 bg-white overflow-hidden">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row items-start gap-12 md:gap-20">
             <div className="flex-[1.3] space-y-8">
@@ -574,7 +612,7 @@ export default function Home() {
       </section>
 
       {/* --- ФУТЕР --- */}
-      <footer className="py-16 px-4 bg-white border-t border-zinc-100">
+      <footer id="social" className="py-16 px-4 bg-white border-t border-zinc-100">
         <div className="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center md:items-start gap-12">
           <div className="text-center md:text-left space-y-8">
             <div className="flex justify-center md:justify-start gap-10">
