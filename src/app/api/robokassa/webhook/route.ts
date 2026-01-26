@@ -90,12 +90,12 @@ async function handleWebhook(request: Request) {
     if (findError || !participant) {
       console.error('Participant not found for InvId:', InvId);
       // Все равно возвращаем OK, чтобы Robokassa не повторяла запрос
-      return NextResponse.text('OK');
+      return new NextResponse('OK', { status: 200 });
     }
 
     // Если уже оплачено, просто возвращаем OK
     if (participant.payment_status === 'paid') {
-      return NextResponse.text('OK');
+      return new NextResponse('OK', { status: 200 });
     }
 
     // Обновляем статус на "paid"
@@ -109,7 +109,7 @@ async function handleWebhook(request: Request) {
 
     if (updateError) {
       console.error('Failed to update payment status:', updateError);
-      return NextResponse.text('OK'); // Все равно OK, чтобы не было повторных запросов
+      return new NextResponse('OK', { status: 200 }); // Все равно OK, чтобы не было повторных запросов
     }
 
     // Создаем одноразовую Telegram ссылку для этого участника
@@ -132,10 +132,10 @@ async function handleWebhook(request: Request) {
     }
 
     // Robokassa ожидает ответ "OK" в случае успеха
-    return NextResponse.text('OK');
+    return new NextResponse('OK', { status: 200 });
   } catch (error) {
     console.error('Webhook processing error:', error);
     // Все равно возвращаем OK, чтобы Robokassa не повторяла запрос
-    return NextResponse.text('OK');
+    return new NextResponse('OK', { status: 200 });
   }
 }
