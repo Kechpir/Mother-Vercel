@@ -98,11 +98,12 @@ async function handleWebhook(request: Request) {
       return new NextResponse('OK', { status: 200 });
     }
 
-    // Обновляем статус на "paid"
+    // Обновляем статус на "paid" и сохраняем сумму оплаты
     const { error: updateError } = await supabase
       .from('participants')
       .update({
         payment_status: 'paid',
+        payment_amount: parseFloat(OutSum) || null, // Сохраняем сумму оплаты
         updated_at: new Date().toISOString(),
       })
       .eq('id', participant.id);

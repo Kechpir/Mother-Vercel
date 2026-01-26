@@ -16,8 +16,12 @@ export default function Home() {
     email: "",
     city: "",
     age: "",
+    promo_code: "",
   });
   const [agreed, setAgreed] = useState(false);
+  const [promoCodeValid, setPromoCodeValid] = useState<{valid: boolean, discount?: number} | null>(null);
+  const [checkingPromo, setCheckingPromo] = useState(false);
+  const [finalAmount, setFinalAmount] = useState(25000);
 
   useEffect(() => {
     const fetchRate = async () => {
@@ -49,6 +53,40 @@ export default function Home() {
     }
   }, [sessionsDropdownOpen]);
 
+  const checkPromoCode = async (code: string) => {
+    if (!code || code.trim() === '') {
+      setPromoCodeValid(null);
+      setFinalAmount(25000);
+      return;
+    }
+
+    setCheckingPromo(true);
+    try {
+      const response = await fetch('/api/promo/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: code.toUpperCase() }),
+      });
+
+      const data = await response.json();
+      
+      if (data.valid) {
+        setPromoCodeValid({ valid: true, discount: data.discount_amount || 0 });
+        // Применяем скидку
+        const discount = data.discount_amount || 0;
+        setFinalAmount(Math.max(0, 25000 - discount));
+      } else {
+        setPromoCodeValid({ valid: false });
+        setFinalAmount(25000);
+      }
+    } catch (error) {
+      setPromoCodeValid({ valid: false });
+      setFinalAmount(25000);
+    } finally {
+      setCheckingPromo(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!agreed) {
@@ -60,7 +98,10 @@ export default function Home() {
       // Сохраняем участника в базу данных
       const { data: participantData, error } = await supabase
         .from("participants")
-        .insert([formData])
+        .insert([{
+          ...formData,
+          promo_code: formData.promo_code ? formData.promo_code.toUpperCase() : null,
+        }])
         .select('id')
         .single();
       
@@ -72,10 +113,11 @@ export default function Home() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          amount: 25000,
+          amount: finalAmount,
           email: formData.email,
           description: 'Участие в энергетических сессиях: Ирина Головатова',
-          participantId: participantData.id // Передаем ID участника
+          participantId: participantData.id, // Передаем ID участника
+          promoCode: formData.promo_code ? formData.promo_code.toUpperCase() : null,
         }),
       });
 
@@ -410,7 +452,17 @@ export default function Home() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl mb-6">
                 <div className="bg-zinc-50 p-4 rounded-2xl border border-zinc-100 flex flex-col items-center justify-center">
                   <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-widest mb-1">Стоимость в Тенге</span>
-                  <span className="text-3xl md:text-4xl font-black text-black tracking-tighter">25.000 <span className="text-lg md:text-xl ml-1">тг</span></span>
+                  <div className="flex flex-col items-center">
+                    {finalAmount < 25000 && (
+                      <span className="text-xs text-zinc-400 line-through mb-1">25.000 ₸</span>
+                    )}
+                    <span className="text-3xl md:text-4xl font-black text-black tracking-tighter">
+                      {finalAmount.toLocaleString('ru-RU')} <span className="text-lg md:text-xl ml-1">тг</span>
+                    </span>
+                    {promoCodeValid?.valid && (
+                      <span className="text-xs text-green-600 font-bold mt-1">Скидка применена!</span>
+                    )}
+                  </div>
                 </div>
                 
                 <div className="bg-zinc-900 p-4 rounded-2xl border border-zinc-800 flex flex-col items-center justify-center relative overflow-hidden group">
@@ -419,7 +471,7 @@ export default function Home() {
                   <div className="flex items-center gap-2 relative z-10">
                     {exchangeRate ? (
                       <span className="text-3xl md:text-4xl font-black text-[#ffa600] tracking-tighter">
-                        ~{Math.round(25000 * exchangeRate).toLocaleString()} <span className="text-lg md:text-xl ml-1">₽</span>
+                        ~{Math.round(finalAmount * exchangeRate).toLocaleString()} <span className="text-lg md:text-xl ml-1">₽</span>
                       </span>
                     ) : (
                       <div className="h-8 w-24 bg-zinc-800 animate-pulse rounded-lg" />
@@ -744,6 +796,47 @@ export default function Home() {
                   />
                 </div>
               ))}
+
+              {/* Поле промокода */}
+              <div className="relative group">
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-[#ffa600] transition-colors duration-300 z-10">
+                  <Sparkles size={18} />
+                </div>
+                <div className="relative">
+                  <input 
+                    type="text"
+                    placeholder="Промокод (необязательно)" 
+                    className="w-full bg-zinc-800/50 border-2 p-3.5 pl-12 pr-24 rounded-2xl text-white outline-none focus:border-[#ffa600] focus:ring-2 focus:ring-orange-500/20 focus:bg-zinc-800 transition-all duration-300 text-sm placeholder:text-zinc-400 shadow-[0_4px_12px_rgba(0,0,0,0.3)] group-hover:border-zinc-600"
+                    value={formData.promo_code} 
+                    onChange={(e) => {
+                      setFormData({...formData, promo_code: e.target.value});
+                      if (e.target.value.length >= 3) {
+                        checkPromoCode(e.target.value);
+                      } else {
+                        setPromoCodeValid(null);
+                        setFinalAmount(25000);
+                      }
+                    }}
+                  />
+                  {checkingPromo && (
+                    <div className="absolute right-4 top-1/2 -translate-y-1/2">
+                      <div className="w-4 h-4 border-2 border-[#ffa600] border-t-transparent rounded-full animate-spin" />
+                    </div>
+                  )}
+                  {promoCodeValid && !checkingPromo && (
+                    <div className="absolute right-4 top-1/2 -translate-y-1/2">
+                      {promoCodeValid.valid ? (
+                        <span className="text-green-500 text-xs font-bold">✓</span>
+                      ) : (
+                        <span className="text-red-500 text-xs font-bold">✗</span>
+                      )}
+                    </div>
+                  )}
+                </div>
+                {promoCodeValid && !promoCodeValid.valid && formData.promo_code && (
+                  <p className="text-red-400 text-xs mt-1 ml-4">Неверный промокод</p>
+                )}
+              </div>
 
               <div className="pt-4 space-y-5">
                 <button 

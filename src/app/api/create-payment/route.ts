@@ -3,7 +3,7 @@ import crypto from 'crypto';
 
 export async function POST(request: Request) {
   try {
-    const { amount, email, description, participantId } = await request.json();
+    const { amount, email, description, participantId, promoCode } = await request.json();
 
     const merchantLogin = process.env.ROBOKASSA_MERCHANT_LOGIN;
     const isTest = process.env.NEXT_PUBLIC_ROBOKASSA_IS_TEST === '1' ? 1 : 0;
@@ -67,8 +67,27 @@ export async function POST(request: Request) {
           const supabase = createClient(supabaseUrl, supabaseServiceKey);
           await supabase
             .from('participants')
-            .update({ payment_inv_id: invId.toString() })
+            .update({ 
+              payment_inv_id: invId.toString(),
+              promo_code: promoCode || null,
+            })
             .eq('id', participantId);
+          
+          // Если промокод использован, увеличиваем счетчик использований
+          if (promoCode) {
+            const { data: promo } = await supabase
+              .from('promo_codes')
+              .select('used_count')
+              .eq('code', promoCode.toUpperCase())
+              .single();
+            
+            if (promo) {
+              await supabase
+                .from('promo_codes')
+                .update({ used_count: (promo.used_count || 0) + 1 })
+                .eq('code', promoCode.toUpperCase());
+            }
+          }
         }
       } catch (dbError) {
         console.error('Failed to save InvId to database:', dbError);
