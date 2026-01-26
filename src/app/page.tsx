@@ -92,15 +92,26 @@ export default function Home() {
           </video>
           <div className="absolute inset-0 bg-black/50 z-10" />
         </div>
-        <div className="relative z-20 max-w-4xl mx-auto text-white px-4">
-          <h1 className="text-3xl md:text-5xl font-bold mb-6 leading-tight drop-shadow-lg uppercase tracking-tight">
-            Энергетические сессии "Энергия первоначальности" и <br /> "Энергетическое выравнивание всех тел и позвоночника"
+        <div className="relative z-20 max-w-5xl mx-auto text-white px-4">
+          <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-6 leading-tight drop-shadow-[0_4px_20px_rgba(0,0,0,0.5)] uppercase tracking-[0.15em] md:tracking-[0.2em]">
+            <span className="inline-block bg-gradient-to-b from-white via-zinc-100 to-zinc-400 bg-clip-text text-transparent [text-shadow:0_0_30px_rgba(255,255,255,0.3)]">
+              Энергетические сессии
+            </span>
+            <br className="hidden md:block" />
+            <span className="inline-block mt-2 bg-gradient-to-b from-zinc-200 via-zinc-300 to-zinc-500 bg-clip-text text-transparent [text-shadow:0_0_20px_rgba(200,200,200,0.2)]">
+              "Энергия первоначальности"
+            </span>
+            <br className="hidden md:block" />
+            <span className="inline-block mt-2 bg-gradient-to-b from-zinc-200 via-zinc-300 to-zinc-500 bg-clip-text text-transparent [text-shadow:0_0_20px_rgba(200,200,200,0.2)]">
+              и "Энергетическое выравнивание всех тел и позвоночника"
+            </span>
           </h1>
-          <p className="text-lg md:text-xl mb-10 opacity-90 font-light tracking-wide">
+          <p className="text-sm md:text-base mb-10 opacity-90 font-light tracking-[0.25em] uppercase text-zinc-200">
             с 2 по 27 февраля
           </p>
-          <a href="#register" className="bg-[#ffa600] text-white px-10 py-4 rounded-full text-base font-bold hover:bg-white hover:text-black hover:scale-105 transition-all shadow-xl inline-block uppercase tracking-widest">
-            ПРИНЯТЬ УЧАСТИЕ
+          <a href="#register" className="group relative inline-flex items-center justify-center px-10 py-4 md:px-14 md:py-5 overflow-hidden font-semibold text-white transition-all duration-300 bg-gradient-to-r from-[#ffa600] to-[#ff8c00] rounded-[2rem] hover:from-white hover:to-zinc-100 hover:text-black hover:scale-[1.02] shadow-[0_8px_30px_rgba(255,166,0,0.4)] hover:shadow-[0_12px_40px_rgba(255,166,0,0.6)] border border-[#ffa600]/20">
+            <span className="relative uppercase tracking-[0.15em] text-sm md:text-base font-medium">Принять участие</span>
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
           </a>
         </div>
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce opacity-30 text-white z-20">
@@ -531,8 +542,8 @@ export default function Home() {
             ))}
           </div>
 
-          <div className="pt-6">
-            <a href="#register" className="inline-block bg-[#ffa600] text-white px-12 py-4 rounded-2xl font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all hover:scale-105 shadow-2xl">
+          <div className="pt-10">
+            <a href="#register" className="inline-block bg-[#ffa600] text-white px-16 py-6 md:px-24 md:py-8 text-lg md:text-xl rounded-2xl font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all hover:scale-105 shadow-2xl">
               Принять участие
             </a>
             <p className="mt-8 text-[9px] md:text-[10px] text-zinc-400 uppercase tracking-widest leading-relaxed max-w-3xl mx-auto opacity-80">
