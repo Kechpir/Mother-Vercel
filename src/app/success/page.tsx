@@ -14,20 +14,35 @@ export default function SuccessPage() {
     const params = new URLSearchParams(window.location.search);
     const id = params.get('participant_id');
     
-    if (!id) return;
+    if (!id) {
+      console.warn('No participant_id in URL');
+      return;
+    }
     
     setParticipantId(id);
+    console.log('Fetching invite link for participant:', id);
     
     // Функция для получения ссылки
     const fetchInviteLink = async (participantId: string) => {
       try {
         const response = await fetch(`/api/telegram/get-invite?participant_id=${participantId}`);
-        const data = await response.json();
         
-        if (data.inviteLink) {
+        if (!response.ok) {
+          console.error('API response not OK:', response.status, response.statusText);
+          return false;
+        }
+        
+        const data = await response.json();
+        console.log('API response:', data);
+        
+        // Проверяем, что inviteLink существует, не null и не пустая строка
+        if (data.inviteLink && typeof data.inviteLink === 'string' && data.inviteLink.trim() !== '') {
+          console.log('Invite link found:', data.inviteLink);
           setInviteLink(data.inviteLink);
           return true; // Ссылка найдена
         }
+        
+        console.log('Invite link not ready yet:', data);
         return false; // Ссылка еще не готова
       } catch (error) {
         console.error('Failed to fetch invite link:', error);
@@ -48,6 +63,7 @@ export default function SuccessPage() {
       
       // Если превысили лимит попыток, прекращаем
       if (attempts >= maxAttempts) {
+        console.log('Max attempts reached, stopping polling');
         clearInterval(intervalId);
         return;
       }
@@ -57,6 +73,7 @@ export default function SuccessPage() {
       
       // Если ссылка найдена, прекращаем проверку
       if (found) {
+        console.log('Invite link found, stopping polling');
         clearInterval(intervalId);
       }
     }, 3000); // Каждые 3 секунды
@@ -140,6 +157,11 @@ export default function SuccessPage() {
             <p className="text-zinc-500 text-sm text-center mt-2">
               Если ссылка не появилась в течение минуты, свяжитесь с нами
             </p>
+            {participantId && (
+              <p className="text-zinc-600 text-xs text-center mt-2 font-mono">
+                ID: {participantId}
+              </p>
+            )}
           </div>
         )}
 
