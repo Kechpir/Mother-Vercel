@@ -3,40 +3,90 @@ import crypto from 'crypto';
 
 export async function POST(request: Request) {
   try {
-    const { amount, email, description } = await request.json();
+    const { amount, email, description, participantId } = await request.json();
 
     const merchantLogin = process.env.ROBOKASSA_MERCHANT_LOGIN;
-    const password1 = process.env.ROBOKASSA_PASSWORD_1;
     const isTest = process.env.NEXT_PUBLIC_ROBOKASSA_IS_TEST === '1' ? 1 : 0;
+    
+    // Для тестового режима используем тестовый пароль, если он задан
+    const password1 = isTest && process.env.ROBOKASSA_TEST_PASSWORD_1 
+      ? process.env.ROBOKASSA_TEST_PASSWORD_1 
+      : process.env.ROBOKASSA_PASSWORD_1;
 
     if (!merchantLogin || !password1) {
+      console.error('Missing Robokassa credentials:', { 
+        hasLogin: !!merchantLogin, 
+        hasPassword: !!password1,
+        isTest,
+        hasTestPassword: !!process.env.ROBOKASSA_TEST_PASSWORD_1
+      });
       return NextResponse.json({ error: 'Missing Robokassa credentials' }, { status: 500 });
     }
 
-    // Уникальный ID платежа (можно заменить на ID из базы данных)
+    // Уникальный ID платежа (используем timestamp в секундах)
     const invId = Math.floor(Date.now() / 1000); 
 
     // Формируем подпись: MerchantLogin:OutSum:InvId:Password1
     // Сумму нужно форматировать до 2 знаков после запятой (например 25000.00)
     const outSum = Number(amount).toFixed(2);
     const signatureStr = `${merchantLogin}:${outSum}:${invId}:${password1}`;
-    const signature = crypto.createHash('md5').update(signatureStr).digest('hex');
+    const signature = crypto.createHash('md5').update(signatureStr, 'utf8').digest('hex').toUpperCase();
 
-    // Формируем URL
+    // Описание нужно правильно закодировать для URL
+    const paymentDescription = description || 'Оплата участия в энергетических сессиях';
+
+    // Формируем URL с правильной кодировкой
     const baseUrl = 'https://auth.robokassa.kz/Merchant/Index.aspx';
-    const params = new URLSearchParams({
-      MerchantLogin: merchantLogin,
-      OutSum: outSum,
-      InvId: invId.toString(),
-      Description: description || 'Оплата участия в энергетических сессиях',
-      SignatureValue: signature,
-      Email: email,
-      IsTest: isTest.toString(),
-      // Можно добавить свои параметры через Shp_
-      // Shp_item: 'energy_session'
-    });
+    const params = new URLSearchParams();
+    params.append('MerchantLogin', merchantLogin);
+    params.append('OutSum', outSum);
+    params.append('InvId', invId.toString());
+    params.append('Description', paymentDescription);
+    params.append('SignatureValue', signature);
+    if (email) {
+      params.append('Email', email);
+    }
+    if (isTest) {
+      params.append('IsTest', '1');
+    }
+
+    // Добавляем Success URL (куда вернуть пользователя после оплаты)
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://energy-practice.org';
+    params.append('SuccessURL', `${siteUrl}/success?participant_id=${participantId || ''}`);
 
     const paymentUrl = `${baseUrl}?${params.toString()}`;
+
+    // Сохраняем InvId в базу данных, если передан participantId
+    if (participantId) {
+      try {
+        const { createClient } = await import('@supabase/supabase-js');
+        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+        const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+
+        if (supabaseServiceKey) {
+          const supabase = createClient(supabaseUrl, supabaseServiceKey);
+          await supabase
+            .from('participants')
+            .update({ payment_inv_id: invId.toString() })
+            .eq('id', participantId);
+        }
+      } catch (dbError) {
+        console.error('Failed to save InvId to database:', dbError);
+        // Не критично, продолжаем
+      }
+    }
+
+    // Логируем для отладки (всегда, чтобы видеть в Vercel)
+    console.log('Robokassa payment URL generated:', {
+      merchantLogin,
+      outSum,
+      invId,
+      signatureStr: signatureStr.replace(password1, '***HIDDEN***'), // Скрываем пароль в логах
+      signature,
+      isTest,
+      usingTestPassword: isTest && !!process.env.ROBOKASSA_TEST_PASSWORD_1,
+      url: paymentUrl
+    });
 
     return NextResponse.json({ paymentUrl });
   } catch (error) {

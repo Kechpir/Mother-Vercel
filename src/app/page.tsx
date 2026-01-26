@@ -9,6 +9,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [exchangeRate, setExchangeRate] = useState<number | null>(null);
   const [openEnergy, setOpenEnergy] = useState<number | null>(null);
+  const [sessionsDropdownOpen, setSessionsDropdownOpen] = useState(false);
   const [formData, setFormData] = useState({
     full_name: "",
     phone: "",
@@ -33,6 +34,21 @@ export default function Home() {
     fetchRate();
   }, []);
 
+  // Закрываем дропдаун при клике вне его
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (sessionsDropdownOpen && !target.closest('.sessions-dropdown')) {
+        setSessionsDropdownOpen(false);
+      }
+    };
+
+    if (sessionsDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [sessionsDropdownOpen]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!agreed) {
@@ -41,8 +57,15 @@ export default function Home() {
     }
     setLoading(true);
     try {
-      const { error } = await supabase.from("participants").insert([formData]);
+      // Сохраняем участника в базу данных
+      const { data: participantData, error } = await supabase
+        .from("participants")
+        .insert([formData])
+        .select('id')
+        .single();
+      
       if (error) throw error;
+      if (!participantData?.id) throw new Error('Не удалось сохранить данные участника');
       
       // Генерируем ссылку на оплату через наш API
       const paymentResponse = await fetch('/api/create-payment', {
@@ -51,7 +74,8 @@ export default function Home() {
         body: JSON.stringify({
           amount: 25000,
           email: formData.email,
-          description: 'Участие в энергетических сессиях: Ирина Головатова'
+          description: 'Участие в энергетических сессиях: Ирина Головатова',
+          participantId: participantData.id // Передаем ID участника
         }),
       });
 
@@ -89,7 +113,47 @@ export default function Home() {
             
             <nav className="hidden md:flex items-center gap-6">
               <a href="#about" className="text-zinc-300 hover:text-[#ffa600] transition-colors text-sm font-medium uppercase tracking-widest">О мне</a>
-              <a href="#packages" className="text-zinc-300 hover:text-[#ffa600] transition-colors text-sm font-medium uppercase tracking-widest">Энергии</a>
+              
+              {/* Дропдаун "Сессии" */}
+              <div className="relative sessions-dropdown">
+                <button
+                  onClick={() => setSessionsDropdownOpen(!sessionsDropdownOpen)}
+                  className="flex items-center gap-1 text-zinc-300 hover:text-[#ffa600] transition-colors text-sm font-medium uppercase tracking-widest"
+                >
+                  Сессии
+                  <ChevronDown 
+                    size={16} 
+                    className={`transition-transform duration-200 ${sessionsDropdownOpen ? 'rotate-180' : ''}`}
+                  />
+                </button>
+                
+                {sessionsDropdownOpen && (
+                  <div className="absolute top-full left-0 mt-2 w-48 bg-zinc-900 border border-zinc-700 rounded-lg shadow-xl overflow-hidden z-50">
+                    <a 
+                      href="#" 
+                      className="block px-4 py-3 text-sm text-zinc-300 hover:bg-zinc-800 hover:text-[#ffa600] transition-colors uppercase tracking-widest"
+                      onClick={(e) => { e.preventDefault(); setSessionsDropdownOpen(false); }}
+                    >
+                      Сессия 1
+                    </a>
+                    <a 
+                      href="#" 
+                      className="block px-4 py-3 text-sm text-zinc-300 hover:bg-zinc-800 hover:text-[#ffa600] transition-colors uppercase tracking-widest"
+                      onClick={(e) => { e.preventDefault(); setSessionsDropdownOpen(false); }}
+                    >
+                      Сессия 2
+                    </a>
+                    <a 
+                      href="#" 
+                      className="block px-4 py-3 text-sm text-zinc-300 hover:bg-zinc-800 hover:text-[#ffa600] transition-colors uppercase tracking-widest"
+                      onClick={(e) => { e.preventDefault(); setSessionsDropdownOpen(false); }}
+                    >
+                      Сессия 3
+                    </a>
+                  </div>
+                )}
+              </div>
+              
               <a href="#social" className="text-zinc-300 hover:text-[#ffa600] transition-colors text-sm font-medium uppercase tracking-widest">Соц сети</a>
               <a href="#register" className="bg-[#ffa600] text-white px-5 py-2 rounded-full text-xs font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all shadow-lg">
                 Оплата
