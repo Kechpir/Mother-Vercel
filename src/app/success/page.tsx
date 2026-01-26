@@ -10,25 +10,42 @@ export default function SuccessPage() {
   const [participantId, setParticipantId] = useState<string | null>(null);
 
   useEffect(() => {
-    // Получаем participantId из URL параметров
+    // Получаем параметры из URL
     const params = new URLSearchParams(window.location.search);
     const id = params.get('participant_id');
+    const invId = params.get('InvId') || params.get('inv_id'); // Robokassa возвращает InvId
     
-    if (!id) {
-      console.warn('No participant_id in URL');
+    // Если нет participant_id, пробуем использовать InvId
+    if (!id && !invId) {
+      console.warn('No participant_id or InvId in URL. Available params:', Array.from(params.keys()));
       return;
     }
     
-    setParticipantId(id);
-    console.log('Fetching invite link for participant:', id);
+    if (id) {
+      setParticipantId(id);
+      console.log('Using participant_id:', id);
+    } else if (invId) {
+      console.log('Using InvId from Robokassa:', invId);
+    }
     
     // Функция для получения ссылки
-    const fetchInviteLink = async (participantId: string) => {
+    const fetchInviteLink = async () => {
       try {
-        const response = await fetch(`/api/telegram/get-invite?participant_id=${participantId}`);
+        // Формируем URL с параметрами
+        let apiUrl = '/api/telegram/get-invite?';
+        if (id) {
+          apiUrl += `participant_id=${id}`;
+        } else if (invId) {
+          apiUrl += `inv_id=${invId}`;
+        }
+        
+        console.log('Fetching invite link from:', apiUrl);
+        const response = await fetch(apiUrl);
         
         if (!response.ok) {
           console.error('API response not OK:', response.status, response.statusText);
+          const errorData = await response.json().catch(() => ({}));
+          console.error('Error details:', errorData);
           return false;
         }
         
@@ -51,7 +68,7 @@ export default function SuccessPage() {
     };
     
     // Пытаемся получить ссылку сразу
-    fetchInviteLink(id);
+    fetchInviteLink();
     
     // Если ссылки еще нет, начинаем периодически проверять (polling)
     // Проверяем каждые 3 секунды, максимум 20 раз (1 минута)
@@ -69,7 +86,7 @@ export default function SuccessPage() {
       }
       
       // Проверяем ссылку
-      const found = await fetchInviteLink(id);
+      const found = await fetchInviteLink();
       
       // Если ссылка найдена, прекращаем проверку
       if (found) {
