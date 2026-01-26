@@ -22,19 +22,19 @@ async function handleWebhook(request: Request) {
     const params = Object.fromEntries(url.searchParams);
 
     // Если данные в body (POST), парсим их
-    let bodyParams = {};
+    let bodyParams: Record<string, string> = {};
     try {
       const body = await request.text();
       if (body) {
         const formData = new URLSearchParams(body);
-        bodyParams = Object.fromEntries(formData);
+        bodyParams = Object.fromEntries(formData) as Record<string, string>;
       }
     } catch (e) {
       // Игнорируем ошибки парсинга body
     }
 
     // Объединяем параметры (query string имеет приоритет)
-    const allParams = { ...bodyParams, ...params };
+    const allParams: Record<string, string> = { ...bodyParams, ...params };
 
     const {
       OutSum,
