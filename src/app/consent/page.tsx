@@ -134,10 +134,19 @@ export default function ConsentPage() {
                   <strong className="font-semibold text-zinc-900">Индивидуальный предприниматель:</strong> ГОЛОВАТОВА ИРИНА РАСИМОВНА
                 </p>
                 <p>
-                  <strong className="font-semibold text-zinc-900">ИИН:</strong> 730521450027
+                  <strong className="font-semibold text-zinc-900">БИН (ИИН):</strong> 730521450027
                 </p>
                 <p>
-                  <strong className="font-semibold text-zinc-900">Адрес:</strong> Республика Казахстан, г. Астана, ул. Бараева, д. 9, кв. 3
+                  <strong className="font-semibold text-zinc-900">Адрес:</strong> Астана, ул. Бараева, д. 9, кв. 3
+                </p>
+                <p>
+                  <strong className="font-semibold text-zinc-900">Банк:</strong> АО "Kaspi Bank"
+                </p>
+                <p>
+                  <strong className="font-semibold text-zinc-900">БИК:</strong> CASPKZKA
+                </p>
+                <p>
+                  <strong className="font-semibold text-zinc-900">Номер счета:</strong> KZ89722S000006963616
                 </p>
                 <p>
                   <strong className="font-semibold text-zinc-900">Телефон:</strong> <a href="tel:+77012509963" className="text-[#ffa600] hover:underline">+7 701 250 99 63</a>

@@ -112,8 +112,12 @@ export default function OfferPage() {
             <p><strong>Индивидуальный предприниматель:</strong></p>
             <p className="text-base font-bold text-zinc-900 uppercase">ГОЛОВАТОВА ИРИНА РАСИМОВНА</p>
             <div className="pt-2 space-y-1 text-zinc-600 font-medium">
-              <p>ИИН: 730521450027</p>
-              <p>Адрес: Республика Казахстан, г. Астана, ул. Бараева, д. 9, кв. 3</p>
+              <p>БИН (ИИН): 730521450027</p>
+              <p>Адрес: Астана, ул. Бараева, д. 9, кв. 3</p>
+              <p>Банк: АО "Kaspi Bank"</p>
+              <p>КБе: 19</p>
+              <p>БИК: CASPKZKA</p>
+              <p>Номер счета: KZ89722S000006963616</p>
             </div>
           </section>
         </div>
