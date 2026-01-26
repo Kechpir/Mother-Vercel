@@ -14,25 +14,56 @@ export default function SuccessPage() {
     const params = new URLSearchParams(window.location.search);
     const id = params.get('participant_id');
     
-    if (id) {
-      setParticipantId(id);
-      // Пытаемся получить ссылку из базы данных
-      fetchInviteLink(id);
-    }
-  }, []);
-
-  const fetchInviteLink = async (id: string) => {
-    try {
-      const response = await fetch(`/api/telegram/get-invite?participant_id=${id}`);
-      const data = await response.json();
-      
-      if (data.inviteLink) {
-        setInviteLink(data.inviteLink);
+    if (!id) return;
+    
+    setParticipantId(id);
+    
+    // Функция для получения ссылки
+    const fetchInviteLink = async (participantId: string) => {
+      try {
+        const response = await fetch(`/api/telegram/get-invite?participant_id=${participantId}`);
+        const data = await response.json();
+        
+        if (data.inviteLink) {
+          setInviteLink(data.inviteLink);
+          return true; // Ссылка найдена
+        }
+        return false; // Ссылка еще не готова
+      } catch (error) {
+        console.error('Failed to fetch invite link:', error);
+        return false;
       }
-    } catch (error) {
-      console.error('Failed to fetch invite link:', error);
-    }
-  };
+    };
+    
+    // Пытаемся получить ссылку сразу
+    fetchInviteLink(id);
+    
+    // Если ссылки еще нет, начинаем периодически проверять (polling)
+    // Проверяем каждые 3 секунды, максимум 20 раз (1 минута)
+    let attempts = 0;
+    const maxAttempts = 20;
+    
+    const intervalId = setInterval(async () => {
+      attempts++;
+      
+      // Если превысили лимит попыток, прекращаем
+      if (attempts >= maxAttempts) {
+        clearInterval(intervalId);
+        return;
+      }
+      
+      // Проверяем ссылку
+      const found = await fetchInviteLink(id);
+      
+      // Если ссылка найдена, прекращаем проверку
+      if (found) {
+        clearInterval(intervalId);
+      }
+    }, 3000); // Каждые 3 секунды
+    
+    // Очищаем интервал при размонтировании компонента
+    return () => clearInterval(intervalId);
+  }, []);
 
   const copyToClipboard = () => {
     if (inviteLink) {
