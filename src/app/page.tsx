@@ -43,7 +43,26 @@ export default function Home() {
     try {
       const { error } = await supabase.from("participants").insert([formData]);
       if (error) throw error;
-      alert("Данные сохранены! Переходим к оплате...");
+      
+      // Генерируем ссылку на оплату через наш API
+      const paymentResponse = await fetch('/api/create-payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          amount: 25000,
+          email: formData.email,
+          description: 'Участие в энергетических сессиях: Ирина Головатова'
+        }),
+      });
+
+      const paymentData = await paymentResponse.json();
+
+      if (paymentData.paymentUrl) {
+        // Перенаправляем на оплату
+        window.location.href = paymentData.paymentUrl;
+      } else {
+        throw new Error('Не удалось создать ссылку на оплату');
+      }
     } catch (error: any) {
       alert("Ошибка: " + error.message);
     } finally {
