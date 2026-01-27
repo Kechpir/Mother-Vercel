@@ -22,6 +22,36 @@ export default function Home() {
   const [promoCodeValid, setPromoCodeValid] = useState<{valid: boolean, discount?: number} | null>(null);
   const [checkingPromo, setCheckingPromo] = useState(false);
   const [finalAmount, setFinalAmount] = useState(25000);
+  const [timeLeft, setTimeLeft] = useState({ days: "00", hours: "00", minutes: "00", seconds: "00" });
+
+  useEffect(() => {
+    const targetDate = new Date("2026-02-02T22:00:00+05:00"); // 2 февраля 22:00 по Астане (GMT+5)
+
+    const timer = setInterval(() => {
+      const now = new Date();
+      const difference = targetDate.getTime() - now.getTime();
+
+      if (difference <= 0) {
+        clearInterval(timer);
+        setTimeLeft({ days: "00", hours: "00", minutes: "00", seconds: "00" });
+        return;
+      }
+
+      const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+      setTimeLeft({
+        days: days.toString().padStart(2, "0"),
+        hours: hours.toString().padStart(2, "0"),
+        minutes: minutes.toString().padStart(2, "0"),
+        seconds: seconds.toString().padStart(2, "0"),
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     const fetchRate = async () => {
@@ -170,28 +200,19 @@ export default function Home() {
                 </button>
                 
                 {sessionsDropdownOpen && (
-                  <div className="absolute top-full left-0 mt-2 w-48 bg-zinc-900 border border-zinc-700 rounded-lg shadow-xl overflow-hidden z-50">
-                    <a 
-                      href="#" 
-                      className="block px-4 py-3 text-sm text-zinc-300 hover:bg-zinc-800 hover:text-[#ffa600] transition-colors uppercase tracking-widest"
-                      onClick={(e) => { e.preventDefault(); setSessionsDropdownOpen(false); }}
-                    >
-                      Сессия 1
-                    </a>
-                    <a 
-                      href="#" 
-                      className="block px-4 py-3 text-sm text-zinc-300 hover:bg-zinc-800 hover:text-[#ffa600] transition-colors uppercase tracking-widest"
-                      onClick={(e) => { e.preventDefault(); setSessionsDropdownOpen(false); }}
-                    >
-                      Сессия 2
-                    </a>
-                    <a 
-                      href="#" 
-                      className="block px-4 py-3 text-sm text-zinc-300 hover:bg-zinc-800 hover:text-[#ffa600] transition-colors uppercase tracking-widest"
-                      onClick={(e) => { e.preventDefault(); setSessionsDropdownOpen(false); }}
-                    >
-                      Сессия 3
-                    </a>
+                  <div className="absolute top-full left-0 mt-2 w-56 bg-zinc-900 border border-zinc-700 rounded-lg shadow-xl overflow-hidden z-50">
+                    <div className="px-4 py-3 text-sm text-zinc-500 cursor-not-allowed uppercase tracking-widest border-b border-zinc-700/50">
+                      <span className="block text-zinc-500">Сессия 1</span>
+                      <span className="text-[10px] normal-case tracking-normal text-zinc-600 mt-1 block">Скоро будет доступно</span>
+                    </div>
+                    <div className="px-4 py-3 text-sm text-zinc-500 cursor-not-allowed uppercase tracking-widest border-b border-zinc-700/50">
+                      <span className="block text-zinc-500">Сессия 2</span>
+                      <span className="text-[10px] normal-case tracking-normal text-zinc-600 mt-1 block">Скоро будет доступно</span>
+                    </div>
+                    <div className="px-4 py-3 text-sm text-zinc-500 cursor-not-allowed uppercase tracking-widest">
+                      <span className="block text-zinc-500">Сессия 3</span>
+                      <span className="text-[10px] normal-case tracking-normal text-zinc-600 mt-1 block">Скоро будет доступно</span>
+                    </div>
                   </div>
                 )}
               </div>
@@ -215,23 +236,18 @@ export default function Home() {
           <video autoPlay loop muted playsInline className="w-full h-full object-cover">
             <source src="https://res.cloudinary.com/dij7s1nbf/video/upload/v1769257304/43832-437611758_small_i7pc9s.mp4" type="video/mp4" />
           </video>
-          <div className="absolute inset-0 bg-black/50 z-10" />
+          <div className="absolute inset-0 bg-black/45 z-10" />
+          <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/30 via-transparent to-black/50" aria-hidden />
         </div>
-        <div className="relative z-20 max-w-5xl mx-auto text-white px-4">
-          <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-6 leading-tight drop-shadow-[0_4px_20px_rgba(0,0,0,0.5)] uppercase tracking-[0.15em] md:tracking-[0.2em]">
-            <span className="inline-block bg-gradient-to-b from-white via-zinc-100 to-zinc-400 bg-clip-text text-transparent [text-shadow:0_0_30px_rgba(255,255,255,0.3)]">
-              Энергетические сессии
-            </span>
+        <div className="relative z-20 max-w-5xl mx-auto px-4 py-8 md:py-12 rounded-2xl bg-black/25 backdrop-blur-[2px] border border-white/5">
+          <h1 className="font-hero text-2xl md:text-4xl lg:text-5xl font-light md:font-normal mb-6 leading-tight uppercase tracking-[0.12em] md:tracking-[0.18em] text-white [text-shadow:0_2px_12px_rgba(0,0,0,0.6),0_0_1px_rgba(0,0,0,0.8)]">
+            Энергетические сессии
             <br className="hidden md:block" />
-            <span className="inline-block mt-2 bg-gradient-to-b from-zinc-200 via-zinc-300 to-zinc-500 bg-clip-text text-transparent [text-shadow:0_0_20px_rgba(200,200,200,0.2)]">
-              "Энергия первоначальности"
-            </span>
-            <br className="hidden md:block" />
-            <span className="inline-block mt-2 bg-gradient-to-b from-zinc-200 via-zinc-300 to-zinc-500 bg-clip-text text-transparent [text-shadow:0_0_20px_rgba(200,200,200,0.2)]">
-              и "Энергетическое выравнивание всех тел и позвоночника"
+            <span className="inline-block mt-2 text-white/95">
+              Возвращение к первоначальной настройке тела
             </span>
           </h1>
-          <p className="text-sm md:text-base mb-10 opacity-90 font-light tracking-[0.25em] uppercase text-zinc-200">
+          <p className="text-sm md:text-base mb-10 font-light tracking-[0.2em] uppercase text-zinc-300 [text-shadow:0_1px_8px_rgba(0,0,0,0.5)]">
             с 2 по 27 февраля
           </p>
           <a href="#register" className="group relative inline-flex items-center justify-center px-10 py-4 md:px-14 md:py-5 overflow-hidden font-semibold text-white transition-all duration-300 bg-gradient-to-r from-[#ffa600] to-[#ff8c00] rounded-[2rem] hover:from-white hover:to-zinc-100 hover:text-black hover:scale-[1.02] shadow-[0_8px_30px_rgba(255,166,0,0.4)] hover:shadow-[0_12px_40px_rgba(255,166,0,0.6)] border border-[#ffa600]/20">
@@ -248,11 +264,11 @@ export default function Home() {
       <section className="py-10 md:py-12 px-4 bg-white">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-2xl md:text-3xl font-bold mb-6 leading-tight uppercase tracking-tighter">
-            Цикл энергетического погружения <br /> "Энергия Первоначальности"
+            Цикл энергетического погружения <br /> «Энергия первоначальности»
           </h2>
           <div className="space-y-1 text-sm md:text-base text-zinc-500 mb-8 font-light italic">
-            <p>с 2 по 13 февраля | 10 сеансов по будням</p>
-            <p>Сеанс в группе в 22:00 по Астане. Сеансы проводятся в Zoom</p>
+            <p>с 2 по 27 февраля | 10 сеансов по будням</p>
+            <p>Групповой формат | 22:00 по Астане | Zoom</p>
           </div>
           
           <div className="relative py-6 mt-6">
@@ -271,66 +287,40 @@ export default function Home() {
       </section>
 
       {/* --- БЛОК 3 + 4: ДНК И ОЧИЩЕНИЕ --- */}
-      <section className="py-12 md:py-16 px-4 bg-white">
-        <div className="max-w-5xl mx-auto">
-          <div className="flex flex-col md:flex-row items-center gap-10 md:gap-14">
+      <section className="py-10 md:py-12 px-4 bg-white">
+        <div className="max-w-4xl mx-auto">
+          <div className="flex flex-col md:flex-row items-center gap-8 md:gap-10">
             <div className="flex-[1.2] space-y-6 order-2 md:order-1">
               <h2 className="text-2xl md:text-3xl font-bold text-zinc-900 tracking-tight">Энергия Первоначальности</h2>
               <div className="space-y-4 text-base text-zinc-600 leading-relaxed font-light">
-                <p>На протяжении множества воплощений — включая нынешнее — в человеке накапливались слои информации и энергетических паттернов. Эти записи хранятся не только в памяти, но и в клетках тела, в его структуре и полях.</p>
-                <p>Именно они со временем начинают ограничивать жизненный ресурс физического тела: запускают программы старения, боли, болезней, истощения и страха завершения жизни.</p>
-                <p>Речь идёт не о событиях как таковых, а о застрявших энергетических образах и отпечатках опыта, которые продолжают воспроизводиться снова и снова, даже когда сознательно человек уже давно «пошёл дальше».</p>
-                <p className="text-black font-bold italic">Энергия Первоначальности работает адресно и точно.</p>
-                <p>Она словно мощный энергетический магнит, способный выявлять и вытягивать из клеточной памяти те искажения, которые больше не поддерживают жизнь, здоровье и расширение.</p>
-                <p>Во время сеансов происходит не просто очищение. Идёт глубокое взаимодействие с клетками тела:</p>
+                <p>В теле человека со временем накапливаются энергетические записи и напряжение, которые ограничивают жизненный ресурс и удерживают в режиме выживания.</p>
+                <p>Энергия Первоначальности помогает телу вернуться к своей естественной настройке — без борьбы, искажений и внутреннего напряжения.</p>
+                <p className="font-bold text-black">Во время сеансов:</p>
                 <ul className="space-y-2 pl-4">
                   <li className="flex items-start gap-2">
                     <span className="text-[#ffa600] mt-1.5 w-1.5 h-1.5 rounded-full bg-[#ffa600] shrink-0" />
-                    <span>высвобождение старых энергетических записей,</span>
+                    <span>высвобождаются старые энергетические отпечатки</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-[#ffa600] mt-1.5 w-1.5 h-1.5 rounded-full bg-[#ffa600] shrink-0" />
-                    <span>распаковка зафиксированных программ боли и ограничения,</span>
+                    <span>снижается фоновое напряжение</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-[#ffa600] mt-1.5 w-1.5 h-1.5 rounded-full bg-[#ffa600] shrink-0" />
-                    <span>мягкая перезапись информации на более исходный, чистый уровень.</span>
+                    <span>восстанавливается ощущение целостности</span>
                   </li>
                 </ul>
-                <p>Клетки начинают вспоминать своё первоисконное состояние — то, каким они были до вмешательства чуждых шаблонов и искажений.</p>
-                <p>Это состояние, где человек:</p>
-                <ul className="space-y-2 pl-4">
-                  <li className="flex items-start gap-2">
-                    <span className="text-[#ffa600] mt-1.5 w-1.5 h-1.5 rounded-full bg-[#ffa600] shrink-0" />
-                    <span>не отделён от энергии,</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-[#ffa600] mt-1.5 w-1.5 h-1.5 rounded-full bg-[#ffa600] shrink-0" />
-                    <span>не живёт в борьбе с телом,</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-[#ffa600] mt-1.5 w-1.5 h-1.5 rounded-full bg-[#ffa600] shrink-0" />
-                    <span>не существует в постоянном режиме выживания.</span>
-                  </li>
-                </ul>
-                <p>В основе этой энергии лежит напоминание о простом и фундаментальном:</p>
-                <p className="font-medium text-zinc-800">
-                  мы — Свет, <br />
-                  мы — энергия, <br />
-                  мы — божественны по своей природе, <br />
-                  мы — Создатели и Творцы своей реальности.
-                </p>
                 <p className="pt-4 border-t border-zinc-100 text-black font-bold italic">
-                  Эта сессия возвращение к себе настоящему, к той точке, где тело и сознание снова начинают работать в согласии, а жизнь перестаёт сжиматься и начинает расширяться.
+                  Это не про исправление. Это возвращение к себе настоящему, к состоянию, где тело и сознание снова работают в согласии.
                 </p>
               </div>
             </div>
-            <div className="flex-1 order-1 md:order-2 w-full max-w-[450px]">
-              <div className="h-full min-h-[400px] md:min-h-[600px] rounded-[32px] overflow-hidden shadow-2xl relative group border-2 border-[#ffa600]/5">
+            <div className="flex-1 order-1 md:order-2 w-full max-w-[300px] md:max-w-[320px] shrink-0">
+              <div className="aspect-[3/4] rounded-[24px] overflow-hidden shadow-2xl relative group border-2 border-[#ffa600]/5">
                 <img 
                   src="https://res.cloudinary.com/dij7s1nbf/image/upload/v1769357650/ai-generated-9400220_1920_ylobuk.jpg" 
                   alt="ДНК" 
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
                 />
                 <div className="absolute inset-0 bg-orange-900/5 group-hover:bg-transparent transition-colors" />
               </div>
@@ -367,10 +357,10 @@ export default function Home() {
             <h2 className="text-3xl font-bold text-zinc-900 uppercase tracking-tight">Энергия Первоначальности</h2>
             <div className="space-y-4 text-base md:text-lg text-zinc-600 leading-relaxed font-light">
               <p className="italic border-l-4 border-[#ffa600] pl-5 py-1">
-                Эта энергия способна увеличивать период активной и полноценной жизни в физическом теле, позволяя проживать его без боли, напряжения и страдания.
+                Эта энергия поддерживает долгий период активной и полноценной жизни в теле, помогая выходить из боли, напряжения и внутреннего истощения.
               </p>
               <p className="text-zinc-800 font-medium">
-                Во время сеанса поддержка Ангела Рафаэля сопровождает процесс интеграции исконной Энергии Первоначальности. Благодаря этому каждая клетка получает возможность вспомнить своё изначальное состояние, принять его и обрести устойчивость и баланс.
+                Во время сеанса происходит мягкая интеграция Энергии Первоначальности, поддерживаемая тонким целительным полем. Каждая клетка получает возможность вспомнить своё изначальное состояние, обрести устойчивость, баланс и внутреннюю опору.
               </p>
             </div>
           </div>
@@ -383,7 +373,7 @@ export default function Home() {
           <div className="flex-1 space-y-4 order-2 md:order-1">
             <h2 className="text-3xl font-bold text-zinc-900 tracking-tight">Клеточное Пробуждение</h2>
             <p className="text-lg text-zinc-600 leading-relaxed font-light">
-              Энергия Первоначальности активирует глубинные процессы на уровне клеточной памяти, усиливая осознание своей божественной природы. Эти изменения отражаются не только внутри, но и во всех сферах жизни, постепенно трансформируя её и направляя в сторону большего качества, гармонии и целостности.
+              Энергия Первоначальности активирует глубинные процессы на уровне клеточной памяти. Возвращается осознание своей изначальной природы и внутренней целостности. Эти изменения отражаются не только внутри тела, но и во всех сферах жизни — мягко направляя её к большему качеству, гармонии и устойчивости.
             </p>
           </div>
           <div className="flex-1 order-1 md:order-2 w-full max-w-[450px]">
@@ -401,14 +391,34 @@ export default function Home() {
 
       {/* --- БЛОК 8: РЕЗУЛЬТАТЫ --- */}
       <section className="py-12 md:py-16 px-4 bg-white">
-        <div className="max-w-4xl mx-auto text-center space-y-6">
-          <h2 className="text-2xl md:text-3xl font-bold uppercase tracking-tight">Результаты, которые вы сможете ощутить?</h2>
-          <p className="text-sm md:text-base text-zinc-600 font-light leading-relaxed">
-            Вы начнёте замечать, что возвращается ощущение комфорта и присутствия в собственном теле. Со временем тело может естественным образом освобождаться от симптомов, а состояние — меняться в сторону большей лёгкости, силы, молодости и внешней привлекательности.
-          </p>
-          <p className="text-sm md:text-base text-zinc-700 font-medium leading-relaxed max-w-3xl mx-auto">
-            На уровне клеточной памяти активируется изначальная информация: здоровье является базовым состоянием, а боль и разрушение — не норма. Тело вспоминает состояние целостности, в котором отсутствует необходимость стареть, разрушаться или существовать в режиме выживания. Клетки наполняются живой энергией, которая поддерживает жизненную силу и обеспечивает всё необходимое для полноценной, насыщенной жизни.
-          </p>
+        <div className="max-w-4xl mx-auto text-center space-y-8">
+          <h2 className="text-2xl md:text-3xl font-bold uppercase tracking-tight">Результаты, которые вы сможете ощутить</h2>
+          
+          <div className="space-y-6">
+            <p className="text-sm md:text-lg text-zinc-600 font-light leading-relaxed">
+              Со временем возвращается ощущение комфорта и присутствия в собственном теле. <br className="hidden md:block" />
+              Тело начинает мягко:
+            </p>
+            
+            <ul className="flex flex-col items-center space-y-2 text-zinc-700 font-medium">
+              <li className="flex items-center gap-2">• выходить из напряжения</li>
+              <li className="flex items-center gap-2">• освобождаться от застрявших состояний</li>
+              <li className="flex items-center gap-2">• восстанавливать чувство лёгкости и силы</li>
+            </ul>
+
+            <p className="text-sm md:text-base text-zinc-600 font-light leading-relaxed max-w-2xl mx-auto">
+              Состояние постепенно меняется в сторону большей устойчивости, жизненной энергии и внутренней собранности.
+            </p>
+
+            <div className="pt-4 space-y-4">
+              <p className="text-sm md:text-base text-zinc-700 font-medium leading-relaxed max-w-3xl mx-auto">
+                На уровне клеточной памяти активируется ощущение целостности — когда телу больше не нужно жить в режиме постоянного выживания.
+              </p>
+              <p className="text-sm md:text-base text-zinc-700 font-medium leading-relaxed max-w-3xl mx-auto">
+                Клетки наполняются живой энергией, поддерживающей ресурс, витальность и более насыщенное проживание жизни.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -423,7 +433,7 @@ export default function Home() {
         <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
           <div className="backdrop-blur-md bg-black/30 py-10 px-8 rounded-[32px] border border-white/10 shadow-[0_32px_64px_-15px_rgba(0,0,0,0.7)]">
             <p className="text-base md:text-lg font-bold text-white leading-relaxed uppercase tracking-widest drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] opacity-95">
-              Сессии с энергией Первоначальности предполагает длительную и регулярную работу, так как процесс затрагивает глубинные уровни. Для обновления и очищения клеточной памяти требуется до 4-5 месяцев. Это работа на уровне ДНК!
+              Сессии с Энергией Первоначальности — это процесс, который раскрывается со временем. Работа затрагивает глубинные уровни и предполагает регулярное участие. Изменения в клеточной памяти могут постепенно разворачиваться в течение нескольких месяцев.
             </p>
           </div>
         </div>
@@ -441,7 +451,7 @@ export default function Home() {
               <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#ffa600] text-white px-6 py-1 rounded-full text-[10px] font-black uppercase tracking-[0.2em] shadow-lg">Полный цикл</div>
               
               <h3 className="text-base md:text-xl font-black mb-3 uppercase leading-tight max-w-4xl">
-                Энергетические сессии "Энергия первоначальности" и 
+                Энергетические сессии "Возвращение к первоначальной настройке тела" и 
                 "Энергетическое выравнивание всех тел и позвоночника"
               </h3>
               
@@ -503,7 +513,7 @@ export default function Home() {
           </h2>
           <div className="space-y-1 text-sm md:text-base text-zinc-500 mb-12 font-light italic">
             <p>с 16 по 27 февраля | 10 сеансов по будням</p>
-            <p>Сеанс в группе в 8.00 мск. Доступен 24 часа.</p>
+            <p>Сеанс в группе в 11.00 по Астане. Доступен 24 часа.</p>
           </div>
 
           <div className="space-y-10">
@@ -658,17 +668,17 @@ export default function Home() {
               Цикл энергетических сессий будет проходить по будням с 2 по 27 февраля.
             </p>
             <div className="text-xs md:text-sm font-medium space-y-1 opacity-80 uppercase tracking-widest">
-              <p>Закрытие регистрации 30 января в 15.00 мск.</p>
-              <p>Повышение цены 1 февраля в 23.00 мск. Осталось:</p>
+              <p>Закрытие регистрации 2 февраля в 21.00 по Астане.</p>
+              <p>Старт курса 2 февраля в 22.00 по Астане. Осталось:</p>
             </div>
           </div>
 
           <div className="flex justify-center gap-4 md:gap-10">
             {[
-              { label: "День", value: "06" },
-              { label: "Час", value: "11" },
-              { label: "Минуты", value: "08" },
-              { label: "Секунды", value: "37" }
+              { label: "День", value: timeLeft.days },
+              { label: "Час", value: timeLeft.hours },
+              { label: "Минуты", value: timeLeft.minutes },
+              { label: "Секунды", value: timeLeft.seconds }
             ].map((item, i) => (
               <div key={i} className="flex flex-col items-center">
                 <span className="text-4xl md:text-6xl font-black text-[#ffa600] tracking-tighter drop-shadow-xl">{item.value}</span>

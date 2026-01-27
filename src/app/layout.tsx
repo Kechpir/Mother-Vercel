@@ -1,8 +1,13 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Cormorant_Garamond } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin", "cyrillic"] });
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin", "cyrillic"],
+  weight: ["300", "400", "500", "600"],
+  variable: "--font-hero",
+});
 
 export const metadata: Metadata = {
   title: "Ирина Головатова | Энергия Первоначальности",
@@ -19,7 +24,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ru" className="scroll-smooth">
-      <body className={`${inter.className} bg-[#000000] text-white antialiased`}>
+      <body className={`${inter.className} ${cormorant.variable} bg-[#000000] text-white antialiased`}>
         {children}
       </body>
     </html>

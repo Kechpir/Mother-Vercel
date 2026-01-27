@@ -11,6 +11,9 @@ const config: Config = {
       colors: {
         accent: "#c1a57b",
       },
+      fontFamily: {
+        hero: ["var(--font-hero)", "Georgia", "serif"],
+      },
     },
   },
   plugins: [],

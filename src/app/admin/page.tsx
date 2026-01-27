@@ -98,20 +98,42 @@ export default function AdminPage() {
   };
 
   const exportToCSV = () => {
+    // Функция для правильного экранирования CSV значений
+    const escapeCSV = (value: any): string => {
+      if (value === null || value === undefined) return '';
+      const str = String(value);
+      // Если значение содержит точку с запятой, кавычки или перенос строки, оборачиваем в кавычки
+      if (str.includes(';') || str.includes('"') || str.includes('\n') || str.includes('\r')) {
+        // Удваиваем кавычки внутри значения
+        return `"${str.replace(/"/g, '""')}"`;
+      }
+      return str;
+    };
+
     const headers = ['ФИО', 'Телефон', 'Email', 'Город', 'Возраст', 'Сумма', 'Промокод', 'Дата оплаты'];
     const rows = participants.map(p => [
-      p.full_name || '',
-      p.phone || '',
-      p.email || '',
-      p.city || '',
-      p.age || '',
-      p.payment_amount?.toFixed(2) || '0',
-      p.promo_code || '',
-      new Date(p.created_at).toLocaleString('ru-RU'),
+      escapeCSV(p.full_name),
+      escapeCSV(p.phone),
+      escapeCSV(p.email),
+      escapeCSV(p.city),
+      escapeCSV(p.age),
+      escapeCSV(p.payment_amount?.toFixed(2) || '0'),
+      escapeCSV(p.promo_code),
+      escapeCSV(new Date(p.created_at).toLocaleString('ru-RU')),
     ]);
 
-    const csv = [headers, ...rows].map(row => row.join(',')).join('\n');
-    const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+    // Форматируем CSV: 
+    // 1. Добавляем 'sep=;' чтобы Excel сразу понял разделитель
+    // 2. Используем ';' как разделитель (стандарт для Excel в РФ)
+    const csvContent = [
+      headers.map(escapeCSV).join(';'),
+      ...rows.map(row => row.join(';'))
+    ].join('\r\n');
+    
+    const csvWithExcelHint = `sep=;\r\n${csvContent}`;
+    
+    // Используем BOM (\ufeff) для корректного отображения кириллицы в UTF-8
+    const blob = new Blob(['\ufeff' + csvWithExcelHint], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
     link.download = `participants_${new Date().toISOString().split('T')[0]}.csv`;
