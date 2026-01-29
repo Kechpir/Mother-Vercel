@@ -9,7 +9,6 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [exchangeRate, setExchangeRate] = useState<number | null>(null);
   const [openEnergy, setOpenEnergy] = useState<number | null>(null);
-  const [sessionsDropdownOpen, setSessionsDropdownOpen] = useState(false);
   const [formData, setFormData] = useState({
     full_name: "",
     phone: "",
@@ -67,21 +66,6 @@ export default function Home() {
     };
     fetchRate();
   }, []);
-
-  // Закрываем дропдаун при клике вне его
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-      if (sessionsDropdownOpen && !target.closest('.sessions-dropdown')) {
-        setSessionsDropdownOpen(false);
-      }
-    };
-
-    if (sessionsDropdownOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => document.removeEventListener('mousedown', handleClickOutside);
-    }
-  }, [sessionsDropdownOpen]);
 
   const checkPromoCode = async (code: string) => {
     if (!code || code.trim() === '') {
@@ -185,38 +169,6 @@ export default function Home() {
             
             <nav className="hidden md:flex items-center gap-6">
               <a href="#about" className="text-zinc-300 hover:text-[#ffa600] transition-colors text-sm font-medium uppercase tracking-widest">О мне</a>
-              
-              {/* Дропдаун "Сессии" */}
-              <div className="relative sessions-dropdown">
-                <button
-                  onClick={() => setSessionsDropdownOpen(!sessionsDropdownOpen)}
-                  className="flex items-center gap-1 text-zinc-300 hover:text-[#ffa600] transition-colors text-sm font-medium uppercase tracking-widest"
-                >
-                  Сессии
-                  <ChevronDown 
-                    size={16} 
-                    className={`transition-transform duration-200 ${sessionsDropdownOpen ? 'rotate-180' : ''}`}
-                  />
-                </button>
-                
-                {sessionsDropdownOpen && (
-                  <div className="absolute top-full left-0 mt-2 w-56 bg-zinc-900 border border-zinc-700 rounded-lg shadow-xl overflow-hidden z-50">
-                    <div className="px-4 py-3 text-sm text-zinc-500 cursor-not-allowed uppercase tracking-widest border-b border-zinc-700/50">
-                      <span className="block text-zinc-500">Сессия 1</span>
-                      <span className="text-[10px] normal-case tracking-normal text-zinc-600 mt-1 block">Скоро будет доступно</span>
-                    </div>
-                    <div className="px-4 py-3 text-sm text-zinc-500 cursor-not-allowed uppercase tracking-widest border-b border-zinc-700/50">
-                      <span className="block text-zinc-500">Сессия 2</span>
-                      <span className="text-[10px] normal-case tracking-normal text-zinc-600 mt-1 block">Скоро будет доступно</span>
-                    </div>
-                    <div className="px-4 py-3 text-sm text-zinc-500 cursor-not-allowed uppercase tracking-widest">
-                      <span className="block text-zinc-500">Сессия 3</span>
-                      <span className="text-[10px] normal-case tracking-normal text-zinc-600 mt-1 block">Скоро будет доступно</span>
-                    </div>
-                  </div>
-                )}
-              </div>
-              
               <a href="#social" className="text-zinc-300 hover:text-[#ffa600] transition-colors text-sm font-medium uppercase tracking-widest">Соц сети</a>
               <a href="#register" className="bg-[#ffa600] text-white px-5 py-2 rounded-full text-xs font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all shadow-lg">
                 Оплата
@@ -706,25 +658,51 @@ export default function Home() {
                 Давайте знакомиться, меня зовут Ирина Головатова
               </h2>
               
-              <div className="space-y-6 text-sm md:text-base text-zinc-600 font-light leading-relaxed">
+              <div className="space-y-8 text-sm md:text-base text-zinc-600 font-light leading-relaxed">
                 <p>
-                  Преображаю людей, помогая им обрести молодость, здоровье, внутренний ресурс, баланс и гармонию с собой и миром. Провожу исцеляющие и омолаживающие программы, групповые курсы, личные сессии, индивидуальные потоковые расстановки, диагностику тонкого и физического тела. Помогаю расширить границы и увидеть Свет внутри себя.
+                  Я — интегративный психолог, фасилитатор Access, телесно-ориентированный и энергетический терапевт, проводник энергий и состояний глубинного восстановления. В своей работе я объединяю психологию, телесные практики, работу с энергиями и интуитивное восприятие, помогая человеку вернуться к целостности, внутреннему ресурсу и живости. Я сопровождаю людей в периодах трансформаций, когда важно не бороться с собой и не «чинить» себя, а мягко восстановить связь с телом, сознанием и своей истинной природой.
                 </p>
-                
-                <ul className="grid grid-cols-1 gap-y-2 text-[11px] md:text-[13px] text-zinc-500 font-medium">
-                  {[
-                    "Тренер, целитель техники Элизз-Мила", "Тренер школы Крайона", "Маг Нового Времени",
-                    "Световой косметолог", "Терапевт Божественного Выравнивания", "Целитель Нового Времени",
-                    "Целительская техника Ноам Зарус", "Целительная техника Ниа Та Нэ", "Целительная техника Маа За Тамее",
-                    "Мастер ХИАМ'АНАСТРА", "Медиум Нового Времени", "Мастер Тора Ан Тария",
-                    "Арт- терапевт, коуч", "Мастер Учитель Рэйки", "Мастер по работе с энергией SHOON'A'NAAR (меч Экскалибур)",
-                    "Шийя'А'Шун — пионер детских шагов Тийя'А'Нада", "ШЕН'А'МАА — белая жрица"
-                  ].map((item, i) => (
-                    <li key={i} className="flex items-start gap-2">
-                      <span className="text-zinc-300">—</span> {item}
-                    </li>
-                  ))}
-                </ul>
+
+                <div className="border-t border-zinc-200 pt-6">
+                  <h3 className="text-base md:text-lg font-bold text-zinc-900 mb-4">Направления моей работы</h3>
+                  <ul className="space-y-2 text-zinc-600">
+                    <li>— Интегративная психология и телесно-ориентированная терапия</li>
+                    <li>— Энергетические сессии и выравнивание тела</li>
+                    <li>— Работа с клеточной памятью и глубинными состояниями</li>
+                    <li>— Индивидуальные и групповые программы</li>
+                    <li>— Диагностика тонкого и физического тела</li>
+                  </ul>
+                </div>
+
+                <div className="border-t border-zinc-200 pt-6">
+                  <h3 className="text-base md:text-lg font-bold text-zinc-900 mb-4">Профессиональная база</h3>
+                  <ul className="space-y-2 text-zinc-600">
+                    <li>— Интегративный психолог</li>
+                    <li>— Фасилитатор Access</li>
+                    <li>— Телесно-ориентированный и энергетический терапевт</li>
+                    <li>— Проводник энергий</li>
+                    <li>— Целительные техники Ниа Та Нэ, Ноам Зарус, Маа За Тамее</li>
+                    <li>— Мастер Тора Ан Тария</li>
+                    <li>— Терапевт и инструктор Божественного выравнивания</li>
+                    <li>— Духовное целительство и энергетическая кристаллотерапия</li>
+                    <li>— Духовное наставничество</li>
+                  </ul>
+                </div>
+
+                <div className="border-t border-zinc-200 pt-6">
+                  <h3 className="text-base md:text-lg font-bold text-zinc-900 mb-4">Как я работаю</h3>
+                  <p className="mb-4">
+                    С добротой, вниманием и глубоким уважением к пути человека я помогаю устранять энергетические блокады, активировать жизненные силы организма и возвращать ощущение внутренней опоры. В своей работе я опираюсь на:
+                  </p>
+                  <ul className="space-y-2 text-zinc-600 mb-4">
+                    <li>• интуитивное видение человека в его целостности</li>
+                    <li>• энергию кристаллов</li>
+                    <li>• поддержку Духовного Мира</li>
+                  </ul>
+                  <p>
+                    Я помогаю увидеть в себе уникальную и восхитительную сущность, которая всегда была внутри, но могла быть скрыта слоями напряжения, опыта и боли.
+                  </p>
+                </div>
               </div>
             </div>
 
