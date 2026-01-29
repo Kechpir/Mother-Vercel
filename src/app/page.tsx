@@ -168,8 +168,13 @@ export default function Home() {
             </div>
             
             <nav className="hidden md:flex items-center gap-6">
+              <a href="https://www.instagram.com/accessbars.irina/" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-9 h-9 rounded-xl bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] text-white shadow-md hover:scale-110 transition-transform" aria-label="Instagram">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+              </a>
+              <a href="https://t.me/+7WoSGeS2y6JhNzQy" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-9 h-9 rounded-xl bg-[#0088cc] text-white shadow-md hover:scale-110 transition-transform" aria-label="Telegram">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4"><path d="m22 2-7 20-4-9-9-4Z"></path><path d="M22 2 11 13"></path></svg>
+              </a>
               <a href="#about" className="text-zinc-300 hover:text-[#ffa600] transition-colors text-sm font-medium uppercase tracking-widest">О мне</a>
-              <a href="#social" className="text-zinc-300 hover:text-[#ffa600] transition-colors text-sm font-medium uppercase tracking-widest">Соц сети</a>
               <a href="#register" className="bg-[#ffa600] text-white px-5 py-2 rounded-full text-xs font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all shadow-lg">
                 Оплата
               </a>
@@ -876,9 +881,14 @@ export default function Home() {
               </a>
             </div>
             
-            <p className="text-[9px] text-zinc-300 uppercase tracking-[0.3em] font-medium">
-              © 2026. Все права защищены.
-            </p>
+            <div className="space-y-2">
+              <p className="text-[9px] text-zinc-300 uppercase tracking-[0.3em] font-medium">
+                © 2026. Все права защищены.
+              </p>
+              <p className="text-[9px] text-zinc-400 tracking-[0.05em] font-medium max-w-xs">
+                ИП Головатова Ирина Расимовна, БИН (ИИН) 730521450027
+              </p>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4 text-[9px] md:text-[10px] text-zinc-400 uppercase tracking-widest font-medium">
