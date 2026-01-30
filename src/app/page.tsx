@@ -829,7 +829,6 @@ export default function Home() {
                 {promoCodeValid && !promoCodeValid.valid && formData.promo_code && (
                   <p className="text-red-400 text-xs mt-1 ml-4">Неверный промокод</p>
                 )}
-                <p className="text-zinc-400 text-[10px] mt-2 ml-4">Стандартная оплата 25.000 ₸. С промокодом PROMO2026 — 15.000 ₸</p>
               </div>
 
               <div className="pt-4 space-y-5">
