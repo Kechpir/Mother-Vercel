@@ -20,7 +20,7 @@ export default function Home() {
   const [agreed, setAgreed] = useState(false);
   const [promoCodeValid, setPromoCodeValid] = useState<{valid: boolean, discount?: number} | null>(null);
   const [checkingPromo, setCheckingPromo] = useState(false);
-  const [finalAmount, setFinalAmount] = useState(25000);
+  const [finalAmount, setFinalAmount] = useState(500); // Временно 500 ₸ для тестовой оплаты, потом вернуть 25000
   const [timeLeft, setTimeLeft] = useState({ days: "00", hours: "00", minutes: "00", seconds: "00" });
 
   useEffect(() => {
@@ -70,7 +70,7 @@ export default function Home() {
   const checkPromoCode = async (code: string) => {
     if (!code || code.trim() === '') {
       setPromoCodeValid(null);
-      setFinalAmount(25000);
+      setFinalAmount(500);
       return;
     }
 
@@ -88,14 +88,14 @@ export default function Home() {
         setPromoCodeValid({ valid: true, discount: data.discount_amount || 0 });
         // Применяем скидку
         const discount = data.discount_amount || 0;
-        setFinalAmount(Math.max(0, 25000 - discount));
+        setFinalAmount(Math.max(0, 500 - discount));
       } else {
         setPromoCodeValid({ valid: false });
-        setFinalAmount(25000);
+        setFinalAmount(500);
       }
     } catch (error) {
       setPromoCodeValid({ valid: false });
-      setFinalAmount(25000);
+      setFinalAmount(500);
     } finally {
       setCheckingPromo(false);
     }
@@ -420,8 +420,8 @@ export default function Home() {
                 <div className="bg-zinc-50 p-4 rounded-2xl border border-zinc-100 flex flex-col items-center justify-center">
                   <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-widest mb-1">Стоимость в Тенге</span>
                   <div className="flex flex-col items-center">
-                    {finalAmount < 25000 && (
-                      <span className="text-xs text-zinc-400 line-through mb-1">25.000 ₸</span>
+                    {finalAmount < 500 && (
+                      <span className="text-xs text-zinc-400 line-through mb-1">500 ₸</span>
                     )}
                     <span className="text-3xl md:text-4xl font-black text-black tracking-tighter">
                       {finalAmount.toLocaleString('ru-RU')} <span className="text-lg md:text-xl ml-1">тг</span>
@@ -617,7 +617,7 @@ export default function Home() {
         
         <div className="relative z-10 max-w-5xl mx-auto px-6 text-center space-y-10">
           <h2 className="text-2xl md:text-4xl font-black uppercase tracking-tight leading-tight">
-            Успей прийти на сессии по цене со <br className="hidden md:block" /> скидкой <span className="text-zinc-400/50 line-through">30.000 тг</span> <span className="text-[#ffa600]">25.000 тг</span>
+            Успей прийти на сессии по цене со <br className="hidden md:block" /> скидкой <span className="text-zinc-400/50 line-through">30.000 тг</span> <span className="text-[#ffa600]">500 ₸</span>
           </h2>
           
           <div className="space-y-4">
@@ -807,7 +807,7 @@ export default function Home() {
                         checkPromoCode(e.target.value);
                       } else {
                         setPromoCodeValid(null);
-                        setFinalAmount(25000);
+                        setFinalAmount(500);
                       }
                     }}
                   />
