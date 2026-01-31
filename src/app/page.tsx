@@ -3,12 +3,11 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { supabase } from "../lib/supabase";
-import { ChevronDown, Sparkles, Zap, Check, User, MessageCircle, ChevronLeft, ChevronRight, Plus, X, Mail, Phone, MapPin, Menu } from "lucide-react";
+import { ChevronDown, Sparkles, Zap, Check, User, MessageCircle, ChevronLeft, ChevronRight, Mail, Phone, MapPin, Menu, Info } from "lucide-react";
 
 export default function Home() {
   const [loading, setLoading] = useState(false);
   const [exchangeRate, setExchangeRate] = useState<number | null>(null);
-  const [openEnergy, setOpenEnergy] = useState<number | null>(null);
   const [formData, setFormData] = useState({
     full_name: "",
     phone: "",
@@ -24,7 +23,7 @@ export default function Home() {
   const [timeLeft, setTimeLeft] = useState({ days: "00", hours: "00", minutes: "00", seconds: "00" });
 
   useEffect(() => {
-    const targetDate = new Date("2026-02-02T22:00:00+05:00"); // 2 февраля 22:00 по Астане (GMT+5)
+    const targetDate = new Date("2026-02-07T22:00:00+05:00"); // 7 февраля 22:00 по Астане (GMT+5)
 
     const timer = setInterval(() => {
       const now = new Date();
@@ -176,7 +175,7 @@ export default function Home() {
               </a>
               <a href="#about" className="text-zinc-300 hover:text-[#ffa600] transition-colors text-sm font-medium uppercase tracking-widest">О мне</a>
               <a href="#register" className="bg-[#ffa600] text-white px-5 py-2 rounded-full text-xs font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all shadow-lg">
-                Оплата
+                Забронировать место
               </a>
             </nav>
 
@@ -205,7 +204,7 @@ export default function Home() {
             </span>
           </h1>
           <p className="text-sm md:text-base mb-10 font-light tracking-[0.2em] uppercase text-zinc-300 [text-shadow:0_1px_8px_rgba(0,0,0,0.5)]">
-            с 2 по 27 февраля
+            с 7 по 27 февраля
           </p>
           <a href="#register" className="group relative inline-flex items-center justify-center px-10 py-4 md:px-14 md:py-5 overflow-hidden font-semibold text-white transition-all duration-300 bg-gradient-to-r from-[#ffa600] to-[#ff8c00] rounded-[2rem] hover:from-white hover:to-zinc-100 hover:text-black hover:scale-[1.02] shadow-[0_8px_30px_rgba(255,166,0,0.4)] hover:shadow-[0_12px_40px_rgba(255,166,0,0.6)] border border-[#ffa600]/20">
             <span className="relative uppercase tracking-[0.15em] text-sm md:text-base font-medium">Принять участие</span>
@@ -224,7 +223,7 @@ export default function Home() {
             Цикл энергетического погружения <br /> «Энергия первоначальности»
           </h2>
           <div className="space-y-1 text-sm md:text-base text-zinc-500 mb-8 font-light italic">
-            <p>с 2 по 27 февраля | 10 сеансов по будням</p>
+            <p>с 7 по 27 февраля | 10 сеансов по будням</p>
             <p>Групповой формат | 22:00 по Астане | Zoom</p>
           </div>
           
@@ -413,7 +412,7 @@ export default function Home() {
               </h3>
               
               <p className="text-[10px] md:text-xs text-orange-500 font-black uppercase tracking-widest mb-5">
-                с 2 по 27 февраля
+                с 7 по 27 февраля
               </p>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl mb-6">
@@ -463,145 +462,233 @@ export default function Home() {
       </section>
 
       {/* --- БЛОК 10: ЗДОРОВЫЙ ПОЗВОНОЧНИК (ПОДРОБНО) --- */}
-      <section className="py-12 md:py-16 px-4 bg-white border-t border-zinc-100">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-2xl md:text-3xl font-bold mb-6 uppercase tracking-tight">
-            Заочный курс <br /> "Здоровый позвоночник"
-          </h2>
-          <div className="space-y-1 text-sm md:text-base text-zinc-500 mb-12 font-light italic">
-            <p>с 16 по 27 февраля | 10 сеансов по будням</p>
-            <p>Сеанс в группе в 11.00 по Астане. Доступен 24 часа.</p>
-          </div>
-
-          <div className="space-y-10">
-            <h3 className="text-lg md:text-xl font-bold uppercase tracking-tight max-w-2xl mx-auto leading-tight">
-              Нарушения опорно-двигательной системы проявляются через различные заболевания и болезненные симптомы
-            </h3>
-            
-            <div className="relative max-w-2xl mx-auto">
-              <img src="https://res.cloudinary.com/dij7s1nbf/image/upload/v1769258254/diagram_an0vin.jpg" alt="Диаграмма" className="w-full h-auto rounded-2xl" />
-            </div>
-
-            <div className="pt-10 space-y-8">
-              <div className="space-y-2">
-                <h4 className="text-lg md:text-xl font-bold uppercase tracking-tight">Данный курс поможет вам в следующих ситуациях:</h4>
-                <p className="text-[10px] md:text-xs text-zinc-400 uppercase tracking-widest font-medium">при искривлениях, болях, повышенном давлении</p>
+      <section className="pt-16 md:pt-24 pb-8 md:pb-12 px-4 bg-white border-t border-zinc-100 overflow-hidden">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+            {/* Левая колонка: Текст */}
+            <div className="flex-1 space-y-8 order-2 lg:order-1">
+              <div className="space-y-4">
+                <div className="inline-block bg-[#ffa600]/10 text-[#ffa600] px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-[0.2em]">
+                  Исцеляющий цикл
+                </div>
+                <h2 className="font-hero text-xl md:text-2xl lg:text-3xl font-semibold text-zinc-900 tracking-tight leading-[1.25] text-balance">
+                  «Энергетическое выравнивание <br className="hidden md:block" /> всех тел и позвоночника»
+                </h2>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-y-8 gap-x-4">
-                {[
-                  { icon: <Zap className="text-[#ffa600]" size={18} />, text: "Боли в пояснице и спине" },
-                  { icon: <Sparkles className="text-[#ffa600]" size={18} />, text: "Высокое давление, головные боли и мигрени" },
-                  { icon: <Check className="text-[#ffa600]" size={18} />, text: "Искривление таза и разница в длине ног" },
-                  { icon: <Zap className="text-[#ffa600]" size={18} />, text: "Боли и спазмы в мышцах, нарушение координации" },
-                  { icon: <Check className="text-[#ffa600]" size={18} />, text: "Боли в плечах и коленных суставах, артрозы" },
-                  { icon: <Sparkles className="text-[#ffa600]" size={18} />, text: "Искривления в шейном отделе, нарушения слуха" }
-                ].map((item, i) => (
-                  <div key={i} className="flex flex-col items-center md:items-start text-center md:text-left gap-3 px-4">
-                    <div className="bg-orange-50 p-2 rounded-full">{item.icon}</div>
-                    <p className="text-[10px] md:text-[11px] font-bold text-zinc-800 uppercase leading-relaxed tracking-tight">{item.text}</p>
-                  </div>
-                ))}
+              <div className="space-y-6 text-base md:text-lg text-zinc-600 font-light leading-relaxed">
+                <p className="text-zinc-900 font-medium">
+                  Это пространство глубокой работы с телом, психоэмоциональным состоянием и энергетической системой человека.
+                </p>
+                <p>
+                  Сессия направлена не только на физическое выравнивание, но и на восстановление внутренней согласованности — когда тело, эмоции, сознание и энергия снова начинают работать как единое целое.
+                </p>
+                
+                <div className="bg-zinc-50 p-6 md:p-8 rounded-[32px] border border-zinc-100 space-y-4">
+                  <p className="font-bold text-zinc-900 uppercase text-xs tracking-widest">Когда вы в напряжении:</p>
+                  <ul className="space-y-3">
+                    <li className="flex items-center gap-3">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#ffa600]" />
+                      <span className="text-sm md:text-base">В теле — через боль, зажимы, усталость</span>
+                    </li>
+                    <li className="flex items-center gap-3">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#ffa600]" />
+                      <span className="text-sm md:text-base">В состоянии — через тревожность и перегрузку</span>
+                    </li>
+                    <li className="flex items-center gap-3">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#ffa600]" />
+                      <span className="text-sm md:text-base">В энергии — через потерю опоры и ресурса</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <p className="italic text-[#ffa600] font-medium border-l-4 border-[#ffa600] pl-6 py-2">
+                  Энергетическое выравнивание создаёт условия для возвращения к более естественному состоянию — внутренней устойчивости, целостности и присутствия в себе.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap gap-6 pt-4">
+                <div className="space-y-1">
+                  <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Период</p>
+                  <p className="text-sm font-bold text-zinc-900">с 16 по 27 февраля</p>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Формат</p>
+                  <p className="text-sm font-bold text-zinc-900">10 сеансов по будням</p>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Время</p>
+                  <p className="text-sm font-bold text-zinc-900">22:00 по Астане</p>
+                </div>
               </div>
             </div>
 
-            {/* НОВЫЙ БЛОК: НАПРАВЛЕНИЯ ЭНЕРГИЙ КУРСА */}
-            <div className="pt-16 md:pt-20 border-t border-zinc-100">
-              <h3 className="text-xl md:text-2xl font-bold text-center mb-12 uppercase tracking-tight leading-tight max-w-2xl mx-auto">
-                Высокочастотные мощные энергии этого курса направлены на:
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6 text-left max-w-4xl mx-auto">
-                {[
-                  "Выпрямление светового канала вдоль позвоночника",
-                  "Центрирование всей опорно-двигательной системы",
-                  "Освобождение от тяжелых элементов кармы сосредоточенной в костях",
-                  "Восстановление и Божественное урегулирование всего организма",
-                  "Исправление искривления таза и выравнивание длины ног",
-                  "Очищение тела от тяжелых металлов",
-                  "Выравнивание уровня лопаток",
-                  "Очищение энергетического тела и открытие верхних чакр",
-                  "Освобождение от боли в спине и выравнивание позвоночника",
-                  "Поднятие вибраций"
-                ].map((text, i) => (
-                  <div key={i} className="flex items-start gap-4 group">
-                    <div className="mt-1 shrink-0">
-                      <Check className="text-[#ffa600] group-hover:scale-125 transition-transform" size={20} />
-                    </div>
-                    <span className="text-sm md:text-base text-zinc-700 font-light leading-snug">{text}</span>
-                  </div>
-                ))}
+            {/* Правая колонка: Картинка */}
+            <div className="flex-1 order-1 lg:order-2 w-full max-w-[500px] lg:max-w-none">
+              <div className="relative group">
+                {/* Декоративное свечение сзади */}
+                <div className="absolute -inset-4 bg-gradient-to-tr from-[#ffa600]/20 to-purple-500/20 rounded-[40px] blur-2xl opacity-50 group-hover:opacity-80 transition-opacity duration-700" />
+                
+                <div className="relative aspect-[4/5] rounded-[40px] overflow-hidden shadow-2xl border-2 border-white/50">
+                  <img 
+                    src="https://res.cloudinary.com/dij7s1nbf/image/upload/v1769767151/ChatGPT_Image_30_%D1%8F%D0%BD%D0%B2._2026_%D0%B3._14_58_45_ybv35t.png" 
+                    alt="Энергетическое выравнивание всех тел и позвоночника" 
+                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-60" />
+                </div>
+
+                {/* Плашка поверх картинки */}
+                <div className="absolute -bottom-6 -left-6 bg-white p-6 rounded-3xl shadow-xl border border-zinc-100 hidden md:block max-w-[200px] animate-float">
+                  <Sparkles className="text-[#ffa600] mb-2" size={24} />
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-900 leading-tight">
+                    Глубокая трансформация на всех уровнях
+                  </p>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
-      {/* --- БЛОК: ЭНЕРГИИ КУРСА (АККОРДЕОН) --- */}
-      <section className="py-12 md:py-16 px-4 bg-white border-t border-zinc-100">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-xl md:text-3xl font-bold text-center mb-10 uppercase tracking-tight leading-tight max-w-3xl mx-auto">
-            В курсе "Здоровый позвоночник" мы будем работать со следующими энергиями:
-          </h2>
 
-          <div className="border-t border-[#ffa600]/30">
-            {[
-              {
-                title: "Забота о суставах",
-                content: (
-                  <p className="text-sm md:text-base text-zinc-600 leading-relaxed font-light py-4">
-                    <span className="font-bold text-black">Энергетическая система - Забота о Суставах</span>, облегчает боль при движениях, заполняя область тонких сочленений между нашими костями. Это способствует восстановлению связок, хрящей и других тканей, необходимых для обеспечения комфортного движения каждого сустава.
-                  </p>
-                )
-              },
-              {
-                title: "Забота о костях",
-                content: (
-                  <div className="text-sm md:text-base text-zinc-600 leading-relaxed font-light py-4 space-y-4">
-                    <p className="font-bold text-black">Мощная Энергетическая система, которая работает на несколько аспектов:</p>
-                    <ul className="space-y-3">
-                      <li className="flex gap-3 items-start"><span className="text-[#ffa600]">•</span> Структурное Выравнивание энергий вашего физического тела с вашей высшей Божественной Матрицей.</li>
-                      <li className="flex gap-3 items-start"><span className="text-[#ffa600]">•</span> Улучшение и оптимизация плотности костной ткани.</li>
-                      <li className="flex gap-3 items-start"><span className="text-[#ffa600]">•</span> Жизненная Сила Костного Мозга помогает костному мозгу вырабатывать здоровые клетки крови.</li>
-                    </ul>
-                    <p className="font-medium text-zinc-800 italic border-l-2 border-[#ffa600] pl-4">Эти Энергии обладают Божественным Разумом.</p>
+      <div className="pt-6 md:pt-8 pb-12 md:pb-16 px-4 md:px-8 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <div className="pt-4 space-y-10">
+              <div className="text-center max-w-3xl mx-auto">
+                <h4 className="text-xl md:text-2xl font-bold text-zinc-900 tracking-tight leading-tight mb-2">
+                  Этот формат может быть полезен, если вы замечаете:
+                </h4>
+                <p className="text-base md:text-lg text-zinc-500 font-light italic">
+                  (когда тело и внутреннее состояние выходят из баланса)
+                </p>
+              </div>
+
+              <div className="border-t border-zinc-200 pt-8" />
+
+              <div className="space-y-6">
+                <h5 className="text-base md:text-lg font-bold uppercase tracking-widest text-[#ffa600]">
+                  Верхний ряд — физическое тело
+                </h5>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  <div className="space-y-2">
+                    <p className="text-base md:text-lg font-semibold text-zinc-800">Напряжение и боли в спине</p>
+                    <p className="text-sm md:text-base text-zinc-600 font-light leading-relaxed">ощущение скованности, усталости, потери гибкости и опоры</p>
                   </div>
-                )
-              },
-              {
-                title: "Божественное выравнивание позвоночника (1 сеанс)",
-                content: (
-                  <div className="text-sm md:text-base text-zinc-600 leading-relaxed font-light py-4 space-y-4">
-                    <p>
-                      <span className="font-bold text-black italic">"Божественное выпрямление"</span> соответствует пульсу Нового времени. Оно представляет собой процесс Божественного изменения структуры ДНК с помощью силы духа.
-                    </p>
-                    <p>
-                      Вы сможете сразу же заметить изменение статики. Спустя несколько дней или недель после сеанса выпрямления позвоночника тело человека восстанавливает божественное урегулирование на клеточном уровне.
-                    </p>
-                    <p className="font-medium text-zinc-800 italic border-l-2 border-[#ffa600] pl-4">
-                      Это урегулирование обуславливает изменение информации в клетках и служит импульсом для самоисцеления.
-                    </p>
+                  <div className="space-y-2">
+                    <p className="text-base md:text-lg font-semibold text-zinc-800">Головные боли, давление, мигрени</p>
+                    <p className="text-sm md:text-base text-zinc-600 font-light leading-relaxed">как телесная реакция на длительное напряжение</p>
                   </div>
-                )
-              }
-            ].map((item, i) => (
-              <div key={i} className="border-b border-[#ffa600]/30 overflow-hidden">
-                <button 
-                  onClick={() => setOpenEnergy(openEnergy === i ? null : i)}
-                  className="w-full flex items-center justify-between py-6 md:py-8 text-left group"
-                >
-                  <span className={`text-base md:text-xl font-medium transition-all ${openEnergy === i ? 'text-[#ffa600] font-bold' : 'text-zinc-800 group-hover:text-black'}`}>
-                    {item.title}
-                  </span>
-                  <div className={`transition-transform duration-300 ${openEnergy === i ? 'rotate-180' : ''}`}>
-                    {openEnergy === i ? <X size={20} className="text-[#ffa600]" /> : <Plus size={20} className="text-zinc-400" />}
+                  <div className="space-y-2">
+                    <p className="text-base md:text-lg font-semibold text-zinc-800">Перекос таза, ощущение разной длины ног</p>
+                    <p className="text-sm md:text-base text-zinc-600 font-light leading-relaxed">нарушение устойчивости и баланса в теле</p>
                   </div>
-                </button>
-                <div 
-                  className={`transition-all duration-500 ease-in-out ${openEnergy === i ? 'max-h-[1000px] opacity-100 mb-6' : 'max-h-0 opacity-0'}`}
-                >
-                  <div className="px-1">{item.content}</div>
                 </div>
               </div>
-            ))}
+
+              <div className="border-t border-zinc-200 pt-8" />
+
+              <div className="space-y-6">
+                <h5 className="text-base md:text-lg font-bold uppercase tracking-widest text-[#ffa600]">
+                  Нижний ряд — состояние и энергия
+                </h5>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  <div className="space-y-2">
+                    <p className="text-base md:text-lg font-semibold text-zinc-800">Хроническая тревожность и внутреннее давление</p>
+                    <p className="text-sm md:text-base text-zinc-600 font-light leading-relaxed">сложность расслабиться и отпустить контроль</p>
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-base md:text-lg font-semibold text-zinc-800">Эмоциональная усталость и истощение</p>
+                    <p className="text-sm md:text-base text-zinc-600 font-light leading-relaxed">ощущение перегруженности, потери ресурса и живости</p>
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-base md:text-lg font-semibold text-zinc-800">Потеря опоры и устойчивости внутри</p>
+                    <p className="text-sm md:text-base text-zinc-600 font-light leading-relaxed">жизнь в режиме выживания, нестабильный эмоциональный фон</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="border-t border-zinc-200 pt-8" />
+
+              <p className="text-sm md:text-base text-zinc-500 font-light leading-relaxed text-center max-w-3xl mx-auto italic">
+                Работа направлена на восстановление согласованности между телом, психоэмоциональным состоянием и энергетической системой человека.
+              </p>
+            </div>
+
+            {/* НОВЫЙ БЛОК: НАПРАВЛЕНИЯ ЭНЕРГИЙ КУРСА */}
+            <div className="pt-16 md:pt-20 border-t border-zinc-100">
+              <h3 className="text-xl md:text-2xl font-bold text-center mb-10 tracking-tight leading-tight max-w-2xl mx-auto">
+                Энергии этого курса направлены на:
+              </h3>
+
+              <div className="border-t border-zinc-200 pt-8" />
+
+              <div className="space-y-6 max-w-3xl mx-auto">
+                <h4 className="text-sm md:text-base font-bold uppercase tracking-widest text-[#ffa600]">
+                  Восстановление оси и телесной согласованности
+                </h4>
+                <ul className="space-y-3 text-left">
+                  {[
+                    "Выравнивание внутренней оси вдоль позвоночника",
+                    "Центрирование опорно-двигательной системы",
+                    "Восстановление баланса таза и опоры",
+                    "Гармонизацию положения лопаток и плечевого пояса",
+                    "Снижение глубинного напряжения в спине"
+                  ].map((text, i) => (
+                    <li key={i} className="flex items-start gap-3">
+                      <Check className="mt-0.5 shrink-0 text-[#ffa600]" size={18} />
+                      <span className="text-sm md:text-base text-zinc-700 font-semibold leading-snug">{text}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="border-t border-zinc-200 pt-8 mt-8" />
+
+              <div className="space-y-6 max-w-3xl mx-auto mt-8">
+                <h4 className="text-sm md:text-base font-bold uppercase tracking-widest text-[#ffa600]">
+                  Работу с энергетическим и психоэмоциональным состоянием
+                </h4>
+                <ul className="space-y-3 text-left">
+                  {[
+                    "Освобождение от зафиксированных энергетических перегрузок",
+                    "Восстановление естественной циркуляции энергии",
+                    "Очищение энергетического поля",
+                    "Поддержку ясности, устойчивости и внутреннего баланса",
+                    "Повышение чувствительности к себе и своему состоянию"
+                  ].map((text, i) => (
+                    <li key={i} className="flex items-start gap-3">
+                      <Check className="mt-0.5 shrink-0 text-[#ffa600]" size={18} />
+                      <span className="text-sm md:text-base text-zinc-700 font-semibold leading-snug">{text}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="border-t border-zinc-200 pt-8 mt-10" />
+
+              <p className="text-xs md:text-sm text-zinc-500 font-light leading-relaxed text-center max-w-2xl mx-auto italic mt-6">
+                Процесс направлен на согласованную работу с телом, состоянием и энергетической системой, без давления и форсирования изменений.
+              </p>
+            </div>
+          </div>
+        </div>
+
+      <section className="py-12 md:py-16 px-4 md:px-8 bg-white border-t border-zinc-100">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 text-zinc-700 font-medium leading-relaxed text-base md:text-lg lg:text-xl">
+            <p>
+              Энергетическое выравнивание сонастроено с ритмами Нового времени.
+              Это процесс глубинной перенастройки, в котором активируются внутренние механизмы обновления и восстановления человека.
+            </p>
+            <p>
+              Изменения могут ощущаться уже на уровне телесной статики —
+              со временем тело начинает естественно возвращаться к более устойчивому и сбалансированному состоянию.
+            </p>
+            <p className="md:col-span-2">
+              В течение последующих дней и недель процесс продолжает раскрываться на клеточном уровне:
+              происходит обновление внутренней информации,
+              что служит импульсом для включения собственных восстановительных и саморегулирующих процессов организма.
+            </p>
           </div>
         </div>
       </section>
@@ -622,11 +709,11 @@ export default function Home() {
           
           <div className="space-y-4">
             <p className="text-sm md:text-lg font-bold uppercase tracking-widest opacity-90">
-              Цикл энергетических сессий будет проходить по будням с 2 по 27 февраля.
+              Цикл энергетических сессий будет проходить по будням с 7 по 27 февраля.
             </p>
             <div className="text-xs md:text-sm font-medium space-y-1 opacity-80 uppercase tracking-widest">
-              <p>Закрытие регистрации 2 февраля в 21.00 по Астане.</p>
-              <p>Старт курса 2 февраля в 22.00 по Астане. Осталось:</p>
+              <p>Закрытие регистрации 7 февраля в 22.00 по Астане.</p>
+              <p>Старт курса 7 февраля в 22.00 по Астане. Осталось:</p>
             </div>
           </div>
 
@@ -743,31 +830,33 @@ export default function Home() {
       </section>
 
       {/* --- БЛОК 15: ФОРМА РЕГИСТРАЦИИ (В САМОМ НИЗУ) --- */}
-      <section id="register" className="pt-4 pb-20 px-4 bg-gradient-to-b from-zinc-50 via-orange-50/30 to-zinc-50 relative overflow-hidden">
+      <section id="register" className="pt-4 pb-20 px-6 md:px-8 lg:px-10 bg-gradient-to-b from-zinc-50 via-orange-50/30 to-zinc-50 relative overflow-hidden">
         {/* Фоновые декоративные элементы для глубины */}
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-orange-200/40 rounded-full blur-[120px] opacity-60" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-orange-100/50 rounded-full blur-[120px] opacity-40" />
 
-        <div className="max-w-xl mx-auto relative z-10">
-          <div className="bg-gradient-to-br from-zinc-900 via-zinc-800 to-black p-6 md:p-8 rounded-[32px] shadow-[0_25px_80px_-15px_rgba(0,0,0,0.6),0_0_0_1px_rgba(255,166,0,0.15),inset_0_1px_0_rgba(255,255,255,0.05)] border-2 border-[#ffa600]/20 flex flex-col items-center relative overflow-hidden">
+        <div className="max-w-6xl mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-[1fr_28rem] gap-6 lg:gap-8 items-start">
+          {/* Левая колонка: форма */}
+          <div className="min-h-0 order-2 lg:order-1 flex flex-col">
+            <div className="w-full h-full min-h-0 flex-1 flex flex-col bg-gradient-to-br from-zinc-900 via-zinc-800 to-black p-3 md:p-4 rounded-2xl shadow-[0_25px_80px_-15px_rgba(0,0,0,0.6),0_0_0_1px_rgba(255,166,0,0.15),inset_0_1px_0_rgba(255,255,255,0.05)] border-2 border-[#ffa600]/20 relative overflow-hidden">
             {/* Декоративные элементы */}
             <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-20 h-1 bg-gradient-to-r from-transparent via-[#ffa600] to-transparent rounded-full" />
             <div className="absolute top-0 right-0 w-48 h-48 bg-[#ffa600]/10 rounded-full blur-[80px] -mr-24 -mt-24" />
             <div className="absolute bottom-0 left-0 w-48 h-48 bg-[#ffa600]/10 rounded-full blur-[80px] -ml-24 -mb-24" />
             
-            <div className="text-center mb-6 space-y-2 relative z-10">
-              <div className="inline-block bg-[#ffa600]/20 text-[#ffa600] px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border border-[#ffa600]/30">
+            <div className="text-left mb-2 space-y-0.5 relative z-10">
+              <div className="inline-block bg-[#ffa600]/20 text-[#ffa600] px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-widest border border-[#ffa600]/30">
                 Финальный шаг
               </div>
-              <h3 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tighter leading-tight">
-                Забронируйте <br /> своё участие
+              <h3 className="text-lg md:text-xl font-black text-white uppercase tracking-tighter leading-tight">
+                Забронируйте своё участие
               </h3>
-              <p className="text-zinc-300 text-xs font-light max-w-xs mx-auto">
-                Заполните данные для регистрации и перехода к безопасной системе оплаты Prodamus.
+              <p className="text-zinc-300 text-[10px] font-light max-w-xs leading-snug">
+                Заполните данные и перейдите к оплате Prodamus.
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="w-full space-y-3">
+            <form onSubmit={handleSubmit} className="w-full space-y-1.5">
               {[
                 { id: "full_name", placeholder: "ФИО полностью", icon: <User size={18} /> },
                 { id: "age", placeholder: "Ваш возраст", icon: <Sparkles size={18} /> },
@@ -783,7 +872,7 @@ export default function Home() {
                     required 
                     type={field.id === 'email' ? 'email' : (field.id === 'phone' ? 'tel' : (field.id === 'age' ? 'number' : 'text'))}
                     placeholder={field.placeholder} 
-                    className="w-full bg-zinc-800/50 border-2 border-zinc-700/50 p-3.5 pl-12 rounded-2xl text-white outline-none focus:border-[#ffa600] focus:ring-2 focus:ring-orange-500/20 focus:bg-zinc-800 transition-all duration-300 text-sm placeholder:text-zinc-400 shadow-[0_4px_12px_rgba(0,0,0,0.3)] group-hover:border-zinc-600"
+                    className="w-full bg-zinc-800/50 border-2 border-zinc-700/50 py-2 px-3 pl-10 rounded-lg text-sm text-white outline-none focus:border-[#ffa600] focus:ring-2 focus:ring-orange-500/20 focus:bg-zinc-800 transition-all duration-300 placeholder:text-zinc-400 shadow-[0_4px_12px_rgba(0,0,0,0.3)] group-hover:border-zinc-600"
                     value={(formData as any)[field.id]} 
                     onChange={(e) => setFormData({...formData, [field.id]: e.target.value})} 
                   />
@@ -799,7 +888,7 @@ export default function Home() {
                   <input 
                     type="text"
                     placeholder="Промокод (необязательно)" 
-                    className="w-full bg-zinc-800/50 border-2 p-3.5 pl-12 pr-24 rounded-2xl text-white outline-none focus:border-[#ffa600] focus:ring-2 focus:ring-orange-500/20 focus:bg-zinc-800 transition-all duration-300 text-sm placeholder:text-zinc-400 shadow-[0_4px_12px_rgba(0,0,0,0.3)] group-hover:border-zinc-600"
+                    className="w-full bg-zinc-800/50 border-2 py-2 px-3 pl-10 pr-24 rounded-lg text-sm text-white outline-none focus:border-[#ffa600] focus:ring-2 focus:ring-orange-500/20 focus:bg-zinc-800 transition-all duration-300 placeholder:text-zinc-400 shadow-[0_4px_12px_rgba(0,0,0,0.3)] group-hover:border-zinc-600"
                     value={formData.promo_code} 
                     onChange={(e) => {
                       setFormData({...formData, promo_code: e.target.value});
@@ -831,16 +920,16 @@ export default function Home() {
                 )}
               </div>
 
-              <div className="pt-4 space-y-5">
+              <div className="pt-2 space-y-2">
                 <button 
                   type="submit" 
                   disabled={loading} 
-                  className="w-full bg-gradient-to-r from-[#ffa600] to-[#ff8c00] text-white py-3.5 rounded-2xl font-black text-sm hover:from-black hover:to-zinc-900 hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.4)] hover:scale-[1.02] transition-all duration-300 uppercase tracking-widest active:scale-[0.98] shadow-[0_8px_24px_-5px_rgba(255,166,0,0.4)]"
+                  className="w-full bg-gradient-to-r from-[#ffa600] to-[#ff8c00] text-white py-2.5 rounded-xl font-black text-sm hover:from-black hover:to-zinc-900 hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.4)] hover:scale-[1.02] transition-all duration-300 uppercase tracking-widest active:scale-[0.98] shadow-[0_8px_24px_-5px_rgba(255,166,0,0.4)]"
                 >
                   {loading ? "ПОДОЖДИТЕ..." : "ЗАПИСАТЬСЯ И ОПЛАТИТЬ"}
                 </button>
                 
-                <div className="bg-zinc-800/40 backdrop-blur-sm p-4 rounded-2xl border-2 border-zinc-700/30 shadow-[0_4px_12px_rgba(0,0,0,0.3)] flex items-start gap-3">
+                <div className="bg-zinc-800/40 backdrop-blur-sm p-2 rounded-lg border-2 border-zinc-700/30 shadow-[0_4px_12px_rgba(0,0,0,0.3)] flex items-start gap-2">
                   <div className="pt-0.5">
                     <input 
                       required
@@ -857,6 +946,36 @@ export default function Home() {
                 </div>
               </div>
             </form>
+            </div>
+          </div>
+
+          {/* Правая колонка: сноска «Как записаться» — крупный текст, аккуратное оформление */}
+          <div className="order-1 lg:order-2 w-full">
+            <div className="w-full p-6 md:p-8 rounded-[32px] bg-gradient-to-br from-amber-50 to-orange-50/50 border-2 border-[#ffa600]/50 shadow-[0_20px_50px_-12px_rgba(255,166,0,0.15),0_0_0_1px_rgba(255,166,0,0.1)] relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-40 h-40 bg-[#ffa600]/15 rounded-full blur-3xl -mr-20 -mt-20" />
+              <div className="absolute bottom-0 left-0 w-24 h-24 bg-amber-200/30 rounded-full blur-2xl -ml-12 -mb-12" />
+              <div className="relative z-10 flex items-start gap-4">
+                <div className="shrink-0 w-14 h-14 rounded-2xl bg-[#ffa600]/20 flex items-center justify-center border-2 border-[#ffa600]/50 shadow-sm">
+                  <Info className="text-[#ffa600]" size={26} />
+                </div>
+                <div className="space-y-4 flex-1 min-w-0">
+                  <h4 className="text-lg md:text-xl font-bold text-zinc-900 leading-tight">
+                    Как записаться на курс
+                  </h4>
+                  <ol className="space-y-3 text-base md:text-lg text-zinc-700 font-medium leading-relaxed list-decimal list-inside pl-1">
+                    <li className="pl-1">Заполните анкету в форме слева.</li>
+                    <li className="pl-1">Нажмите «Записаться» и оплатите участие.</li>
+                    <li className="pl-1">После оплаты откроется окно со ссылкой на Telegram-канал — обязательно вступите в канал.</li>
+                    <li className="pl-1">В канале каждый день будут публиковаться ссылки-приглашения на Zoom-сессии.</li>
+                  </ol>
+                  <div className="pt-3 mt-3 border-t-2 border-[#ffa600]/30">
+                    <p className="text-sm md:text-base text-zinc-800 font-semibold leading-relaxed">
+                      Без вступления в канал вы не получите доступ к сессиям.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
