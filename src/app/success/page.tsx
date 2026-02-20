@@ -4,100 +4,76 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { CheckCircle, Copy, ExternalLink } from "lucide-react";
 
+type OrderType = "main" | "protocol" | null;
+
 export default function SuccessPage() {
+  const [orderType, setOrderType] = useState<OrderType>(null);
   const [inviteLink, setInviteLink] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [participantId, setParticipantId] = useState<string | null>(null);
 
   useEffect(() => {
-    // Получаем параметры из URL
     const params = new URLSearchParams(window.location.search);
-    const id = params.get('participant_id');
-    const invId = params.get('InvId') || params.get('inv_id'); // Robokassa возвращает InvId
-    
-    // Если нет participant_id, пробуем использовать InvId
+    const id = params.get("participant_id");
+    const invId = params.get("InvId") || params.get("inv_id");
+
+    if (id) setParticipantId(id);
+
     if (!id && !invId) {
-      console.warn('No participant_id or InvId in URL. Available params:', Array.from(params.keys()));
+      setOrderType("main");
       return;
     }
-    
-    if (id) {
-      setParticipantId(id);
-      console.log('Using participant_id:', id);
-    } else if (invId) {
-      console.log('Using InvId from Robokassa:', invId);
-    }
-    
-    // Функция для получения ссылки
-    const fetchInviteLink = async () => {
+
+    const checkOrderType = async () => {
+      const q = id ? `participant_id=${id}` : `inv_id=${invId}`;
+      const res = await fetch(`/api/order-type?${q}`);
+      const data = await res.json().catch(() => ({}));
+      setOrderType(data.type === "protocol" ? "protocol" : "main");
+    };
+    checkOrderType();
+  }, []);
+
+  useEffect(() => {
+    if (orderType !== "main") return;
+
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("participant_id");
+    const invId = params.get("InvId") || params.get("inv_id");
+    if (!id && !invId) return;
+
+    const fetchInviteLink = async (): Promise<boolean> => {
       try {
-        // Формируем URL с параметрами
-        let apiUrl = '/api/telegram/get-invite?';
-        if (id) {
-          apiUrl += `participant_id=${id}`;
-        } else if (invId) {
-          apiUrl += `inv_id=${invId}`;
-        }
-        
-        console.log('Fetching invite link from:', apiUrl);
+        const apiUrl = id ? `/api/telegram/get-invite?participant_id=${id}` : `/api/telegram/get-invite?inv_id=${invId}`;
         const response = await fetch(apiUrl);
-        
-        if (!response.ok) {
-          console.error('API response not OK:', response.status, response.statusText);
-          const errorData = await response.json().catch(() => ({}));
-          console.error('Error details:', errorData);
-          return false;
+        if (response.status === 404 && invId) {
+          const typeRes = await fetch(`/api/order-type?inv_id=${invId}`);
+          const typeData = await typeRes.json().catch(() => ({}));
+          if (typeData.type === "protocol") {
+            setOrderType("protocol");
+            return true;
+          }
         }
-        
+        if (!response.ok) return false;
         const data = await response.json();
-        console.log('API response:', data);
-        
-        // Проверяем, что inviteLink существует, не null и не пустая строка
-        if (data.inviteLink && typeof data.inviteLink === 'string' && data.inviteLink.trim() !== '') {
-          console.log('Invite link found:', data.inviteLink);
+        if (data.inviteLink && typeof data.inviteLink === "string" && data.inviteLink.trim() !== "") {
           setInviteLink(data.inviteLink);
-          return true; // Ссылка найдена
+          return true;
         }
-        
-        console.log('Invite link not ready yet:', data);
-        return false; // Ссылка еще не готова
-      } catch (error) {
-        console.error('Failed to fetch invite link:', error);
+        return false;
+      } catch {
         return false;
       }
     };
-    
-    // Пытаемся получить ссылку сразу
+
     fetchInviteLink();
-    
-    // Если ссылки еще нет, начинаем периодически проверять (polling)
-    // Проверяем каждые 3 секунды, максимум 20 раз (1 минута)
     let attempts = 0;
-    const maxAttempts = 20;
-    
     const intervalId = setInterval(async () => {
       attempts++;
-      
-      // Если превысили лимит попыток, прекращаем
-      if (attempts >= maxAttempts) {
-        console.log('Max attempts reached, stopping polling');
-        clearInterval(intervalId);
-        return;
-      }
-      
-      // Проверяем ссылку
-      const found = await fetchInviteLink();
-      
-      // Если ссылка найдена, прекращаем проверку
-      if (found) {
-        console.log('Invite link found, stopping polling');
-        clearInterval(intervalId);
-      }
-    }, 3000); // Каждые 3 секунды
-    
-    // Очищаем интервал при размонтировании компонента
+      if (attempts >= 20) clearInterval(intervalId);
+      else if (await fetchInviteLink()) clearInterval(intervalId);
+    }, 3000);
     return () => clearInterval(intervalId);
-  }, []);
+  }, [orderType]);
 
   const copyToClipboard = () => {
     if (inviteLink) {
@@ -118,11 +94,27 @@ export default function SuccessPage() {
             Оплата успешна!
           </h1>
           <p className="text-zinc-300 text-lg font-light">
-            Спасибо за регистрацию на энергетические сессии
+            {orderType === "protocol"
+              ? "Спасибо за заказ персонального энергетического протокола"
+              : "Спасибо за регистрацию на энергетические сессии"}
           </p>
         </div>
 
-        {inviteLink ? (
+        {orderType === "protocol" ? (
+          <div className="bg-zinc-900/50 rounded-2xl p-6 md:p-8 border border-zinc-700/50 mb-6">
+            <p className="text-zinc-300 text-center mb-4">
+              Аудиозаписи готовятся в течение 5–7 дней. Мы свяжемся с вами по указанным контактам и вышлем материалы.
+            </p>
+            <div className="text-center">
+              <Link
+                href="/sessions/energiya-pervonachalnosti"
+                className="inline-block text-zinc-400 hover:text-[#ffa600] transition-colors text-sm font-medium uppercase tracking-widest"
+              >
+                Вернуться к описанию протокола
+              </Link>
+            </div>
+          </div>
+        ) : orderType === "main" && inviteLink ? (
           <div className="bg-zinc-900/50 rounded-2xl p-6 md:p-8 border border-zinc-700/50 mb-6">
             <h2 className="text-xl font-bold text-white mb-4 uppercase tracking-widest">
               Ваша ссылка на Telegram группу
@@ -166,7 +158,7 @@ export default function SuccessPage() {
               </p>
             </div>
           </div>
-        ) : (
+        ) : orderType === "main" ? (
           <div className="bg-zinc-900/50 rounded-2xl p-6 md:p-8 border border-zinc-700/50 mb-6">
             <p className="text-zinc-300 text-center">
               Ваша ссылка на Telegram группу генерируется...
@@ -180,16 +172,32 @@ export default function SuccessPage() {
               </p>
             )}
           </div>
+        ) : (
+          <div className="bg-zinc-900/50 rounded-2xl p-6 md:p-8 border border-zinc-700/50 mb-6">
+            <p className="text-zinc-400 text-center">Загрузка...</p>
+          </div>
         )}
 
-        <div className="text-center">
-          <Link
-            href="/"
-            className="inline-block text-zinc-400 hover:text-[#ffa600] transition-colors text-sm font-medium uppercase tracking-widest"
-          >
-            Вернуться на главную
-          </Link>
-        </div>
+        {orderType !== null && orderType !== "protocol" && (
+          <div className="text-center">
+            <Link
+              href="/"
+              className="inline-block text-zinc-400 hover:text-[#ffa600] transition-colors text-sm font-medium uppercase tracking-widest"
+            >
+              Вернуться на главную
+            </Link>
+          </div>
+        )}
+        {orderType === "protocol" && (
+          <div className="text-center mt-4">
+            <Link
+              href="/"
+              className="inline-block text-zinc-400 hover:text-[#ffa600] transition-colors text-sm font-medium uppercase tracking-widest"
+            >
+              На главную
+            </Link>
+          </div>
+        )}
       </div>
     </main>
   );

@@ -3,7 +3,7 @@ import crypto from 'crypto';
 
 export async function POST(request: Request) {
   try {
-    const { amount, email, description, participantId, promoCode } = await request.json();
+    const { amount, email, description, participantId, protocolOrderId, promoCode } = await request.json();
 
     const merchantLogin = process.env.ROBOKASSA_MERCHANT_LOGIN;
     const isTest = process.env.NEXT_PUBLIC_ROBOKASSA_IS_TEST === '1' ? 1 : 0;
@@ -52,12 +52,14 @@ export async function POST(request: Request) {
 
     // Добавляем Success URL (куда вернуть пользователя после оплаты)
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://energy-practice.org';
-    params.append('SuccessURL', `${siteUrl}/success?participant_id=${participantId || ''}`);
+    const successPath = protocolOrderId ? '/success-protocol' : '/success';
+    const successId = protocolOrderId || participantId || '';
+    params.append('SuccessURL', `${siteUrl}${successPath}${successId ? `?participant_id=${successId}` : ''}`);
 
     const paymentUrl = `${baseUrl}?${params.toString()}`;
 
-    // Сохраняем InvId в базу данных, если передан participantId
-    if (participantId) {
+    // Сохраняем InvId в базу данных
+    if (participantId || protocolOrderId) {
       try {
         const { createClient } = await import('@supabase/supabase-js');
         const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
@@ -65,22 +67,22 @@ export async function POST(request: Request) {
 
         if (supabaseServiceKey) {
           const supabase = createClient(supabaseUrl, supabaseServiceKey);
+          const table = protocolOrderId ? 'protocol_orders' : 'participants';
+          const rowId = protocolOrderId || participantId;
           await supabase
-            .from('participants')
-            .update({ 
+            .from(table)
+            .update({
               payment_inv_id: invId.toString(),
               promo_code: promoCode || null,
             })
-            .eq('id', participantId);
-          
-          // Если промокод использован, увеличиваем счетчик использований
-          if (promoCode) {
+            .eq('id', rowId);
+
+          if (promoCode && !protocolOrderId) {
             const { data: promo } = await supabase
               .from('promo_codes')
               .select('used_count')
               .eq('code', promoCode.toUpperCase())
               .single();
-            
             if (promo) {
               await supabase
                 .from('promo_codes')
@@ -91,7 +93,6 @@ export async function POST(request: Request) {
         }
       } catch (dbError) {
         console.error('Failed to save InvId to database:', dbError);
-        // Не критично, продолжаем
       }
     }
 

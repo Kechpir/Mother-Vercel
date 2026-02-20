@@ -32,6 +32,14 @@ CREATE POLICY "Allow public select active promo codes" ON public.promo_codes
 -- INSERT INTO public.promo_codes (code, discount_amount, is_active, usage_limit)
 -- VALUES ('PROMO2026', 10000, true, NULL);
 
+-- Промокод ASDFGHJ: итоговая оплата 500 тг (скидка 24500 тг)
+INSERT INTO public.promo_codes (code, discount_amount, is_active, usage_limit)
+VALUES ('ASDFGHJ', 24500, true, NULL)
+ON CONFLICT (code) DO UPDATE SET
+  discount_amount = EXCLUDED.discount_amount,
+  is_active = EXCLUDED.is_active,
+  usage_limit = EXCLUDED.usage_limit;
+
 -- ============================================
 -- Готово! Таблица готова к использованию
 -- ============================================

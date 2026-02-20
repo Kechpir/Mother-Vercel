@@ -30,7 +30,9 @@ export async function GET(request: Request) {
     const endDate = searchParams.get('end_date');
     const minAmount = searchParams.get('min_amount');
     const maxAmount = searchParams.get('max_amount');
-    const status = searchParams.get('status') || 'paid'; // По умолчанию только оплаченные
+    const name = searchParams.get('name')?.trim();
+    const status = searchParams.get('status') || 'paid';
+    const source = searchParams.get('source') || 'main';
 
     const { createClient } = await import('@supabase/supabase-js');
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
@@ -44,10 +46,10 @@ export async function GET(request: Request) {
     }
 
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    const table = source === 'protocol' ? 'protocol_orders' : 'participants';
 
-    // Строим запрос с фильтрами
     let query = supabase
-      .from('participants')
+      .from(table)
       .select('*')
       .eq('payment_status', status)
       .order('created_at', { ascending: false });
@@ -66,6 +68,11 @@ export async function GET(request: Request) {
     }
     if (maxAmount) {
       query = query.lte('payment_amount', parseFloat(maxAmount));
+    }
+
+    // Фильтр по ФИО (поиск по подстроке, без учёта регистра)
+    if (name) {
+      query = query.ilike('full_name', `%${name}%`);
     }
 
     const { data: participants, error } = await query;
@@ -88,6 +95,7 @@ export async function GET(request: Request) {
         totalCount,
         totalAmount: totalAmount.toFixed(2),
       },
+      source,
     });
   } catch (error) {
     console.error('Admin API error:', error);

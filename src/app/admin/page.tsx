@@ -31,6 +31,8 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(false);
   
   // Фильтры
+  const [source, setSource] = useState<"main" | "protocol">("main");
+  const [searchName, setSearchName] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [minAmount, setMinAmount] = useState("");
@@ -52,12 +54,17 @@ export default function AdminPage() {
     }
   }, []);
 
+  useEffect(() => {
+    if (isAuthenticated) fetchParticipants();
+  }, [source]);
+
   const fetchParticipants = async () => {
     setLoading(true);
     try {
       const auth = localStorage.getItem('admin_auth') || password;
       const params = new URLSearchParams();
-      
+      params.append('source', source);
+      if (searchName.trim()) params.append('name', searchName.trim());
       if (startDate) params.append('start_date', startDate);
       if (endDate) params.append('end_date', endDate);
       if (minAmount) params.append('min_amount', minAmount);
@@ -90,6 +97,7 @@ export default function AdminPage() {
   };
 
   const handleReset = () => {
+    setSearchName("");
     setStartDate("");
     setEndDate("");
     setMinAmount("");
@@ -136,7 +144,7 @@ export default function AdminPage() {
     const blob = new Blob(['\ufeff' + csvWithExcelHint], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = `participants_${new Date().toISOString().split('T')[0]}.csv`;
+    link.download = `${source === 'protocol' ? 'protocol_orders' : 'participants'}_${new Date().toISOString().split('T')[0]}.csv`;
     link.click();
   };
 
@@ -176,7 +184,9 @@ export default function AdminPage() {
         {/* Заголовок */}
         <div className="mb-8">
           <h1 className="text-4xl font-black text-white mb-2 uppercase">Админ-панель</h1>
-          <p className="text-zinc-400">Управление участниками</p>
+          <p className="text-zinc-400">
+          Управление участниками · {source === "main" ? "Главная страница" : "Персональный энергетический протокол"}
+        </p>
         </div>
 
         {/* Статистика */}
@@ -214,13 +224,47 @@ export default function AdminPage() {
           </div>
         </div>
 
+        {/* Источник: главная / протокол */}
+        <div className="flex gap-2 mb-6">
+          <button
+            onClick={() => setSource("main")}
+            className={`px-6 py-3 rounded-xl font-bold uppercase tracking-widest transition-all ${
+              source === "main"
+                ? "bg-[#ffa600] text-white"
+                : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-white"
+            }`}
+          >
+            Главная страница
+          </button>
+          <button
+            onClick={() => setSource("protocol")}
+            className={`px-6 py-3 rounded-xl font-bold uppercase tracking-widest transition-all ${
+              source === "protocol"
+                ? "bg-[#ffa600] text-white"
+                : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-white"
+            }`}
+          >
+            Персональный энергетический протокол
+          </button>
+        </div>
+
         {/* Фильтры */}
         <div className="bg-zinc-800/50 rounded-2xl p-6 border border-zinc-700/50 mb-6">
           <div className="flex items-center gap-2 mb-4">
             <Filter className="w-5 h-5 text-[#ffa600]" />
             <h2 className="text-xl font-bold text-white">Фильтры</h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+            <div>
+              <label className="block text-zinc-400 text-sm mb-2">ФИО</label>
+              <input
+                type="text"
+                value={searchName}
+                onChange={(e) => setSearchName(e.target.value)}
+                placeholder="Имя или фамилия"
+                className="w-full px-4 py-2 bg-zinc-900/50 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-[#ffa600]"
+              />
+            </div>
             <div>
               <label className="block text-zinc-400 text-sm mb-2">Дата от</label>
               <input

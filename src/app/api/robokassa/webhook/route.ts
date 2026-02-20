@@ -80,57 +80,84 @@ async function handleWebhook(request: Request) {
 
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Ищем участника по InvId (payment_inv_id)
+    // Ищем по InvId: сначала в participants (главная), потом в protocol_orders (протокол)
     const { data: participant, error: findError } = await supabase
       .from('participants')
+      .select('id, payment_status, email, telegram, full_name')
+      .eq('payment_inv_id', InvId)
+      .single();
+
+    if (!findError && participant) {
+      // Оплата с главной страницы — обновляем, создаём инвайт, шлём на email/Telegram
+      if (participant.payment_status === 'paid') {
+        return new NextResponse('OK', { status: 200 });
+      }
+      const { error: updateError } = await supabase
+        .from('participants')
+        .update({
+          payment_status: 'paid',
+          payment_amount: parseFloat(OutSum) || null,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', participant.id);
+      if (updateError) {
+        console.error('Failed to update payment status:', updateError);
+        return new NextResponse('OK', { status: 200 });
+      }
+      let inviteLink: string | null = null;
+      try {
+        const inviteResponse = await fetch(
+          `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/telegram/create-invite`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ participantId: participant.id }),
+          }
+        );
+        const inviteData = await inviteResponse.json().catch(() => ({}));
+        inviteLink = inviteData.inviteLink || null;
+        if (!inviteResponse.ok) {
+          console.error('Failed to create Telegram invite link');
+        } else if (inviteLink) {
+          const { sendInviteLinkToParticipant } = await import('@/lib/send-invite-link');
+          await sendInviteLinkToParticipant(
+            {
+              email: participant.email ?? null,
+              telegram: participant.telegram ?? null,
+              full_name: participant.full_name ?? null,
+            },
+            inviteLink
+          );
+        }
+      } catch (inviteError) {
+        console.error('Error creating invite link:', inviteError);
+      }
+      return new NextResponse('OK', { status: 200 });
+    }
+
+    // Не нашли в participants — проверяем protocol_orders (Персональный энергетический протокол)
+    const { data: protocolOrder, error: protocolError } = await supabase
+      .from('protocol_orders')
       .select('id, payment_status')
       .eq('payment_inv_id', InvId)
       .single();
 
-    if (findError || !participant) {
-      console.error('Participant not found for InvId:', InvId);
-      // Все равно возвращаем OK, чтобы Robokassa не повторяла запрос
-      return new NextResponse('OK', { status: 200 });
-    }
-
-    // Если уже оплачено, просто возвращаем OK
-    if (participant.payment_status === 'paid') {
-      return new NextResponse('OK', { status: 200 });
-    }
-
-    // Обновляем статус на "paid" и сохраняем сумму оплаты
-    const { error: updateError } = await supabase
-      .from('participants')
-      .update({
-        payment_status: 'paid',
-        payment_amount: parseFloat(OutSum) || null, // Сохраняем сумму оплаты
-        updated_at: new Date().toISOString(),
-      })
-      .eq('id', participant.id);
-
-    if (updateError) {
-      console.error('Failed to update payment status:', updateError);
-      return new NextResponse('OK', { status: 200 }); // Все равно OK, чтобы не было повторных запросов
-    }
-
-    // Создаем одноразовую Telegram ссылку для этого участника
-    try {
-      const inviteResponse = await fetch(
-        `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/telegram/create-invite`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ participantId: participant.id }),
-        }
-      );
-
-      if (!inviteResponse.ok) {
-        console.error('Failed to create Telegram invite link');
+    if (!protocolError && protocolOrder) {
+      if (protocolOrder.payment_status === 'paid') {
+        return new NextResponse('OK', { status: 200 });
       }
-    } catch (inviteError) {
-      console.error('Error creating invite link:', inviteError);
-      // Не критично, можно создать ссылку позже
+      await supabase
+        .from('protocol_orders')
+        .update({
+          payment_status: 'paid',
+          payment_amount: parseFloat(OutSum) || null,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', protocolOrder.id);
+      return new NextResponse('OK', { status: 200 });
     }
+
+    console.error('Participant/protocol not found for InvId:', InvId);
 
     // Robokassa ожидает ответ "OK" в случае успеха
     return new NextResponse('OK', { status: 200 });

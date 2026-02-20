@@ -3,7 +3,9 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { supabase } from "../lib/supabase";
-import { ChevronDown, Sparkles, Zap, Check, User, MessageCircle, ChevronLeft, ChevronRight, Mail, Phone, MapPin, Menu, Info } from "lucide-react";
+import { Sparkles, Zap, Check, User, MessageCircle, ChevronDown, ChevronLeft, ChevronRight, Mail, Phone, MapPin, Info } from "lucide-react";
+import { SiteHeader } from "@/components/SiteHeader";
+import { SiteFooter } from "@/components/SiteFooter";
 
 export default function Home() {
   const [loading, setLoading] = useState(false);
@@ -151,41 +153,7 @@ export default function Home() {
 
   return (
     <main className="flex flex-col bg-white text-black font-sans selection:bg-[#ffa600] selection:text-white">
-      {/* --- ХЕДЕР --- */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-br from-zinc-900 via-zinc-800 to-black border-b border-[#ffa600]/20 shadow-[0_4px_20px_rgba(0,0,0,0.3)]">
-        <div className="max-w-7xl mx-auto px-4 md:px-6">
-          <div className="flex items-center justify-between h-16 md:h-20">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border-2 border-[#ffa600]/30 shadow-lg">
-                <img 
-                  src="https://res.cloudinary.com/dij7s1nbf/image/upload/v1769356927/5453934422802501391_wfkxhr.jpg" 
-                  alt="Logo" 
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <span className="text-white font-black text-sm md:text-base uppercase tracking-tight">Ирина Головатова</span>
-            </div>
-            
-            <nav className="hidden md:flex items-center gap-6">
-              <a href="https://www.instagram.com/accessbars.irina/" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-9 h-9 rounded-xl bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] text-white shadow-md hover:scale-110 transition-transform" aria-label="Instagram">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-              </a>
-              <a href="https://t.me/+7WoSGeS2y6JhNzQy" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-9 h-9 rounded-xl bg-[#0088cc] text-white shadow-md hover:scale-110 transition-transform" aria-label="Telegram">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4"><path d="m22 2-7 20-4-9-9-4Z"></path><path d="M22 2 11 13"></path></svg>
-              </a>
-              <a href="#about" className="text-zinc-300 hover:text-[#ffa600] transition-colors text-sm font-medium uppercase tracking-widest">О мне</a>
-              <a href="#register" className="bg-[#ffa600] text-white px-5 py-2 rounded-full text-xs font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all shadow-lg">
-                Забронировать место
-              </a>
-            </nav>
-
-            <button className="md:hidden text-zinc-300 hover:text-[#ffa600] transition-colors">
-              <Menu size={24} />
-            </button>
-          </div>
-        </div>
-      </header>
-
+      <SiteHeader />
       {/* --- БЛОК 1: HERO --- */}
       <section className="relative h-[70vh] md:h-[85vh] flex items-center justify-center text-center px-4 overflow-hidden mt-16 md:mt-20">
         <div className="absolute inset-0 z-0">
@@ -980,52 +948,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* --- ФУТЕР --- */}
-      <footer id="social" className="py-16 px-4 bg-white border-t border-zinc-100">
-        <div className="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center md:items-start gap-12">
-          <div className="text-center md:text-left space-y-8">
-            <div className="flex justify-center md:justify-start gap-10">
-              <a href="https://www.instagram.com/accessbars.irina/" target="_blank" rel="noopener noreferrer" className="group flex flex-col items-center md:items-start gap-3 transition-all">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-                </div>
-                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 group-hover:text-black">Instagram</span>
-              </a>
-              
-              <a href="https://t.me/+7WoSGeS2y6JhNzQy" target="_blank" rel="noopener noreferrer" className="group flex flex-col items-center md:items-start gap-3 transition-all">
-                <div className="w-12 h-12 rounded-2xl bg-[#0088cc] flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6"><path d="m22 2-7 20-4-9-9-4Z"></path><path d="M22 2 11 13"></path></svg>
-                </div>
-                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 group-hover:text-black">Telegram</span>
-              </a>
-            </div>
-            
-            <div className="space-y-2">
-              <p className="text-[9px] text-zinc-300 uppercase tracking-[0.3em] font-medium">
-                © 2026. Все права защищены.
-              </p>
-              <p className="text-[9px] text-zinc-400 tracking-[0.05em] font-medium max-w-xs">
-                ИП Головатова Ирина Расимовна, БИН (ИИН) 730521450027
-              </p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4 text-[9px] md:text-[10px] text-zinc-400 uppercase tracking-widest font-medium">
-            <div className="flex items-center gap-3 group">
-              <div className="w-1.5 h-1.5 rounded-full bg-zinc-200 group-hover:bg-[#ffa600] transition-colors" />
-              <Link href="/consent" className="hover:text-black transition-colors">Согласие на обработку персональных данных</Link>
-            </div>
-            <div className="flex items-center gap-3 group">
-              <div className="w-1.5 h-1.5 rounded-full bg-zinc-200 group-hover:bg-[#ffa600] transition-colors" />
-              <Link href="/privacy" className="hover:text-black transition-colors">Политика конфиденциальности</Link>
-            </div>
-            <div className="flex items-center gap-3 group">
-              <div className="w-1.5 h-1.5 rounded-full bg-zinc-200 group-hover:bg-[#ffa600] transition-colors" />
-              <Link href="/offer" className="hover:text-black transition-colors">Договор оферты</Link>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </main>
   );
 }
