@@ -31,8 +31,9 @@ export async function GET(request: Request) {
     const minAmount = searchParams.get('min_amount');
     const maxAmount = searchParams.get('max_amount');
     const name = searchParams.get('name')?.trim();
-    const status = searchParams.get('status') || 'paid';
     const source = searchParams.get('source') || 'main';
+    // Для протокола по умолчанию показываем все записи; для главной — только оплаченные
+    const status = searchParams.get('status') ?? (source === 'protocol' ? 'all' : 'paid');
 
     const { createClient } = await import('@supabase/supabase-js');
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
@@ -51,8 +52,11 @@ export async function GET(request: Request) {
     let query = supabase
       .from(table)
       .select('*')
-      .eq('payment_status', status)
       .order('created_at', { ascending: false });
+
+    if (status !== 'all') {
+      query = query.eq('payment_status', status);
+    }
 
     // Фильтр по дате
     if (startDate) {

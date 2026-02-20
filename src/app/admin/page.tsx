@@ -32,6 +32,7 @@ export default function AdminPage() {
   
   // Фильтры
   const [source, setSource] = useState<"main" | "protocol">("main");
+  const [statusFilter, setStatusFilter] = useState<"all" | "paid" | "pending">("paid");
   const [searchName, setSearchName] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -54,9 +55,14 @@ export default function AdminPage() {
     }
   }, []);
 
+  // При смене вкладки выставляем статус по умолчанию и перезагружаем
+  useEffect(() => {
+    setStatusFilter(source === "protocol" ? "all" : "paid");
+  }, [source]);
+
   useEffect(() => {
     if (isAuthenticated) fetchParticipants();
-  }, [source]);
+  }, [source, statusFilter]);
 
   const fetchParticipants = async () => {
     setLoading(true);
@@ -64,6 +70,7 @@ export default function AdminPage() {
       const auth = localStorage.getItem('admin_auth') || password;
       const params = new URLSearchParams();
       params.append('source', source);
+      params.append('status', statusFilter);
       if (searchName.trim()) params.append('name', searchName.trim());
       if (startDate) params.append('start_date', startDate);
       if (endDate) params.append('end_date', endDate);
@@ -225,7 +232,7 @@ export default function AdminPage() {
         </div>
 
         {/* Источник: главная / протокол */}
-        <div className="flex gap-2 mb-6">
+        <div className="flex flex-wrap items-center gap-4 mb-6">
           <button
             onClick={() => setSource("main")}
             className={`px-6 py-3 rounded-xl font-bold uppercase tracking-widest transition-all ${
@@ -246,6 +253,26 @@ export default function AdminPage() {
           >
             Персональный энергетический протокол
           </button>
+          <div className="flex items-center gap-2">
+            <span className="text-zinc-500 text-sm uppercase tracking-wider">Статус:</span>
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value as "all" | "paid" | "pending")}
+              onBlur={() => fetchParticipants()}
+              className="bg-zinc-800 border border-zinc-600 rounded-xl px-4 py-2 text-white text-sm focus:outline-none focus:border-[#ffa600]"
+            >
+              <option value="all">Все</option>
+              <option value="paid">Оплачено</option>
+              <option value="pending">Ожидание</option>
+            </select>
+            <button
+              type="button"
+              onClick={handleFilter}
+              className="text-zinc-400 hover:text-white text-sm uppercase"
+            >
+              Применить
+            </button>
+          </div>
         </div>
 
         {/* Фильтры */}

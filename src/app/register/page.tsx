@@ -4,7 +4,16 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase } from "../../lib/supabase";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, MessageCircle, X } from "lucide-react";
+
+const TELEGRAM_BOT_USERNAME = process.env.NEXT_PUBLIC_TELEGRAM_BOT_USERNAME || "AccsessBot";
+
+function toBase64UrlSafe(str: string): string {
+  const bytes = new TextEncoder().encode(str);
+  let binary = "";
+  for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
 
 const EXTRA_FIELDS = [
   { id: "full_name", label: "ФИО", placeholder: "ФИО полностью", required: true },
@@ -19,6 +28,9 @@ export default function RegisterPage() {
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showTelegramModal, setShowTelegramModal] = useState(false);
+  const [registeredEmail, setRegisteredEmail] = useState<string | null>(null);
+  const [pendingRedirectToCabinet, setPendingRedirectToCabinet] = useState(false);
   const [formData, setFormData] = useState({
     full_name: "",
     city: "",
@@ -75,11 +87,10 @@ export default function RegisterPage() {
         text: "Регистрация прошла успешно. Проверьте почту — мы отправили ссылку для подтверждения. После подтверждения войдите в аккаунт.",
       });
       setFormData({ full_name: "", city: "", age: "", phone: "", email: "", password: "", confirmPassword: "" });
-
-      // Если Supabase не требует подтверждения email — сразу редирект в кабинет
+      setRegisteredEmail(formData.email.trim().toLowerCase());
+      setShowTelegramModal(true);
       if (data.session) {
-        router.push("/cabinet");
-        router.refresh();
+        setPendingRedirectToCabinet(true);
       }
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Ошибка регистрации";
@@ -89,8 +100,64 @@ export default function RegisterPage() {
     }
   };
 
+  const closeTelegramModal = () => {
+    setShowTelegramModal(false);
+    if (pendingRedirectToCabinet) {
+      setPendingRedirectToCabinet(false);
+      router.push("/cabinet");
+      router.refresh();
+    }
+  };
+
+  const telegramStartPayload = registeredEmail ? toBase64UrlSafe(registeredEmail) : "";
+  const telegramBotLink = telegramStartPayload ? `https://t.me/${TELEGRAM_BOT_USERNAME}?start=${telegramStartPayload}` : null;
+
   return (
     <main className="min-h-screen bg-gradient-to-b from-zinc-900 via-zinc-800 to-black text-white flex flex-col items-center justify-center px-4 py-8 md:py-10">
+      {/* Модальное окно: привязка Telegram сразу после регистрации */}
+      {showTelegramModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+          <div className="relative w-full max-w-md rounded-2xl border-2 border-[#ffa600]/50 bg-zinc-900 shadow-2xl p-6">
+            <button
+              type="button"
+              aria-label="Закрыть"
+              onClick={closeTelegramModal}
+              className="absolute right-4 top-4 text-zinc-400 hover:text-white transition"
+            >
+              <X className="w-5 h-5" />
+            </button>
+            <div className="flex flex-col items-center text-center">
+              <div className="w-14 h-14 rounded-2xl bg-[#ffa600]/20 border border-[#ffa600]/40 flex items-center justify-center mb-4">
+                <MessageCircle className="w-7 h-7 text-[#ffa600]" />
+              </div>
+              <h2 className="text-lg font-bold text-white mb-2">Давайте привяжем Telegram</h2>
+              <p className="text-zinc-300 text-sm mb-6">
+                После оплаты вы получите ссылку на группу прямо в мессенджер — не нужно искать письмо на почте.
+              </p>
+              {telegramBotLink ? (
+                <a
+                  href={telegramBotLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={closeTelegramModal}
+                  className="w-full inline-flex items-center justify-center gap-2 py-3.5 px-5 rounded-xl bg-[#ffa600] text-black font-bold text-sm uppercase tracking-wider hover:bg-white transition mb-3"
+                >
+                  <MessageCircle className="w-5 h-5" />
+                  Подключить в Telegram
+                </a>
+              ) : null}
+              <button
+                type="button"
+                onClick={closeTelegramModal}
+                className="text-zinc-400 hover:text-white text-sm uppercase tracking-wider"
+              >
+                Позже
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="w-full max-w-md">
         <div className="text-center mb-4">
           <Link href="/" className="inline-flex items-center gap-2 text-zinc-400 hover:text-[#ffa600] transition-colors text-xs uppercase tracking-widest mb-3">
