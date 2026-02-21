@@ -77,7 +77,7 @@ export async function POST(request: Request) {
             })
             .eq('id', rowId);
 
-          if (promoCode && !protocolOrderId) {
+          if (promoCode) {
             const { data: promo } = await supabase
               .from('promo_codes')
               .select('used_count')

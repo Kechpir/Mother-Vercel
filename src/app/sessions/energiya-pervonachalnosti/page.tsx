@@ -373,6 +373,7 @@ export default function PersonalEnergyProtocolPage() {
                 amount={50000}
                 description="Персональный энергетический протокол"
                 productType="protocol"
+                usePromo
               />
             }
           >

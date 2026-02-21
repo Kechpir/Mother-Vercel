@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase } from "../../lib/supabase";
-import { User, LogOut, Mail, Calendar, Phone, MapPin, Sparkles, Save, MessageCircle, X } from "lucide-react";
+import { User, Mail, Calendar, Phone, MapPin, Sparkles, Save, MessageCircle, X } from "lucide-react";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 
 const TELEGRAM_BOT_USERNAME = process.env.NEXT_PUBLIC_TELEGRAM_BOT_USERNAME || "AccsessBot";
@@ -96,12 +96,6 @@ export default function CabinetPage() {
     }
   }, [loading, user, router]);
 
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    router.push("/");
-    router.refresh();
-  };
-
   const handleSaveProfile = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user?.id) return;
@@ -191,18 +185,10 @@ export default function CabinetPage() {
           </div>
         )}
 
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
-          <Link href="/" className="text-zinc-400 hover:text-[#ffa600] transition-colors text-sm uppercase tracking-widest">
+        <div className="mb-8">
+          <Link href="/" className="inline-flex items-center gap-2 text-zinc-400 hover:text-[#ffa600] transition-colors text-sm uppercase tracking-widest">
             ← На главную
           </Link>
-          <button
-            type="button"
-            onClick={handleSignOut}
-            className="inline-flex items-center gap-2 text-zinc-400 hover:text-red-400 transition-colors text-sm uppercase tracking-widest"
-          >
-            <LogOut className="w-4 h-4" />
-            Выйти
-          </button>
         </div>
 
         <div className="rounded-2xl border border-zinc-700/50 bg-zinc-800/30 p-6 md:p-8 shadow-xl mb-6">
