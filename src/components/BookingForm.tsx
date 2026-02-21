@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { User, Sparkles, Phone, Mail, MapPin } from "lucide-react";
@@ -30,20 +30,52 @@ type BookingFormProps = {
   productType?: 'main' | 'protocol';
 };
 
+const emptyFormData: FormData = {
+  full_name: "",
+  age: "",
+  phone: "",
+  email: "",
+  city: "",
+  promo_code: "",
+};
+
 export function BookingForm({ amount, description, usePromo = false, productType = 'main' }: BookingFormProps) {
-  const [formData, setFormData] = useState<FormData>({
-    full_name: "",
-    age: "",
-    phone: "",
-    email: "",
-    city: "",
-    promo_code: "",
-  });
+  const [formData, setFormData] = useState<FormData>(emptyFormData);
   const [agreed, setAgreed] = useState(false);
   const [loading, setLoading] = useState(false);
   const [finalAmount, setFinalAmount] = useState(amount);
   const [promoCodeValid, setPromoCodeValid] = useState<{ valid: boolean; discount?: number } | null>(null);
   const [checkingPromo, setCheckingPromo] = useState(false);
+  const prefillDoneRef = useRef(false);
+
+  // Подстановка данных из профиля для залогиненных
+  useEffect(() => {
+    if (prefillDoneRef.current) return;
+    const run = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.user?.id) return;
+      prefillDoneRef.current = true;
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("full_name, phone, city, age")
+        .eq("id", session.user.id)
+        .maybeSingle();
+      const email = session.user.email ?? "";
+      const filled = {
+        full_name: profile?.full_name ?? "",
+        age: profile?.age ?? "",
+        phone: profile?.phone ?? "",
+        email: email.trim(),
+        city: profile?.city ?? "",
+        promo_code: "",
+      };
+      setFormData((prev) => {
+        if (prev.email && prev.full_name) return prev;
+        return { ...prev, ...filled };
+      });
+    };
+    run();
+  }, []);
 
   const checkPromoCode = async (code: string) => {
     if (!code || code.trim().length < 3) {

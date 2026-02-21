@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { supabase } from "../lib/supabase";
 import { Sparkles, Zap, Check, User, MessageCircle, ChevronDown, ChevronLeft, ChevronRight, Mail, Phone, MapPin, Info } from "lucide-react";
@@ -23,6 +23,34 @@ export default function Home() {
   const [checkingPromo, setCheckingPromo] = useState(false);
   const [finalAmount, setFinalAmount] = useState(25000);
   const [timeLeft, setTimeLeft] = useState({ days: "00", hours: "00", minutes: "00", seconds: "00" });
+  const prefillDoneRef = useRef(false);
+
+  useEffect(() => {
+    if (prefillDoneRef.current) return;
+    const run = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.user?.id) return;
+      prefillDoneRef.current = true;
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("full_name, phone, city, age")
+        .eq("id", session.user.id)
+        .maybeSingle();
+      const email = session.user.email ?? "";
+      setFormData((prev) => {
+        if (prev.email && prev.full_name) return prev;
+        return {
+          ...prev,
+          full_name: profile?.full_name ?? prev.full_name,
+          phone: profile?.phone ?? prev.phone,
+          city: profile?.city ?? prev.city,
+          age: profile?.age ?? prev.age,
+          email: email.trim() || prev.email,
+        };
+      });
+    };
+    run();
+  }, []);
 
   useEffect(() => {
     const targetDate = new Date("2026-02-07T22:00:00+05:00"); // 7 февраля 22:00 по Астане (GMT+5)
