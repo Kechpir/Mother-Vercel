@@ -6,6 +6,71 @@
 const BREVO_API_URL = "https://api.brevo.com/v3/smtp/email";
 const TELEGRAM_SEND_URL = (token: string) => `https://api.telegram.org/bot${token}/sendMessage`;
 
+/** Экранирование для HTML-атрибутов и текста */
+function escapeHtmlAttr(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+function escapeHtmlText(s: string): string {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function buildInviteEmailHtml(fullName: string | undefined, inviteLink: string, senderName: string): string {
+  const greeting = fullName ? `Здравствуйте, ${escapeHtmlText(fullName)}!` : "Здравствуйте!";
+  const safeLink = escapeHtmlAttr(inviteLink);
+  const safeSender = escapeHtmlText(senderName);
+  return `
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ваша ссылка на группу</title>
+</head>
+<body style="margin:0; padding:0; background-color:#f5f5f0; font-family: Georgia, 'Times New Roman', serif;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f5f5f0;">
+    <tr>
+      <td align="center" style="padding: 32px 16px;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width: 520px; background-color:#ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.08);">
+          <tr>
+            <td style="background: linear-gradient(135deg, #1a1714 0%, #0f0e0c 100%); padding: 28px 32px; text-align: center;">
+              <p style="margin:0; color: #e8e0d0; font-size: 14px; letter-spacing: 0.15em; text-transform: uppercase;">Энергетические сессии</p>
+              <p style="margin: 8px 0 0 0; color: #d4a03c; font-size: 12px; letter-spacing: 0.1em;">Оплата получена</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 32px 32px 24px;">
+              <p style="margin:0 0 20px 0; color: #1a1714; font-size: 17px; line-height: 1.5;">${greeting}</p>
+              <p style="margin:0 0 24px 0; color: #4a4540; font-size: 15px; line-height: 1.6;">Ваша одноразовая ссылка для вступления в закрытую Telegram-группу. Нажмите кнопку ниже или скопируйте ссылку.</p>
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td align="center" style="padding: 8px 0 24px 0;">
+                    <a href="${safeLink}" target="_blank" rel="noopener noreferrer" style="display: inline-block; padding: 14px 32px; background: linear-gradient(135deg, #d4a03c 0%, #b88620 100%); color: #ffffff; font-size: 14px; font-weight: bold; text-decoration: none; border-radius: 12px; letter-spacing: 0.05em;">Перейти в группу</a>
+                  </td>
+                </tr>
+              </table>
+              <p style="margin:0 0 8px 0; color: #7a7570; font-size: 12px;">Ссылка (если кнопка не сработала):</p>
+              <p style="margin:0; word-break: break-all;"><a href="${safeLink}" style="color: #d4a03c; font-size: 13px;">${escapeHtmlText(inviteLink)}</a></p>
+              <p style="margin: 20px 0 0 0; color: #7a7570; font-size: 13px;">Ссылку можно использовать один раз.</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 20px 32px 28px; border-top: 1px solid #ebe8e4;">
+              <p style="margin:0; color: #7a7570; font-size: 13px;">С уважением,<br><strong style="color: #1a1714;">${safeSender}</strong></p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+  `.trim();
+}
+
 type Participant = {
   email: string | null;
   telegram: string | null;
@@ -37,14 +102,24 @@ export async function sendInviteLinkToParticipant(
           body: JSON.stringify({
             sender: { name: senderName, email: senderEmail },
             to: [{ email: participant.email.trim() }],
-            subject: "Ваша ссылка на Telegram-группу — энергетические сессии",
-            htmlContent: `
-              <p>Здравствуйте${participant.full_name ? `, ${participant.full_name}` : ""}!</p>
-              <p>Оплата прошла успешно. Ваша одноразовая ссылка для вступления в закрытую Telegram-группу:</p>
-              <p><a href="${inviteLink}" style="word-break: break-all;">${inviteLink}</a></p>
-              <p>Ссылку можно использовать только один раз. Если ссылка не открывается, скопируйте её в браузер.</p>
-              <p>С уважением,<br/>Команда энергетических сессий</p>
-            `,
+            subject: "Ваша ссылка на группу (оплата получена)",
+            textContent: [
+              `Здравствуйте${participant.full_name ? `, ${participant.full_name}` : ""}!`,
+              "",
+              "Оплата получена. Ваша одноразовая ссылка для вступления в закрытую Telegram-группу:",
+              "",
+              inviteLink,
+              "",
+              "Ссылку можно использовать один раз. Если не открывается — скопируйте в браузер.",
+              "",
+              "С уважением,",
+              "Энергетические сессии",
+            ].join("\n"),
+            htmlContent: buildInviteEmailHtml(
+              participant.full_name ?? undefined,
+              inviteLink,
+              senderName
+            ),
           }),
         });
         if (!res.ok) {
