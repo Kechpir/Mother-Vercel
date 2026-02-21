@@ -39,6 +39,7 @@ export function SiteHeader() {
   const isProtocolPage = pathname === "/sessions/energiya-pervonachalnosti";
   const bookingHref = isProtocolPage ? "/sessions/energiya-pervonachalnosti#booking-form" : "/#register";
   const [sessionsOpen, setSessionsOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [authUser, setAuthUser] = useState<SupabaseUser | null>(null);
   const [scrolled, setScrolled] = useState(false);
 
@@ -63,6 +64,12 @@ export function SiteHeader() {
     if (sessionsOpen) document.addEventListener("click", handleClickOutside);
     return () => document.removeEventListener("click", handleClickOutside);
   }, [sessionsOpen]);
+
+  useEffect(() => {
+    if (mobileMenuOpen) document.body.style.overflow = "hidden";
+    else document.body.style.overflow = "";
+    return () => { document.body.style.overflow = ""; };
+  }, [mobileMenuOpen]);
 
   return (
     <header
@@ -211,11 +218,122 @@ export function SiteHeader() {
             </Link>
           </nav>
 
-          <button className="md:hidden text-[#e8e0d0] hover:text-white transition-colors p-2 -m-2" aria-label="Меню">
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen((v) => !v)}
+            className="md:hidden text-[#e8e0d0] hover:text-white transition-colors p-2 -m-2 touch-manipulation"
+            aria-label={mobileMenuOpen ? "Закрыть меню" : "Открыть меню"}
+            aria-expanded={mobileMenuOpen}
+          >
             <Menu size={22} strokeWidth={1.5} />
           </button>
         </div>
       </div>
+
+      {/* Мобильное меню */}
+      {mobileMenuOpen && (
+        <div
+          className="md:hidden fixed inset-0 top-16 z-40 overflow-y-auto"
+          style={{
+            backgroundColor: "rgba(15, 14, 12, 0.98)",
+            borderTop: `1px solid ${HEADER_BORDER}`,
+          }}
+        >
+          <nav className="flex flex-col py-6 px-4 gap-1">
+            <Link
+              href="/#about"
+              onClick={() => setMobileMenuOpen(false)}
+              className="py-3 px-4 text-[#e8e0d0] hover:text-white text-sm font-light uppercase tracking-[0.12em]"
+            >
+              О МНЕ
+            </Link>
+            {SESSIONS_LINKS.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setMobileMenuOpen(false)}
+                className="py-3 px-4 text-[#e8e0d0] hover:text-white text-sm font-light uppercase tracking-[0.12em]"
+              >
+                {item.label}
+              </Link>
+            ))}
+            <div className="border-t border-[#e8e0d0]/20 my-2" />
+            <a
+              href="https://www.instagram.com/accessbars.irina/"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setMobileMenuOpen(false)}
+              className="py-3 px-4 text-[#e8e0d0] hover:text-white text-sm"
+            >
+              Instagram
+            </a>
+            <a
+              href="https://t.me/+7WoSGeS2y6JhNzQy"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setMobileMenuOpen(false)}
+              className="py-3 px-4 text-[#e8e0d0] hover:text-white text-sm"
+            >
+              Telegram
+            </a>
+            <div className="border-t border-[#e8e0d0]/20 my-2" />
+            {authUser ? (
+              <>
+                <Link
+                  href="/cabinet"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="py-3 px-4 text-[#e8e0d0] hover:text-white text-sm font-light uppercase tracking-[0.12em] flex items-center gap-2"
+                >
+                  <LayoutDashboard className="w-4 h-4" />
+                  Личный кабинет
+                </Link>
+                <button
+                  type="button"
+                  onClick={async () => {
+                    setMobileMenuOpen(false);
+                    await supabase.auth.signOut();
+                    router.push("/");
+                    router.refresh();
+                  }}
+                  className="py-3 px-4 text-left text-[#e8e0d0] hover:text-red-300 text-sm font-light uppercase tracking-[0.12em] flex items-center gap-2"
+                >
+                  <LogOut className="w-4 h-4" />
+                  Выйти
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="py-3 px-4 text-[#e8e0d0] hover:text-white text-sm font-light uppercase tracking-[0.12em]"
+                >
+                  Войти
+                </Link>
+                <Link
+                  href="/register"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="py-3 px-4 text-[#e8e0d0] hover:text-white text-sm font-light uppercase tracking-[0.12em]"
+                >
+                  Регистрация
+                </Link>
+              </>
+            )}
+            <div className="border-t border-[#e8e0d0]/20 my-2" />
+            <Link
+              href={bookingHref}
+              onClick={() => setMobileMenuOpen(false)}
+              className="mx-4 mt-2 flex items-center justify-center px-5 py-3.5 rounded-2xl text-white text-sm font-semibold uppercase tracking-[0.08em]"
+              style={{
+                background: "linear-gradient(135deg, #d4a03c 0%, #c4942e 50%, #b88620 100%)",
+                boxShadow: "0 0 20px rgba(212, 160, 60, 0.25)",
+              }}
+            >
+              {isProtocolPage ? "Приобрести запись" : "Забронировать место"}
+            </Link>
+          </nav>
+        </div>
+      )}
     </header>
   );
 }
