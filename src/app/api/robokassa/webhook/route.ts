@@ -138,7 +138,7 @@ async function handleWebhook(request: Request) {
     // Не нашли в participants — проверяем protocol_orders (Персональный энергетический протокол)
     const { data: protocolOrder, error: protocolError } = await supabase
       .from('protocol_orders')
-      .select('id, payment_status')
+      .select('id, payment_status, full_name, email, phone, city, payment_amount')
       .eq('payment_inv_id', InvId)
       .single();
 
@@ -154,6 +154,36 @@ async function handleWebhook(request: Request) {
           updated_at: new Date().toISOString(),
         })
         .eq('id', protocolOrder.id);
+
+      // Уведомление в Telegram о покупке протокола
+      const notifyChatId = process.env.TELEGRAM_NOTIFY_CHAT_ID || process.env.TELEGRAM_GROUP_ID;
+      const botToken = process.env.TELEGRAM_BOT_TOKEN;
+      if (botToken && notifyChatId) {
+        const sum = OutSum ? `${OutSum} ₸` : (protocolOrder.payment_amount ? `${protocolOrder.payment_amount} ₸` : '—');
+        const lines = [
+          '🟢 Оплата: Персональный энергетический протокол',
+          '',
+          `ФИО: ${protocolOrder.full_name || '—'}`,
+          `Email: ${protocolOrder.email || '—'}`,
+          `Телефон: ${protocolOrder.phone || '—'}`,
+          `Город: ${protocolOrder.city || '—'}`,
+          `Сумма: ${sum}`,
+        ];
+        try {
+          await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              chat_id: notifyChatId,
+              text: lines.join('\n'),
+              disable_web_page_preview: true,
+            }),
+          });
+        } catch (e) {
+          console.error('Telegram protocol notify error:', e);
+        }
+      }
+
       return new NextResponse('OK', { status: 200 });
     }
 
