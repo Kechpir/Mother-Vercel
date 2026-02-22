@@ -1,6 +1,7 @@
 import "./globals.css";
 import type { Metadata, Viewport } from "next";
 import { Inter, Cormorant_Garamond } from "next/font/google";
+import { SupportChat } from "@/components/SupportChat";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -45,6 +46,7 @@ export default function RootLayout({
     <html lang="ru" className="scroll-smooth">
       <body className={`${inter.className} ${cormorant.variable} bg-[#000000] text-white antialiased`}>
         {children}
+        <SupportChat />
       </body>
     </html>
   );

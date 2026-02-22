@@ -7,7 +7,7 @@ import { BookingForm } from "@/components/BookingForm";
 
 const IMAGES = {
   calmGaze:
-    "https://res.cloudinary.com/dij7s1nbf/image/upload/v1771504577/%D0%A1%D0%BF%D0%BE%D0%BA%D0%BE%D0%B9%D0%BD%D1%8B%D0%B9_%D0%B2%D0%B7%D0%B3%D0%BB%D1%8F%D0%B4_dvoutb.png",
+    "https://res.cloudinary.com/dij7s1nbf/image/upload/v1771759389/ChatGPT_Image_22_%D1%84%D0%B5%D0%B2%D1%80._2026_%D0%B3._16_21_41_qgc82w.png",
   headphonesRelax:
     "https://res.cloudinary.com/dij7s1nbf/image/upload/v1771504576/headphones_relax_id873x.jpg",
   headphonesSoftLight:
@@ -15,7 +15,7 @@ const IMAGES = {
   headphonesMicro:
     "https://res.cloudinary.com/dij7s1nbf/image/upload/v1771504576/%D0%BD%D0%B0%D1%83%D1%88%D0%BD%D0%B8%D0%BA%D0%B8_%D0%BC%D0%B8%D0%BA%D1%80%D0%BE_fj11ta.jpg",
   workingProcess:
-    "https://res.cloudinary.com/dij7s1nbf/image/upload/v1771506795/%D1%80%D0%B0%D0%B1%D0%BE%D1%87%D0%B8%D0%B9_%D0%BF%D1%80%D0%BE%D1%86%D0%B5%D1%81%D1%81_1_jy88iv.jpg",
+    "https://res.cloudinary.com/dij7s1nbf/image/upload/v1771759412/photo_2026-02-21_16-57-01_npvmfr.jpg",
   lightInnerBalance:
     "https://res.cloudinary.com/dij7s1nbf/image/upload/v1771507441/%D0%A1%D0%B2%D0%B5%D1%82_%D0%B2%D0%BD%D1%83%D1%82%D1%80%D0%B5%D0%BD%D0%BD%D0%B8%D0%B9_%D0%B1%D0%B0%D0%BB%D0%B0%D0%BD%D1%81_fercb5.png",
   lightMinimalBg:
