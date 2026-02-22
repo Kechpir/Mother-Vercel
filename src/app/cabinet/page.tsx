@@ -58,20 +58,30 @@ export default function CabinetPage() {
     return () => subscription.unsubscribe();
   }, []);
 
-  useEffect(() => {
+  const checkTelegramStatus = async () => {
     if (!user?.email) return;
-    const checkTelegram = async () => {
-      try {
-        const res = await fetch(
-          `/api/telegram/registration-status?email=${encodeURIComponent(user.email!)}`
-        );
-        const data = await res.json().catch(() => ({}));
-        setTelegramConnected(!!data.connected);
-      } catch {
-        setTelegramConnected(null);
-      }
+    try {
+      const res = await fetch(
+        `/api/telegram/registration-status?email=${encodeURIComponent(user.email)}`
+      );
+      const data = await res.json().catch(() => ({}));
+      setTelegramConnected(!!data.connected);
+    } catch {
+      setTelegramConnected(null);
+    }
+  };
+
+  useEffect(() => {
+    checkTelegramStatus();
+  }, [user?.email]);
+
+  // Повторная проверка при возврате на вкладку (после привязки Telegram в другом окне)
+  useEffect(() => {
+    const onVisible = () => {
+      if (user?.email) checkTelegramStatus();
     };
-    checkTelegram();
+    document.addEventListener("visibilitychange", onVisible);
+    return () => document.removeEventListener("visibilitychange", onVisible);
   }, [user?.email]);
 
   useEffect(() => {

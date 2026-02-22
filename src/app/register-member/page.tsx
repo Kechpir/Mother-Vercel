@@ -50,7 +50,7 @@ export default function RegisterMemberPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-zinc-900 via-zinc-800 to-black text-white">
       <SiteHeader />
-      <section className="pt-24 pb-20 px-4 md:px-6">
+      <section className="pt-40 md:pt-44 pb-20 px-4 md:px-6">
         <div className="max-w-md mx-auto">
           <div className="text-center mb-8">
             <Link href="/" className="inline-flex items-center gap-2 text-zinc-400 hover:text-[#ffa600] transition-colors text-sm uppercase tracking-widest mb-6">

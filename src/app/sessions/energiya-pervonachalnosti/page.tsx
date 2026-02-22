@@ -1,9 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Sparkles, Check } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { BookingForm } from "@/components/BookingForm";
+import { ProtocolPriceCard } from "@/components/ProtocolPriceCard";
 
 const IMAGES = {
   calmGaze:
@@ -62,7 +63,7 @@ export default function PersonalEnergyProtocolPage() {
   return (
     <main className="flex flex-col bg-white text-black font-sans min-h-screen selection:bg-[#ffa600] selection:text-white">
       <SiteHeader />
-      <section className="pt-20 md:pt-24 py-10 md:py-14 px-4 bg-[#fafaf9]">
+      <section className="pt-36 md:pt-40 py-10 md:py-14 px-4 bg-[#fafaf9]">
         <div className="max-w-4xl mx-auto px-4 md:px-6 text-center mb-12">
           <h1 className="text-2xl md:text-4xl font-bold text-zinc-900 uppercase tracking-tight">
             Персональный энергетический протокол
@@ -313,56 +314,8 @@ export default function PersonalEnergyProtocolPage() {
             </p>
           </BlockRow>
 
-          {/* Плашка с ценой — премиум-карточка (компактная) */}
-          <div className="w-full max-w-4xl mx-auto rounded-2xl bg-gradient-to-br from-amber-50/90 via-orange-50/60 to-amber-100/50 border border-amber-200/80 shadow-[0_4px_6px_-1px_rgba(251,191,36,0.08),0_20px_50px_-12px_rgba(245,158,11,0.15),0_0_0_1px_rgba(251,191,36,0.06)] p-4 md:p-6">
-            <div className="flex flex-col items-center text-center w-full max-w-2xl mx-auto">
-              <span className="text-xs font-medium uppercase tracking-[0.2em] text-amber-800/80 mb-1.5">
-                персональный протокол
-              </span>
-              <h3 className="text-xl md:text-2xl font-semibold text-zinc-900 tracking-tight leading-tight mb-1 [font-family:var(--font-hero)]">
-                Персональный энергетический протокол
-              </h3>
-              <p className="text-zinc-700 text-base md:text-lg font-medium mb-3">
-                Серия из 3 аудиозаписей под ваш запрос
-              </p>
-
-              <ul className="w-full grid grid-cols-2 gap-x-6 gap-y-1.5 mb-3 text-left">
-                {[
-                  "Персональный подход",
-                  "3 аудиозаписи",
-                  "Готово за 5–7 дней",
-                  "Поддержка после получения",
-                ].map((text) => (
-                  <li key={text} className="flex items-center gap-2 text-zinc-800 text-base md:text-lg font-medium">
-                    <span className="flex-shrink-0 w-5 h-5 rounded-full bg-amber-500/25 flex items-center justify-center">
-                      <Check className="w-3 h-3 text-amber-700" strokeWidth={2.5} />
-                    </span>
-                    {text}
-                  </li>
-                ))}
-              </ul>
-
-              <div className="w-full border-t border-amber-200/70 pt-3 mb-3">
-                <span className="text-xs font-medium uppercase tracking-widest text-zinc-600 block mb-0.5">
-                  Стоимость
-                </span>
-                <p className="text-zinc-900">
-                  <span className="text-3xl md:text-4xl font-bold tracking-tight [font-family:var(--font-hero)]">50 000</span>
-                  <span className="text-base md:text-lg font-semibold text-zinc-600 ml-1.5 align-baseline">тенге</span>
-                </p>
-              </div>
-
-              <a
-                href="#booking-form"
-                className="w-full inline-flex items-center justify-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 text-white py-3 px-6 rounded-xl font-semibold text-base uppercase tracking-widest shadow-[0_4px_14px_rgba(245,158,11,0.35)] hover:from-amber-600 hover:to-amber-700 hover:shadow-[0_6px_20px_rgba(245,158,11,0.4)] hover:scale-[1.02] active:scale-[0.99] transition-all duration-200"
-              >
-                Оформить протокол
-              </a>
-              <p className="text-zinc-600 text-sm mt-2 font-medium">
-                Принимаю не более 5 заявок в месяц
-              </p>
-            </div>
-          </div>
+          {/* Плашка с ценой, скидкой и таймером */}
+          <ProtocolPriceCard />
 
           {/* Блок 8 — форма оплаты слева, текст справа */}
           <div id="booking-form">
@@ -384,7 +337,7 @@ export default function PersonalEnergyProtocolPage() {
               <p><strong>Формат:</strong> Персональный энергетический протокол (серия из 3 аудиозаписей)</p>
               <p><strong>Срок подготовки:</strong> <Accent>5–7 дней</Accent></p>
               <p><strong>Срок использования:</strong> до 3 месяцев</p>
-              <p><strong>Инвестиция:</strong> <Accent>50 000 тенге</Accent></p>
+              <p><strong>Инвестиция:</strong> <Accent>50 000 тенге</Accent> (≈ 8 500 ₽)</p>
             </div>
             <p className="text-zinc-600 text-sm">
               Заполните анкету слева и нажмите «Оплатить» — вы перейдёте к безопасной оплате.

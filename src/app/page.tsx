@@ -183,7 +183,7 @@ export default function Home() {
     <main className="flex flex-col bg-white text-black font-sans selection:bg-[#ffa600] selection:text-white">
       <SiteHeader />
       {/* --- БЛОК 1: HERO --- */}
-      <section className="relative h-[70vh] md:h-[85vh] flex items-center justify-center text-center px-4 overflow-hidden mt-16 md:mt-20">
+      <section className="relative h-[70vh] md:h-[85vh] flex items-center justify-center text-center px-4 overflow-hidden mt-32 md:mt-36">
         <div className="absolute inset-0 z-0">
           <video autoPlay loop muted playsInline className="w-full h-full object-cover">
             <source src="https://res.cloudinary.com/dij7s1nbf/video/upload/v1769257304/43832-437611758_small_i7pc9s.mp4" type="video/mp4" />

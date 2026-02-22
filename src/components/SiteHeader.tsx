@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { Menu, LayoutDashboard, LogOut } from "lucide-react";
+import { DiscountBanner } from "@/components/DiscountBanner";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 
 // Amber/gold brand border and hover
@@ -79,10 +80,10 @@ export function SiteHeader() {
         borderBottomColor: HEADER_BORDER,
       }}
     >
-      <div className="max-w-7xl mx-auto px-4 md:px-6">
-        <div className="flex items-center justify-between h-16 md:h-20">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 w-full">
+        <div className="flex items-center h-16 md:h-20 gap-6 md:gap-8">
           {/* Logo: wordmark + amber accent */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 flex-shrink-0">
             <Link href="/" className="flex items-center gap-3 group">
               <div className="w-9 h-9 md:w-10 md:h-10 rounded-full overflow-hidden ring-1 ring-[rgba(212,160,60,0.25)] flex-shrink-0">
                 <img
@@ -98,38 +99,38 @@ export function SiteHeader() {
             </Link>
           </div>
 
-          <nav className="hidden md:flex items-center gap-5">
-            {/* Social: monochrome outline, amber hover */}
-            <a
-              href="https://www.instagram.com/accessbars.irina/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center w-8 h-8 rounded-lg text-[#e8e0d0]/80 hover:text-[#d4a03c] transition-colors duration-200"
-              aria-label="Instagram"
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-                <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-              </svg>
-            </a>
-            <a
-              href="https://t.me/+7WoSGeS2y6JhNzQy"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center w-8 h-8 rounded-lg text-[#e8e0d0]/80 hover:text-[#d4a03c] transition-colors duration-200"
-              aria-label="Telegram"
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-                <path d="m22 2-7 20-4-9-9-4Z" />
-                <path d="M22 2 11 13" />
-              </svg>
-            </a>
+          <nav className="hidden md:flex flex-1 items-center justify-between min-w-0">
+            {/* Соцсети — цветные иконки, по левой части шапки */}
+            <div className="flex items-center gap-3 flex-shrink-0">
+              <a
+                href="https://www.instagram.com/accessbars.irina/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center w-9 h-9 rounded-lg text-[#E4405F] hover:bg-[#E4405F]/10 transition-colors duration-200"
+                aria-label="Instagram"
+              >
+                <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.205.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                </svg>
+              </a>
+              <a
+                href="https://t.me/+7WoSGeS2y6JhNzQy"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center w-9 h-9 rounded-lg text-[#0088cc] hover:bg-[#0088cc]/10 transition-colors duration-200"
+                aria-label="Telegram"
+              >
+                <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                  <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
+                </svg>
+              </a>
+            </div>
 
-            {/* Nav links: refined uppercase, light weight, hover white */}
+            {/* Навигация: по центру */}
+            <div className="flex items-center gap-5 flex-shrink-0">
             <Link
               href="/#about"
-              className="text-[#e8e0d0] hover:text-white transition-colors duration-200 text-xs font-light uppercase tracking-[0.12em]"
+              className="text-[#e8e0d0] hover:text-white transition-colors duration-200 text-sm font-light uppercase tracking-[0.12em]"
             >
               О МНЕ
             </Link>
@@ -137,7 +138,7 @@ export function SiteHeader() {
               <button
                 type="button"
                 onClick={() => setSessionsOpen((v) => !v)}
-                className="flex items-center gap-1.5 text-[#e8e0d0] hover:text-white transition-colors duration-200 text-xs font-light uppercase tracking-[0.12em]"
+                className="flex items-center gap-1.5 text-[#e8e0d0] hover:text-white transition-colors duration-200 text-sm font-light uppercase tracking-[0.12em]"
               >
                 СЕССИИ
                 <ChevronDownThin open={sessionsOpen} />
@@ -169,9 +170,9 @@ export function SiteHeader() {
               <>
                 <Link
                   href="/cabinet"
-                  className="flex items-center gap-1.5 text-[#e8e0d0] hover:text-white transition-colors duration-200 text-xs font-light uppercase tracking-[0.12em]"
+                  className="flex items-center gap-1.5 text-[#e8e0d0] hover:text-white transition-colors duration-200 text-sm font-light uppercase tracking-[0.12em]"
                 >
-                  <LayoutDashboard className="w-3.5 h-3.5" />
+                  <LayoutDashboard className="w-4 h-4" />
                   Личный кабинет
                 </Link>
                 <button
@@ -181,9 +182,9 @@ export function SiteHeader() {
                     router.push("/");
                     router.refresh();
                   }}
-                  className="flex items-center gap-1.5 text-[#e8e0d0] hover:text-red-300 transition-colors duration-200 text-xs font-light uppercase tracking-[0.12em]"
+                  className="flex items-center gap-1.5 text-[#e8e0d0] hover:text-red-300 transition-colors duration-200 text-sm font-light uppercase tracking-[0.12em]"
                 >
-                  <LogOut className="w-3.5 h-3.5" />
+                  <LogOut className="w-4 h-4" />
                   Выйти
                 </button>
               </>
@@ -191,24 +192,25 @@ export function SiteHeader() {
               <span className="flex items-center gap-4">
                 <Link
                   href="/login"
-                  className="text-[#e8e0d0] hover:text-white transition-colors duration-200 text-xs font-light uppercase tracking-[0.12em]"
+                  className="text-[#e8e0d0] hover:text-white transition-colors duration-200 text-sm font-light uppercase tracking-[0.12em]"
                 >
                   Войти
                 </Link>
                 <span className="text-[#e8e0d0]/40" aria-hidden>|</span>
                 <Link
                   href="/register"
-                  className="text-[#e8e0d0] hover:text-white transition-colors duration-200 text-xs font-light uppercase tracking-[0.12em]"
+                  className="text-[#e8e0d0] hover:text-white transition-colors duration-200 text-sm font-light uppercase tracking-[0.12em]"
                 >
                   Регистрация
                 </Link>
               </span>
             )}
+            </div>
 
-            {/* CTA: amber→gold gradient, refined shape, hover glow */}
+            {/* CTA: amber→gold gradient, справа по шапке */}
             <Link
               href={bookingHref}
-              className="flex items-center justify-center px-5 py-2.5 rounded-2xl text-white text-xs font-semibold uppercase tracking-[0.08em] transition-all duration-300 hover:scale-[1.02] hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-[#d4a03c]/50 focus:ring-offset-2 focus:ring-offset-[#0f0e0c]"
+              className="flex items-center justify-center px-5 py-2.5 rounded-2xl text-white text-sm font-semibold uppercase tracking-[0.08em] transition-all duration-300 hover:scale-[1.02] hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-[#d4a03c]/50 focus:ring-offset-2 focus:ring-offset-[#0f0e0c] flex-shrink-0"
               style={{
                 background: "linear-gradient(135deg, #d4a03c 0%, #c4942e 50%, #b88620 100%)",
                 boxShadow: "0 0 20px rgba(212, 160, 60, 0.25), inset 0 1px 0 rgba(255,255,255,0.15)",
@@ -229,6 +231,8 @@ export function SiteHeader() {
           </button>
         </div>
       </div>
+
+      <DiscountBanner />
 
       {/* Мобильное меню */}
       {mobileMenuOpen && (
@@ -263,7 +267,7 @@ export function SiteHeader() {
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => setMobileMenuOpen(false)}
-              className="py-3 px-4 text-[#e8e0d0] hover:text-white text-sm"
+              className="py-3 px-4 text-[#E4405F] hover:text-[#E4405F]/80 text-base font-medium"
             >
               Instagram
             </a>
@@ -272,7 +276,7 @@ export function SiteHeader() {
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => setMobileMenuOpen(false)}
-              className="py-3 px-4 text-[#e8e0d0] hover:text-white text-sm"
+              className="py-3 px-4 text-[#0088cc] hover:text-[#0088cc]/80 text-base font-medium"
             >
               Telegram
             </a>

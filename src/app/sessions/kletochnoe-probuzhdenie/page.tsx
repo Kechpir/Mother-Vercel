@@ -12,7 +12,7 @@ export default function KletochnoeProbuzhdeniePage() {
   return (
     <main className="flex flex-col bg-white text-black font-sans min-h-screen selection:bg-[#ffa600] selection:text-white">
       <SiteHeader />
-      <section className="pt-20 md:pt-24 py-10 md:py-14 px-4 bg-white">
+      <section className="pt-36 md:pt-40 py-10 md:py-14 px-4 bg-white">
         <div className="max-w-4xl mx-auto px-4 md:px-6 text-center mb-12">
           <h1 className="text-2xl md:text-4xl font-bold text-zinc-900 uppercase tracking-tight">
             Четыре потока энергии

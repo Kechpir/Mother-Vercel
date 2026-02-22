@@ -8,6 +8,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   viewportFit: "cover",
+  themeColor: "#000000",
 };
 
 const inter = Inter({ subsets: ["latin", "cyrillic"] });
@@ -25,7 +26,6 @@ export const metadata: Metadata = {
   description: "Энергетическое Клеточное Пробуждение и исцеление на уровне ДНК",
   metadataBase: new URL(siteUrl),
   manifest: "/manifest.json",
-  themeColor: "#000000",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
