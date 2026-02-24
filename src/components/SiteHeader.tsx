@@ -220,15 +220,34 @@ export function SiteHeader() {
             </Link>
           </nav>
 
-          <button
-            type="button"
-            onClick={() => setMobileMenuOpen((v) => !v)}
-            className="md:hidden text-[#e8e0d0] hover:text-white transition-colors p-2 -m-2 touch-manipulation"
-            aria-label={mobileMenuOpen ? "Закрыть меню" : "Открыть меню"}
-            aria-expanded={mobileMenuOpen}
-          >
-            <Menu size={22} strokeWidth={1.5} />
-          </button>
+          {/* Мобильная шапка: Личный кабинет / Войти + Меню */}
+          <div className="md:hidden flex items-center gap-2 flex-shrink-0 ml-auto">
+            {authUser ? (
+              <Link
+                href="/cabinet"
+                className="text-[#e8e0d0] hover:text-white transition-colors text-[10px] sm:text-xs font-semibold uppercase tracking-wider py-2 px-2.5 touch-manipulation"
+              >
+                Личный кабинет
+              </Link>
+            ) : (
+              <Link
+                href="/login"
+                className="text-[#e8e0d0] hover:text-white transition-colors text-[10px] sm:text-xs font-semibold uppercase tracking-wider py-2 px-2.5 touch-manipulation"
+              >
+                Войти
+              </Link>
+            )}
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen((v) => !v)}
+              className="flex items-center gap-1.5 text-[#e8e0d0] hover:text-white transition-colors py-2 px-3 rounded-lg border border-[#e8e0d0]/30 touch-manipulation"
+              aria-label={mobileMenuOpen ? "Закрыть меню" : "Открыть меню"}
+              aria-expanded={mobileMenuOpen}
+            >
+              <Menu size={20} strokeWidth={1.5} />
+              <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider">Меню</span>
+            </button>
+          </div>
         </div>
       </div>
 
