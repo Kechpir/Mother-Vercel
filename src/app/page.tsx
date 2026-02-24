@@ -53,7 +53,7 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    const targetDate = new Date("2026-02-07T22:00:00+05:00"); // 7 февраля 22:00 по Астане (GMT+5)
+    const targetDate = new Date("2026-03-09T23:59:59+05:00"); // Конец записи 9 марта по Астане (GMT+5)
 
     const timer = setInterval(() => {
       const now = new Date();
@@ -199,8 +199,8 @@ export default function Home() {
               Возвращение к первоначальной настройке тела
             </span>
           </h1>
-          <p className="text-sm md:text-base mb-10 font-light tracking-[0.2em] uppercase text-zinc-300 [text-shadow:0_1px_8px_rgba(0,0,0,0.5)]">
-            с 7 по 27 февраля
+          <p className="text-base md:text-xl mb-10 font-light tracking-[0.2em] uppercase text-zinc-300 [text-shadow:0_1px_8px_rgba(0,0,0,0.5)]">
+            с 9 марта по 2 апреля
           </p>
           <a href="#register" className="group relative inline-flex items-center justify-center px-10 py-4 md:px-14 md:py-5 overflow-hidden font-semibold text-white transition-all duration-300 bg-gradient-to-r from-[#ffa600] to-[#ff8c00] rounded-[2rem] hover:from-white hover:to-zinc-100 hover:text-black hover:scale-[1.02] shadow-[0_8px_30px_rgba(255,166,0,0.4)] hover:shadow-[0_12px_40px_rgba(255,166,0,0.6)] border border-[#ffa600]/20">
             <span className="relative uppercase tracking-[0.15em] text-sm md:text-base font-medium">Принять участие</span>
@@ -218,8 +218,8 @@ export default function Home() {
           <h2 className="text-2xl md:text-3xl font-bold mb-6 leading-tight uppercase tracking-tighter">
             Цикл энергетического погружения <br /> «Энергия первоначальности»
           </h2>
-          <div className="space-y-1 text-sm md:text-base text-zinc-500 mb-8 font-light italic">
-            <p>с 7 по 27 февраля | 10 сеансов по будням</p>
+          <div className="space-y-1 text-base md:text-xl text-zinc-500 mb-8 font-light italic">
+            <p>с 9 марта по 2 апреля | 10 сеансов по будням</p>
             <p>Групповой формат | 22:00 по Астане | Zoom</p>
           </div>
           
@@ -407,8 +407,8 @@ export default function Home() {
                 "Энергетическое выравнивание всех тел и позвоночника"
               </h3>
               
-              <p className="text-[10px] md:text-xs text-orange-500 font-black uppercase tracking-widest mb-5">
-                с 7 по 27 февраля
+              <p className="text-base md:text-lg text-orange-500 font-black uppercase tracking-widest mb-5">
+                с 9 марта по 2 апреля
               </p>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl mb-6">
@@ -506,15 +506,15 @@ export default function Home() {
               <div className="flex flex-wrap gap-6 pt-4">
                 <div className="space-y-1">
                   <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Период</p>
-                  <p className="text-sm font-bold text-zinc-900">с 16 по 27 февраля</p>
+                  <p className="text-base md:text-lg font-bold text-zinc-900">с 9 марта по 2 апреля</p>
                 </div>
                 <div className="space-y-1">
                   <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Формат</p>
-                  <p className="text-sm font-bold text-zinc-900">10 сеансов по будням</p>
+                  <p className="text-base md:text-lg font-bold text-zinc-900">10 сеансов по будням</p>
                 </div>
                 <div className="space-y-1">
                   <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Время</p>
-                  <p className="text-sm font-bold text-zinc-900">22:00 по Астане</p>
+                  <p className="text-base md:text-lg font-bold text-zinc-900">22:00 по Астане</p>
                 </div>
               </div>
             </div>
@@ -563,7 +563,7 @@ export default function Home() {
 
               <div className="space-y-6">
                 <h5 className="text-base md:text-lg font-bold uppercase tracking-widest text-[#ffa600]">
-                  Верхний ряд — физическое тело
+                  Физическое тело
                 </h5>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                   <div className="space-y-2">
@@ -585,7 +585,7 @@ export default function Home() {
 
               <div className="space-y-6">
                 <h5 className="text-base md:text-lg font-bold uppercase tracking-widest text-[#ffa600]">
-                  Нижний ряд — состояние и энергия
+                  Состояние и энергия
                 </h5>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                   <div className="space-y-2">
@@ -690,7 +690,7 @@ export default function Home() {
       </section>
 
       {/* --- БЛОК: ТАЙМЕР (Успей прийти на курс) --- */}
-      <section className="relative min-h-[500px] md:h-[600px] overflow-hidden flex items-center justify-center text-white py-16">
+      <section className="relative min-h-[500px] md:h-[600px] overflow-hidden flex items-center justify-center text-white pt-16 md:pt-20 pb-20 md:pb-28">
         <div 
           className="absolute inset-0 z-0 bg-cover bg-center bg-fixed"
           style={{ backgroundImage: 'url("https://res.cloudinary.com/dij7s1nbf/image/upload/v1769258293/timer_rwjg15.png")' }}
@@ -698,18 +698,18 @@ export default function Home() {
           <div className="absolute inset-0 bg-black/60 md:bg-black/40" />
         </div>
         
-        <div className="relative z-10 max-w-5xl mx-auto px-6 text-center space-y-10">
-          <h2 className="text-2xl md:text-4xl font-black uppercase tracking-tight leading-tight">
+        <div className="relative z-10 max-w-5xl mx-auto px-6 text-center flex flex-col items-center justify-center gap-6 md:gap-8">
+          <h2 className="text-2xl md:text-4xl font-black uppercase tracking-tight leading-tight mt-8 md:mt-10">
             Успей прийти на сессии по цене со <br className="hidden md:block" /> скидкой <span className="text-zinc-400/50 line-through">30.000 тг</span> <span className="text-[#ffa600]">25.000 тг</span>
           </h2>
           
-          <div className="space-y-4">
-            <p className="text-sm md:text-lg font-bold uppercase tracking-widest opacity-90">
-              Цикл энергетических сессий будет проходить по будням с 7 по 27 февраля.
+          <div className="space-y-3">
+            <p className="text-base md:text-xl font-bold uppercase tracking-widest opacity-90">
+              Цикл энергетических сессий будет проходить по будням с 9 марта по 2 апреля.
             </p>
-            <div className="text-xs md:text-sm font-medium space-y-1 opacity-80 uppercase tracking-widest">
-              <p>Закрытие регистрации 7 февраля в 22.00 по Астане.</p>
-              <p>Старт курса 7 февраля в 22.00 по Астане. Осталось:</p>
+            <div className="text-sm md:text-base font-medium space-y-1 opacity-80 uppercase tracking-widest">
+              <p>Записаться можно только до 9 марта.</p>
+              <p>Старт курса 9 марта. Цикл до 2 апреля. Осталось:</p>
             </div>
           </div>
 
@@ -727,11 +727,11 @@ export default function Home() {
             ))}
           </div>
 
-          <div className="pt-10">
+          <div className="pt-2 flex flex-col items-center gap-4 pb-8 md:pb-10">
             <a href="#register" className="inline-block bg-[#ffa600] text-white px-16 py-6 md:px-24 md:py-8 text-lg md:text-xl rounded-2xl font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all hover:scale-105 shadow-2xl">
               Принять участие
             </a>
-            <p className="mt-8 text-[9px] md:text-[10px] text-zinc-400 uppercase tracking-widest leading-relaxed max-w-3xl mx-auto opacity-80">
+            <p className="max-w-3xl mx-auto text-center text-[9px] md:text-[10px] text-zinc-400 uppercase tracking-widest leading-relaxed opacity-80">
               Нажимая кнопку выше, я подтверждаю, что ознакомлен с <Link href="/offer" className="underline hover:text-[#ffa600]">Договором оферты</Link> и принимаю его условия, даю <Link href="/consent" className="underline hover:text-[#ffa600]">Согласие на обработку</Link> моих персональных данных на условиях <Link href="/privacy" className="underline hover:text-[#ffa600]">Политики конфиденциальности</Link>
             </p>
           </div>
@@ -809,7 +809,7 @@ export default function Home() {
           {/* Статистика */}
           <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-4 text-center border-t border-zinc-50 pt-16">
             {[
-              { label: "Более 50 авторских курсов", icon: <Sparkles size={24} /> },
+              { label: "Более 30 авторских курсов", icon: <Sparkles size={24} /> },
               { label: "Более 1000 участников", icon: <User size={24} /> },
               { label: "Более 200 посвящений", icon: <Zap size={24} /> },
               { label: "Более 1000 благодарных отзывов о моей работе", icon: <MessageCircle size={24} /> }

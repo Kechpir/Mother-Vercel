@@ -143,7 +143,7 @@ export default function KletochnoeProbuzhdeniePage() {
             <h2 className="text-xl font-bold text-zinc-900 mb-6">
               Формат и детали
             </h2>
-            <dl className="space-y-3 text-zinc-700">
+            <dl className="space-y-3 text-zinc-700 text-base md:text-xl">
               <div className="flex flex-wrap gap-2">
                 <dt className="font-semibold text-zinc-900">Дата:</dt>
                 <dd>21 февраля</dd>
