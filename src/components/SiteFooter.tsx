@@ -44,6 +44,10 @@ export function SiteFooter() {
             <div className="w-1.5 h-1.5 rounded-full bg-zinc-200 group-hover:bg-[#ffa600] transition-colors" />
             <Link href="/offer" className="hover:text-black transition-colors">Договор оферты</Link>
           </div>
+          <div className="flex items-center gap-3 group">
+            <div className="w-1.5 h-1.5 rounded-full bg-zinc-200 group-hover:bg-[#ffa600] transition-colors" />
+            <Link href="/instructions" className="hover:text-black transition-colors">Инструкции: регистрация и оплата</Link>
+          </div>
         </div>
       </div>
     </footer>

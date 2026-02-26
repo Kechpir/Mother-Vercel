@@ -134,6 +134,12 @@ export function SiteHeader() {
             >
               О МНЕ
             </Link>
+            <Link
+              href="/instructions"
+              className="text-[#e8e0d0] hover:text-white transition-colors duration-200 text-sm font-light uppercase tracking-[0.12em]"
+            >
+              ИНСТРУКЦИИ
+            </Link>
             <div className="relative" ref={sessionsDropdownRef}>
               <button
                 type="button"
@@ -269,6 +275,13 @@ export function SiteHeader() {
               className="py-3 px-4 text-[#e8e0d0] hover:text-white text-sm font-light uppercase tracking-[0.12em]"
             >
               О МНЕ
+            </Link>
+            <Link
+              href="/instructions"
+              onClick={() => setMobileMenuOpen(false)}
+              className="py-3 px-4 text-[#e8e0d0] hover:text-white text-sm font-light uppercase tracking-[0.12em]"
+            >
+              ИНСТРУКЦИИ
             </Link>
             {SESSIONS_LINKS.map((item) => (
               <Link
