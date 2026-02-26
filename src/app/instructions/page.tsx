@@ -18,29 +18,29 @@ export default function InstructionsPage() {
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-br from-zinc-900 via-zinc-800 to-black border-b border-[#ffa600]/20 shadow-[0_4px_20px_rgba(0,0,0,0.3)]">
         <div className="max-w-7xl mx-auto px-4 md:px-6">
-          <div className="relative flex items-center justify-between h-16 md:h-20">
-            <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity shrink-0">
-              <div className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border-2 border-[#ffa600]/30 shadow-lg">
+          <div className="relative flex items-center justify-between h-16 md:h-20 gap-2">
+            <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity shrink-0 min-w-0">
+              <div className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border-2 border-[#ffa600]/30 shadow-lg flex-shrink-0">
                 <img
                   src="https://res.cloudinary.com/dij7s1nbf/image/upload/v1769356927/5453934422802501391_wfkxhr.jpg"
                   alt="Logo"
                   className="w-full h-full object-cover"
                 />
               </div>
-              <span className="text-white font-black text-sm md:text-base uppercase tracking-tight">
+              <span className="text-white font-black text-sm md:text-base uppercase tracking-tight truncate">
                 Ирина Головатова
               </span>
             </Link>
 
+            {/* На мобильном — справа (не по центру), чтобы не налезало на «Ирина Головатова». На десктопе — по центру, полный текст */}
             <Link
               href="/"
-              className="absolute left-1/2 -translate-x-1/2 flex items-center gap-2.5 text-white hover:text-[#ffa600] transition-colors text-base md:text-lg font-semibold uppercase tracking-widest"
+              className="flex items-center gap-2 md:gap-2.5 text-white hover:text-[#ffa600] transition-colors text-xs font-semibold md:text-lg uppercase tracking-widest shrink-0 md:absolute md:left-1/2 md:-translate-x-1/2"
             >
-              <ArrowLeft size={22} className="md:w-6 md:h-6" />
-              <span>Вернуться на главную</span>
+              <ArrowLeft size={18} className="md:w-6 md:h-6 flex-shrink-0" />
+              <span className="md:hidden">На главную</span>
+              <span className="hidden md:inline">Вернуться на главную</span>
             </Link>
-
-            <div className="w-[1px] shrink-0 md:invisible" aria-hidden />
           </div>
         </div>
       </header>
@@ -70,7 +70,6 @@ export default function InstructionsPage() {
                 Следуйте шагам в видео, чтобы создать аккаунт на сайте.
               </p>
               <div className="flex justify-center">
-                {/* На телефоне — по ширине экрана (до 320px), на ПК — компактно. object-contain чтобы в полноэкране было видно всё вертикальное видео */}
                 <div className="w-full max-w-[320px] sm:max-w-[280px] rounded-2xl overflow-hidden border-2 border-zinc-200 shadow-xl bg-black">
                   <video
                     src={REGISTRATION_VIDEO}
