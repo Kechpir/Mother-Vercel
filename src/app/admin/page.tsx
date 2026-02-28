@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Calendar, DollarSign, Users, Filter, Lock, Download } from "lucide-react";
+import { Calendar, DollarSign, Users, Filter, Lock, Download, UserCircle } from "lucide-react";
 
 interface Participant {
   id: string;
@@ -18,6 +18,15 @@ interface Participant {
   updated_at: string;
 }
 
+interface SiteUser {
+  id: string;
+  full_name: string | null;
+  phone: string | null;
+  city: string | null;
+  age: string | null;
+  updated_at: string;
+}
+
 interface Stats {
   totalCount: number;
   totalAmount: string;
@@ -27,23 +36,52 @@ export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
   const [participants, setParticipants] = useState<Participant[]>([]);
+  const [allUsers, setAllUsers] = useState<SiteUser[]>([]);
   const [stats, setStats] = useState<Stats>({ totalCount: 0, totalAmount: "0" });
   const [loading, setLoading] = useState(false);
   
-  // Фильтры
-  const [source, setSource] = useState<"main" | "protocol">("main");
+  // Режим: участники (главная/протокол) или все зарегистрированные пользователи
+  const [source, setSource] = useState<"main" | "protocol" | "users">("main");
   const [statusFilter, setStatusFilter] = useState<"all" | "paid" | "pending">("paid");
   const [searchName, setSearchName] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [minAmount, setMinAmount] = useState("");
   const [maxAmount, setMaxAmount] = useState("");
+  // Фильтры для раздела «Все пользователи»
+  const [filterFirstName, setFilterFirstName] = useState("");
+  const [filterLastName, setFilterLastName] = useState("");
+
+  const fetchUsers = async () => {
+    setLoading(true);
+    try {
+      const auth = localStorage.getItem('admin_auth') || password;
+      const params = new URLSearchParams();
+      if (filterFirstName.trim()) params.append('first_name', filterFirstName.trim());
+      if (filterLastName.trim()) params.append('last_name', filterLastName.trim());
+      const response = await fetch(`/api/admin/users?${params.toString()}`, {
+        headers: { 'Authorization': `Bearer ${auth}` },
+      });
+      if (response.status === 401) {
+        setIsAuthenticated(false);
+        localStorage.removeItem('admin_auth');
+        return;
+      }
+      const data = await response.json();
+      setAllUsers(data.users || []);
+    } catch (e) {
+      console.error('Failed to fetch users:', e);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleLogin = () => {
     if (password) {
       setIsAuthenticated(true);
       localStorage.setItem('admin_auth', password);
-      fetchParticipants();
+      if (source === "users") fetchUsers();
+      else fetchParticipants();
     }
   };
 
@@ -51,17 +89,20 @@ export default function AdminPage() {
     const savedAuth = localStorage.getItem('admin_auth');
     if (savedAuth) {
       setIsAuthenticated(true);
-      fetchParticipants();
+      if (source === "users") fetchUsers();
+      else fetchParticipants();
     }
   }, []);
 
   // При смене вкладки выставляем статус по умолчанию и перезагружаем
   useEffect(() => {
-    setStatusFilter(source === "protocol" ? "all" : "paid");
+    if (source !== "users") setStatusFilter(source === "protocol" ? "all" : "paid");
   }, [source]);
 
   useEffect(() => {
-    if (isAuthenticated) fetchParticipants();
+    if (!isAuthenticated) return;
+    if (source === "users") fetchUsers();
+    else fetchParticipants();
   }, [source, statusFilter]);
 
   const fetchParticipants = async () => {
@@ -100,31 +141,52 @@ export default function AdminPage() {
   };
 
   const handleFilter = () => {
-    fetchParticipants();
+    if (source === "users") fetchUsers();
+    else fetchParticipants();
   };
 
   const handleReset = () => {
-    setSearchName("");
-    setStartDate("");
-    setEndDate("");
-    setMinAmount("");
-    setMaxAmount("");
-    fetchParticipants();
+    if (source === "users") {
+      setFilterFirstName("");
+      setFilterLastName("");
+      fetchUsers();
+    } else {
+      setSearchName("");
+      setStartDate("");
+      setEndDate("");
+      setMinAmount("");
+      setMaxAmount("");
+      fetchParticipants();
+    }
+  };
+
+  const escapeCSV = (value: any): string => {
+    if (value === null || value === undefined) return '';
+    const str = String(value);
+    if (str.includes(';') || str.includes('"') || str.includes('\n') || str.includes('\r')) {
+      return `"${str.replace(/"/g, '""')}"`;
+    }
+    return str;
   };
 
   const exportToCSV = () => {
-    // Функция для правильного экранирования CSV значений
-    const escapeCSV = (value: any): string => {
-      if (value === null || value === undefined) return '';
-      const str = String(value);
-      // Если значение содержит точку с запятой, кавычки или перенос строки, оборачиваем в кавычки
-      if (str.includes(';') || str.includes('"') || str.includes('\n') || str.includes('\r')) {
-        // Удваиваем кавычки внутри значения
-        return `"${str.replace(/"/g, '""')}"`;
-      }
-      return str;
-    };
-
+    if (source === "users") {
+      const headers = ['ФИО', 'Телефон', 'Город', 'Возраст', 'Дата обновления'];
+      const rows = allUsers.map(u => [
+        escapeCSV(u.full_name),
+        escapeCSV(u.phone),
+        escapeCSV(u.city),
+        escapeCSV(u.age),
+        escapeCSV(u.updated_at ? new Date(u.updated_at).toLocaleString('ru-RU') : ''),
+      ]);
+      const csvContent = [headers.map(escapeCSV).join(';'), ...rows.map(row => row.join(';'))].join('\r\n');
+      const blob = new Blob(['\ufeff' + 'sep=;\r\n' + csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `users_${new Date().toISOString().split('T')[0]}.csv`;
+      link.click();
+      return;
+    }
     const headers = ['ФИО', 'Телефон', 'Email', 'Город', 'Возраст', 'Сумма', 'Промокод', 'Дата оплаты'];
     const rows = participants.map(p => [
       escapeCSV(p.full_name),
@@ -136,18 +198,8 @@ export default function AdminPage() {
       escapeCSV(p.promo_code),
       escapeCSV(new Date(p.created_at).toLocaleString('ru-RU')),
     ]);
-
-    // Форматируем CSV: 
-    // 1. Добавляем 'sep=;' чтобы Excel сразу понял разделитель
-    // 2. Используем ';' как разделитель (стандарт для Excel в РФ)
-    const csvContent = [
-      headers.map(escapeCSV).join(';'),
-      ...rows.map(row => row.join(';'))
-    ].join('\r\n');
-    
+    const csvContent = [headers.map(escapeCSV).join(';'), ...rows.map(row => row.join(';'))].join('\r\n');
     const csvWithExcelHint = `sep=;\r\n${csvContent}`;
-    
-    // Используем BOM (\ufeff) для корректного отображения кириллицы в UTF-8
     const blob = new Blob(['\ufeff' + csvWithExcelHint], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
@@ -192,53 +244,67 @@ export default function AdminPage() {
         <div className="mb-8">
           <h1 className="text-4xl font-black text-white mb-2 uppercase">Админ-панель</h1>
           <p className="text-zinc-400">
-          Управление участниками · {source === "main" ? "Главная страница" : "Персональный энергетический протокол"}
-        </p>
+            {source === "users"
+              ? "Все зарегистрированные пользователи сайта (независимо от оплаты)"
+              : `Управление участниками · ${source === "main" ? "Главная страница" : "Персональный энергетический протокол"}`}
+          </p>
         </div>
 
-        {/* Статистика */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-          <div className="bg-zinc-800/50 rounded-2xl p-6 border border-zinc-700/50">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-zinc-400 text-sm mb-1">Всего участников</p>
-                <p className="text-3xl font-bold text-white">{stats.totalCount}</p>
+        {/* Статистика: для участников — 3 карточки, для пользователей — одна */}
+        <div className={`grid gap-4 mb-6 ${source === "users" ? "grid-cols-1 max-w-sm" : "grid-cols-1 md:grid-cols-3"}`}>
+          {source === "users" ? (
+            <div className="bg-zinc-800/50 rounded-2xl p-6 border border-zinc-700/50">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-zinc-400 text-sm mb-1">Всего пользователей</p>
+                  <p className="text-3xl font-bold text-white">{allUsers.length}</p>
+                </div>
+                <UserCircle className="w-12 h-12 text-[#ffa600]" />
               </div>
-              <Users className="w-12 h-12 text-[#ffa600]" />
             </div>
-          </div>
-          <div className="bg-zinc-800/50 rounded-2xl p-6 border border-zinc-700/50">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-zinc-400 text-sm mb-1">Общая сумма</p>
-                <p className="text-3xl font-bold text-white">{parseFloat(stats.totalAmount).toLocaleString('ru-RU')} ₸</p>
+          ) : (
+            <>
+              <div className="bg-zinc-800/50 rounded-2xl p-6 border border-zinc-700/50">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-zinc-400 text-sm mb-1">Всего участников</p>
+                    <p className="text-3xl font-bold text-white">{stats.totalCount}</p>
+                  </div>
+                  <Users className="w-12 h-12 text-[#ffa600]" />
+                </div>
               </div>
-              <DollarSign className="w-12 h-12 text-[#ffa600]" />
-            </div>
-          </div>
-          <div className="bg-zinc-800/50 rounded-2xl p-6 border border-zinc-700/50">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-zinc-400 text-sm mb-1">Средний чек</p>
-                <p className="text-3xl font-bold text-white">
-                  {stats.totalCount > 0 
-                    ? (parseFloat(stats.totalAmount) / stats.totalCount).toLocaleString('ru-RU', { maximumFractionDigits: 0 })
-                    : 0} ₸
-                </p>
+              <div className="bg-zinc-800/50 rounded-2xl p-6 border border-zinc-700/50">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-zinc-400 text-sm mb-1">Общая сумма</p>
+                    <p className="text-3xl font-bold text-white">{parseFloat(stats.totalAmount).toLocaleString('ru-RU')} ₸</p>
+                  </div>
+                  <DollarSign className="w-12 h-12 text-[#ffa600]" />
+                </div>
               </div>
-              <DollarSign className="w-12 h-12 text-[#ffa600]" />
-            </div>
-          </div>
+              <div className="bg-zinc-800/50 rounded-2xl p-6 border border-zinc-700/50">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-zinc-400 text-sm mb-1">Средний чек</p>
+                    <p className="text-3xl font-bold text-white">
+                      {stats.totalCount > 0
+                        ? (parseFloat(stats.totalAmount) / stats.totalCount).toLocaleString('ru-RU', { maximumFractionDigits: 0 })
+                        : 0} ₸
+                    </p>
+                  </div>
+                  <DollarSign className="w-12 h-12 text-[#ffa600]" />
+                </div>
+              </div>
+            </>
+          )}
         </div>
 
-        {/* Источник: главная / протокол */}
+        {/* Переключатель: Главная / Протокол / Все пользователи */}
         <div className="flex flex-wrap items-center gap-4 mb-6">
           <button
             onClick={() => setSource("main")}
             className={`px-6 py-3 rounded-xl font-bold uppercase tracking-widest transition-all ${
-              source === "main"
-                ? "bg-[#ffa600] text-white"
-                : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-white"
+              source === "main" ? "bg-[#ffa600] text-white" : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-white"
             }`}
           >
             Главная страница
@@ -246,91 +312,121 @@ export default function AdminPage() {
           <button
             onClick={() => setSource("protocol")}
             className={`px-6 py-3 rounded-xl font-bold uppercase tracking-widest transition-all ${
-              source === "protocol"
-                ? "bg-[#ffa600] text-white"
-                : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-white"
+              source === "protocol" ? "bg-[#ffa600] text-white" : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-white"
             }`}
           >
             Персональный энергетический протокол
           </button>
-          <div className="flex items-center gap-2">
-            <span className="text-zinc-500 text-sm uppercase tracking-wider">Статус:</span>
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value as "all" | "paid" | "pending")}
-              onBlur={() => fetchParticipants()}
-              className="bg-zinc-800 border border-zinc-600 rounded-xl px-4 py-2 text-white text-sm focus:outline-none focus:border-[#ffa600]"
-            >
-              <option value="all">Все</option>
-              <option value="paid">Оплачено</option>
-              <option value="pending">Ожидание</option>
-            </select>
-            <button
-              type="button"
-              onClick={handleFilter}
-              className="text-zinc-400 hover:text-white text-sm uppercase"
-            >
-              Применить
-            </button>
-          </div>
+          <button
+            onClick={() => setSource("users")}
+            className={`px-6 py-3 rounded-xl font-bold uppercase tracking-widest transition-all flex items-center gap-2 ${
+              source === "users" ? "bg-[#ffa600] text-white" : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-white"
+            }`}
+          >
+            <UserCircle className="w-5 h-5" />
+            Все пользователи
+          </button>
+          {source !== "users" && (
+            <div className="flex items-center gap-2">
+              <span className="text-zinc-500 text-sm uppercase tracking-wider">Статус:</span>
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value as "all" | "paid" | "pending")}
+                onBlur={() => fetchParticipants()}
+                className="bg-zinc-800 border border-zinc-600 rounded-xl px-4 py-2 text-white text-sm focus:outline-none focus:border-[#ffa600]"
+              >
+                <option value="all">Все</option>
+                <option value="paid">Оплачено</option>
+                <option value="pending">Ожидание</option>
+              </select>
+              <button type="button" onClick={handleFilter} className="text-zinc-400 hover:text-white text-sm uppercase">
+                Применить
+              </button>
+            </div>
+          )}
         </div>
 
-        {/* Фильтры */}
+        {/* Фильтры: разные для участников и для пользователей */}
         <div className="bg-zinc-800/50 rounded-2xl p-6 border border-zinc-700/50 mb-6">
           <div className="flex items-center gap-2 mb-4">
             <Filter className="w-5 h-5 text-[#ffa600]" />
             <h2 className="text-xl font-bold text-white">Фильтры</h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-            <div>
-              <label className="block text-zinc-400 text-sm mb-2">ФИО</label>
-              <input
-                type="text"
-                value={searchName}
-                onChange={(e) => setSearchName(e.target.value)}
-                placeholder="Имя или фамилия"
-                className="w-full px-4 py-2 bg-zinc-900/50 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-[#ffa600]"
-              />
+          {source === "users" ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-zinc-400 text-sm mb-2">Имя</label>
+                <input
+                  type="text"
+                  value={filterFirstName}
+                  onChange={(e) => setFilterFirstName(e.target.value)}
+                  placeholder="Поиск по имени"
+                  className="w-full px-4 py-2 bg-zinc-900/50 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-[#ffa600]"
+                />
+              </div>
+              <div>
+                <label className="block text-zinc-400 text-sm mb-2">Фамилия</label>
+                <input
+                  type="text"
+                  value={filterLastName}
+                  onChange={(e) => setFilterLastName(e.target.value)}
+                  placeholder="Поиск по фамилии"
+                  className="w-full px-4 py-2 bg-zinc-900/50 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-[#ffa600]"
+                />
+              </div>
             </div>
-            <div>
-              <label className="block text-zinc-400 text-sm mb-2">Дата от</label>
-              <input
-                type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-                className="w-full px-4 py-2 bg-zinc-900/50 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-[#ffa600]"
-              />
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+              <div>
+                <label className="block text-zinc-400 text-sm mb-2">ФИО</label>
+                <input
+                  type="text"
+                  value={searchName}
+                  onChange={(e) => setSearchName(e.target.value)}
+                  placeholder="Имя или фамилия"
+                  className="w-full px-4 py-2 bg-zinc-900/50 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-[#ffa600]"
+                />
+              </div>
+              <div>
+                <label className="block text-zinc-400 text-sm mb-2">Дата от</label>
+                <input
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  className="w-full px-4 py-2 bg-zinc-900/50 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-[#ffa600]"
+                />
+              </div>
+              <div>
+                <label className="block text-zinc-400 text-sm mb-2">Дата до</label>
+                <input
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  className="w-full px-4 py-2 bg-zinc-900/50 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-[#ffa600]"
+                />
+              </div>
+              <div>
+                <label className="block text-zinc-400 text-sm mb-2">Сумма от (₸)</label>
+                <input
+                  type="number"
+                  value={minAmount}
+                  onChange={(e) => setMinAmount(e.target.value)}
+                  placeholder="0"
+                  className="w-full px-4 py-2 bg-zinc-900/50 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-[#ffa600]"
+                />
+              </div>
+              <div>
+                <label className="block text-zinc-400 text-sm mb-2">Сумма до (₸)</label>
+                <input
+                  type="number"
+                  value={maxAmount}
+                  onChange={(e) => setMaxAmount(e.target.value)}
+                  placeholder="25000"
+                  className="w-full px-4 py-2 bg-zinc-900/50 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-[#ffa600]"
+                />
+              </div>
             </div>
-            <div>
-              <label className="block text-zinc-400 text-sm mb-2">Дата до</label>
-              <input
-                type="date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-                className="w-full px-4 py-2 bg-zinc-900/50 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-[#ffa600]"
-              />
-            </div>
-            <div>
-              <label className="block text-zinc-400 text-sm mb-2">Сумма от (₸)</label>
-              <input
-                type="number"
-                value={minAmount}
-                onChange={(e) => setMinAmount(e.target.value)}
-                placeholder="0"
-                className="w-full px-4 py-2 bg-zinc-900/50 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-[#ffa600]"
-              />
-            </div>
-            <div>
-              <label className="block text-zinc-400 text-sm mb-2">Сумма до (₸)</label>
-              <input
-                type="number"
-                value={maxAmount}
-                onChange={(e) => setMaxAmount(e.target.value)}
-                placeholder="25000"
-                className="w-full px-4 py-2 bg-zinc-900/50 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-[#ffa600]"
-              />
-            </div>
-          </div>
+          )}
           <div className="flex gap-3 mt-4">
             <button
               onClick={handleFilter}
@@ -354,63 +450,96 @@ export default function AdminPage() {
           </div>
         </div>
 
-        {/* Таблица */}
+        {/* Таблица: участники или пользователи */}
         <div className="bg-zinc-800/50 rounded-2xl border border-zinc-700/50 overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-zinc-900/50">
-                <tr>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-widest">ФИО</th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-widest">Телефон</th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-widest">Email</th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-widest">Город</th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-widest">Сумма</th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-widest">Промокод</th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-widest">Дата</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-zinc-700/50">
-                {loading ? (
+            {source === "users" ? (
+              <table className="w-full">
+                <thead className="bg-zinc-900/50">
                   <tr>
-                    <td colSpan={7} className="px-6 py-8 text-center text-zinc-400">
-                      Загрузка...
-                    </td>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-widest">ФИО</th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-widest">Телефон</th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-widest">Город</th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-widest">Возраст</th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-widest">Дата обновления</th>
                   </tr>
-                ) : participants.length === 0 ? (
-                  <tr>
-                    <td colSpan={7} className="px-6 py-8 text-center text-zinc-400">
-                      Нет данных
-                    </td>
-                  </tr>
-                ) : (
-                  participants.map((participant) => (
-                    <tr key={participant.id} className="hover:bg-zinc-900/30 transition-colors">
-                      <td className="px-6 py-4 text-white font-medium">{participant.full_name}</td>
-                      <td className="px-6 py-4 text-zinc-300">{participant.phone}</td>
-                      <td className="px-6 py-4 text-zinc-300">{participant.email}</td>
-                      <td className="px-6 py-4 text-zinc-300">{participant.city}</td>
-                      <td className="px-6 py-4 text-white font-bold">
-                        {participant.payment_amount 
-                          ? `${parseFloat(participant.payment_amount.toString()).toLocaleString('ru-RU')} ₸`
-                          : '—'}
-                      </td>
-                      <td className="px-6 py-4 text-zinc-300">
-                        {participant.promo_code ? (
-                          <span className="bg-[#ffa600]/20 text-[#ffa600] px-2 py-1 rounded text-xs font-bold">
-                            {participant.promo_code}
-                          </span>
-                        ) : (
-                          '—'
-                        )}
-                      </td>
-                      <td className="px-6 py-4 text-zinc-400 text-sm">
-                        {new Date(participant.created_at).toLocaleString('ru-RU')}
-                      </td>
+                </thead>
+                <tbody className="divide-y divide-zinc-700/50">
+                  {loading ? (
+                    <tr>
+                      <td colSpan={5} className="px-6 py-8 text-center text-zinc-400">Загрузка...</td>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+                  ) : allUsers.length === 0 ? (
+                    <tr>
+                      <td colSpan={5} className="px-6 py-8 text-center text-zinc-400">Нет данных</td>
+                    </tr>
+                  ) : (
+                    allUsers.map((u) => (
+                      <tr key={u.id} className="hover:bg-zinc-900/30 transition-colors">
+                        <td className="px-6 py-4 text-white font-medium">{u.full_name ?? "—"}</td>
+                        <td className="px-6 py-4 text-zinc-300">{u.phone ?? "—"}</td>
+                        <td className="px-6 py-4 text-zinc-300">{u.city ?? "—"}</td>
+                        <td className="px-6 py-4 text-zinc-300">{u.age ?? "—"}</td>
+                        <td className="px-6 py-4 text-zinc-400 text-sm">
+                          {u.updated_at ? new Date(u.updated_at).toLocaleString("ru-RU") : "—"}
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            ) : (
+              <table className="w-full">
+                <thead className="bg-zinc-900/50">
+                  <tr>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-widest">ФИО</th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-widest">Телефон</th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-widest">Email</th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-widest">Город</th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-widest">Сумма</th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-widest">Промокод</th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-widest">Дата</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-zinc-700/50">
+                  {loading ? (
+                    <tr>
+                      <td colSpan={7} className="px-6 py-8 text-center text-zinc-400">Загрузка...</td>
+                    </tr>
+                  ) : participants.length === 0 ? (
+                    <tr>
+                      <td colSpan={7} className="px-6 py-8 text-center text-zinc-400">Нет данных</td>
+                    </tr>
+                  ) : (
+                    participants.map((participant) => (
+                      <tr key={participant.id} className="hover:bg-zinc-900/30 transition-colors">
+                        <td className="px-6 py-4 text-white font-medium">{participant.full_name}</td>
+                        <td className="px-6 py-4 text-zinc-300">{participant.phone}</td>
+                        <td className="px-6 py-4 text-zinc-300">{participant.email}</td>
+                        <td className="px-6 py-4 text-zinc-300">{participant.city}</td>
+                        <td className="px-6 py-4 text-white font-bold">
+                          {participant.payment_amount
+                            ? `${parseFloat(participant.payment_amount.toString()).toLocaleString("ru-RU")} ₸`
+                            : "—"}
+                        </td>
+                        <td className="px-6 py-4 text-zinc-300">
+                          {participant.promo_code ? (
+                            <span className="bg-[#ffa600]/20 text-[#ffa600] px-2 py-1 rounded text-xs font-bold">
+                              {participant.promo_code}
+                            </span>
+                          ) : (
+                            "—"
+                          )}
+                        </td>
+                        <td className="px-6 py-4 text-zinc-400 text-sm">
+                          {new Date(participant.created_at).toLocaleString("ru-RU")}
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            )}
           </div>
         </div>
       </div>
