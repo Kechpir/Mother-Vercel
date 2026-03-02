@@ -55,14 +55,13 @@ export default function Home() {
   useEffect(() => {
     const targetDate = new Date("2026-03-09T23:59:59+05:00"); // Конец записи 9 марта по Астане (GMT+5)
 
-    const timer = setInterval(() => {
+    const tick = (): boolean => {
       const now = new Date();
       const difference = targetDate.getTime() - now.getTime();
 
       if (difference <= 0) {
-        clearInterval(timer);
         setTimeLeft({ days: "00", hours: "00", minutes: "00", seconds: "00" });
-        return;
+        return true; // время вышло — останавливаем таймер
       }
 
       const days = Math.floor(difference / (1000 * 60 * 60 * 24));
@@ -76,8 +75,13 @@ export default function Home() {
         minutes: minutes.toString().padStart(2, "0"),
         seconds: seconds.toString().padStart(2, "0"),
       });
-    }, 1000);
+      return false;
+    };
 
+    tick(); // сразу показываем актуальный остаток, не ждём секунду
+    const timer = setInterval(() => {
+      if (tick()) clearInterval(timer);
+    }, 1000);
     return () => clearInterval(timer);
   }, []);
 
@@ -200,7 +204,7 @@ export default function Home() {
             </span>
           </h1>
           <p className="text-base md:text-xl mb-10 font-light tracking-[0.2em] uppercase text-zinc-300 [text-shadow:0_1px_8px_rgba(0,0,0,0.5)]">
-            с 9 марта по 2 апреля
+            с 9 марта по 28 марта
           </p>
           <a href="#register" className="group relative inline-flex items-center justify-center px-10 py-4 md:px-14 md:py-5 overflow-hidden font-semibold text-white transition-all duration-300 bg-gradient-to-r from-[#ffa600] to-[#ff8c00] rounded-[2rem] hover:from-white hover:to-zinc-100 hover:text-black hover:scale-[1.02] shadow-[0_8px_30px_rgba(255,166,0,0.4)] hover:shadow-[0_12px_40px_rgba(255,166,0,0.6)] border border-[#ffa600]/20">
             <span className="relative uppercase tracking-[0.15em] text-sm md:text-base font-medium">Принять участие</span>
@@ -219,7 +223,7 @@ export default function Home() {
             Цикл энергетического погружения <br /> «Энергия первоначальности»
           </h2>
           <div className="space-y-1 text-base md:text-xl text-zinc-500 mb-8 font-light italic">
-            <p>с 9 марта по 2 апреля | 10 сеансов по будням</p>
+            <p>с 9 марта по 28 марта | 10 сеансов по будням</p>
             <p>Групповой формат | 22:00 по Астане | Zoom</p>
           </div>
           
@@ -408,7 +412,7 @@ export default function Home() {
               </h3>
               
               <p className="text-base md:text-lg text-orange-500 font-black uppercase tracking-widest mb-5">
-                с 9 марта по 2 апреля
+                с 9 марта по 28 марта
               </p>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl mb-6">
@@ -506,7 +510,7 @@ export default function Home() {
               <div className="flex flex-wrap gap-6 pt-4">
                 <div className="space-y-1">
                   <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Период</p>
-                  <p className="text-base md:text-lg font-bold text-zinc-900">с 9 марта по 2 апреля</p>
+                  <p className="text-base md:text-lg font-bold text-zinc-900">с 9 марта по 28 марта</p>
                 </div>
                 <div className="space-y-1">
                   <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Формат</p>
@@ -705,11 +709,11 @@ export default function Home() {
           
           <div className="space-y-3">
             <p className="text-base md:text-xl font-bold uppercase tracking-widest opacity-90">
-              Цикл энергетических сессий будет проходить по будням с 9 марта по 2 апреля.
+              Цикл энергетических сессий будет проходить по будням с 9 марта по 28 марта.
             </p>
             <div className="text-sm md:text-base font-medium space-y-1 opacity-80 uppercase tracking-widest">
               <p>Записаться можно только до 9 марта.</p>
-              <p>Старт курса 9 марта. Цикл до 2 апреля. Осталось:</p>
+              <p>Старт курса 9 марта. Цикл до 28 марта. Осталось:</p>
             </div>
           </div>
 
