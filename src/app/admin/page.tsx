@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import * as XLSX from "xlsx";
 import { Calendar, DollarSign, Users, Filter, Lock, Download, UserCircle } from "lucide-react";
 
 interface Participant {
@@ -14,6 +15,7 @@ interface Participant {
   payment_amount: number | null;
   payment_inv_id: string | null;
   promo_code: string | null;
+  telegram_invite_link?: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -160,51 +162,59 @@ export default function AdminPage() {
     }
   };
 
-  const escapeCSV = (value: any): string => {
-    if (value === null || value === undefined) return '';
-    const str = String(value);
-    if (str.includes(';') || str.includes('"') || str.includes('\n') || str.includes('\r')) {
-      return `"${str.replace(/"/g, '""')}"`;
-    }
-    return str;
+  const cell = (value: unknown): string => {
+    if (value === null || value === undefined) return "";
+    return String(value);
   };
 
-  const exportToCSV = () => {
+  const exportToExcel = () => {
+    const dateStr = new Date().toISOString().split("T")[0];
+    let data: string[][];
+    let fileName: string;
+
     if (source === "users") {
-      const headers = ['ФИО', 'Телефон', 'Город', 'Возраст', 'Дата обновления'];
-      const rows = allUsers.map(u => [
-        escapeCSV(u.full_name),
-        escapeCSV(u.phone),
-        escapeCSV(u.city),
-        escapeCSV(u.age),
-        escapeCSV(u.updated_at ? new Date(u.updated_at).toLocaleString('ru-RU') : ''),
-      ]);
-      const csvContent = [headers.map(escapeCSV).join(';'), ...rows.map(row => row.join(';'))].join('\r\n');
-      const blob = new Blob(['\ufeff' + 'sep=;\r\n' + csvContent], { type: 'text/csv;charset=utf-8;' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = `users_${new Date().toISOString().split('T')[0]}.csv`;
-      link.click();
-      return;
+      const headers = ["ФИО", "Телефон", "Город", "Возраст", "Дата обновления"];
+      data = [
+        headers,
+        ...allUsers.map((u) => [
+          cell(u.full_name),
+          cell(u.phone),
+          cell(u.city),
+          cell(u.age),
+          u.updated_at ? new Date(u.updated_at).toLocaleString("ru-RU") : "",
+        ]),
+      ];
+      fileName = `users_${dateStr}.xlsx`;
+    } else {
+      const headers = ["ФИО", "Телефон", "Email", "Город", "Возраст", "Сумма", "Промокод", "Ссылка в Telegram", "Дата оплаты"];
+      data = [
+        headers,
+        ...participants.map((p) => [
+          cell(p.full_name),
+          cell(p.phone),
+          cell(p.email),
+          cell(p.city),
+          cell(p.age),
+          p.payment_amount != null ? p.payment_amount.toFixed(2) : "0",
+          cell(p.promo_code),
+          cell(p.telegram_invite_link ?? ""),
+          new Date(p.created_at).toLocaleString("ru-RU"),
+        ]),
+      ];
+      fileName = `${source === "protocol" ? "protocol_orders" : "participants"}_${dateStr}.xlsx`;
     }
-    const headers = ['ФИО', 'Телефон', 'Email', 'Город', 'Возраст', 'Сумма', 'Промокод', 'Дата оплаты'];
-    const rows = participants.map(p => [
-      escapeCSV(p.full_name),
-      escapeCSV(p.phone),
-      escapeCSV(p.email),
-      escapeCSV(p.city),
-      escapeCSV(p.age),
-      escapeCSV(p.payment_amount?.toFixed(2) || '0'),
-      escapeCSV(p.promo_code),
-      escapeCSV(new Date(p.created_at).toLocaleString('ru-RU')),
-    ]);
-    const csvContent = [headers.map(escapeCSV).join(';'), ...rows.map(row => row.join(';'))].join('\r\n');
-    const csvWithExcelHint = `sep=;\r\n${csvContent}`;
-    const blob = new Blob(['\ufeff' + csvWithExcelHint], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = `${source === 'protocol' ? 'protocol_orders' : 'participants'}_${new Date().toISOString().split('T')[0]}.csv`;
-    link.click();
+
+    const ws = XLSX.utils.aoa_to_sheet(data);
+    const numCols = data[0]?.length ?? 0;
+    const colWidths = Array.from({ length: numCols }, (_, i) => {
+      const maxLen = Math.max(0, ...data.map((row) => (row[i] != null ? String(row[i]).length : 0)));
+      return { wch: Math.min(maxLen + 2, 50) };
+    });
+    ws["!cols"] = colWidths;
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Данные");
+    // Явно формат xlsx — кириллица без кракозябр, не CSV
+    XLSX.writeFile(wb, fileName, { bookType: "xlsx" });
   };
 
   if (!isAuthenticated) {
@@ -441,11 +451,11 @@ export default function AdminPage() {
               Сбросить
             </button>
             <button
-              onClick={exportToCSV}
+              onClick={exportToExcel}
               className="bg-zinc-700 text-white px-6 py-2 rounded-xl font-medium uppercase tracking-widest hover:bg-zinc-600 transition-all flex items-center gap-2"
             >
               <Download className="w-4 h-4" />
-              Экспорт CSV
+              Экспорт Excel
             </button>
           </div>
         </div>
@@ -498,17 +508,18 @@ export default function AdminPage() {
                     <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-widest">Город</th>
                     <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-widest">Сумма</th>
                     <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-widest">Промокод</th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-widest">Ссылка в Telegram</th>
                     <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-widest">Дата</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-zinc-700/50">
                   {loading ? (
                     <tr>
-                      <td colSpan={7} className="px-6 py-8 text-center text-zinc-400">Загрузка...</td>
+                      <td colSpan={8} className="px-6 py-8 text-center text-zinc-400">Загрузка...</td>
                     </tr>
                   ) : participants.length === 0 ? (
                     <tr>
-                      <td colSpan={7} className="px-6 py-8 text-center text-zinc-400">Нет данных</td>
+                      <td colSpan={8} className="px-6 py-8 text-center text-zinc-400">Нет данных</td>
                     </tr>
                   ) : (
                     participants.map((participant) => (
@@ -527,6 +538,21 @@ export default function AdminPage() {
                             <span className="bg-[#ffa600]/20 text-[#ffa600] px-2 py-1 rounded text-xs font-bold">
                               {participant.promo_code}
                             </span>
+                          ) : (
+                            "—"
+                          )}
+                        </td>
+                        <td className="px-6 py-4 text-zinc-300 max-w-[220px]">
+                          {participant.telegram_invite_link ? (
+                            <a
+                              href={participant.telegram_invite_link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-[#0088cc] hover:underline break-all text-xs"
+                              title={participant.telegram_invite_link}
+                            >
+                              {participant.telegram_invite_link}
+                            </a>
                           ) : (
                             "—"
                           )}

@@ -74,6 +74,7 @@ export default function RegisterPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          user_id: data.user?.id ?? undefined,
           full_name: formData.full_name.trim(),
           city: formData.city.trim() || undefined,
           age: formData.age.trim() || undefined,

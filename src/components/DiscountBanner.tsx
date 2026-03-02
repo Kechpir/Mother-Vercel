@@ -76,10 +76,10 @@ export function DiscountBanner() {
           ))}
         </div>
         <Link
-          href="/sessions/energiya-pervonachalnosti#booking-form"
+          href="/sessions/energiya-pervonachalnosti"
           className="w-full sm:w-auto text-center px-4 py-2 rounded-xl bg-[#d4a03c] text-black font-bold text-xs uppercase tracking-wider hover:bg-[#e8b84c] transition-colors shrink-0"
         >
-          Оформить
+          Перейти на Энергетический протокол
         </Link>
       </div>
     </div>
