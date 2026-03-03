@@ -56,15 +56,17 @@ export function DiscountBanner() {
         borderBottom: "1px solid rgba(212, 160, 60, 0.2)",
       }}
     >
-      <div className="max-w-6xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-center gap-3 sm:gap-4 md:gap-6">
-        <span className="font-bold text-[#d4a03c] text-sm sm:text-base md:text-lg text-center sm:text-left">
-          Скидка на персональный энергетический протокол
-        </span>
-        <span className="text-[#e8e0d0] text-xs sm:text-sm md:text-base text-center sm:text-left">
-          <span className="text-[#d4a03c] font-semibold">50 000 тенге</span>
-          <span className="mx-1.5 text-[#e8e0d0]/80">вместо</span>
-          <span className="line-through text-[#e8e0d0]/90">75 000</span>
-        </span>
+      <div className="max-w-6xl mx-auto flex flex-col sm:flex-row md:flex-nowrap sm:items-center sm:justify-center gap-3 sm:gap-4 md:gap-6">
+        <div className="flex flex-wrap sm:flex-nowrap items-baseline gap-2 sm:gap-3 md:gap-3 shrink-0">
+          <span className="font-bold text-[#d4a03c] text-sm sm:text-base md:text-base text-center sm:text-left md:whitespace-nowrap">
+            Скидка на персональный энергетический протокол
+          </span>
+          <span className="text-[#e8e0d0] text-sm sm:text-base md:text-base text-center sm:text-left md:whitespace-nowrap inline-flex items-baseline gap-1.5">
+            <span className="text-[#d4a03c] font-semibold">50 000 тенге</span>
+            <span className="text-[#e8e0d0]/80">вместо</span>
+            <span className="line-through text-[#e8e0d0]/90 align-baseline">75 000</span>
+          </span>
+        </div>
         <div className="flex items-center justify-center gap-1 sm:gap-1.5 md:gap-2 min-w-0 flex-shrink-0">
           {blocks.map(({ value, label }) => (
             <div key={label} className="flex flex-col items-center min-w-0">
