@@ -15,6 +15,7 @@ const HEADER_BORDER = "rgba(212, 160, 60, 0.2)";
 const SESSIONS_LINKS = [
   { href: "/", label: "Главная страница" },
   { href: "/sessions/energiya-pervonachalnosti", label: "Персональный энергетический протокол" },
+  { href: "/sessions/uvelichenie-sessiy", label: "Увеличение сессий" },
 ];
 
 function ChevronDownThin({ open }: { open: boolean }) {
