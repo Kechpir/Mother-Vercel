@@ -8,8 +8,8 @@ import { Menu, LayoutDashboard, LogOut } from "lucide-react";
 import { DiscountBanner } from "@/components/DiscountBanner";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 
-// Amber/gold brand border and hover
-const HEADER_BORDER = "rgba(212, 160, 60, 0.2)";
+// Gold/bronze brand border and hover
+const HEADER_BORDER = "rgba(201, 168, 92, 0.15)";
 
 // Главная всегда первая; «Четыре потока энергии» пока скрыта
 const SESSIONS_LINKS = [
@@ -82,19 +82,19 @@ export function SiteHeader() {
     >
       <div className="max-w-7xl mx-auto px-4 md:px-6 w-full">
         <div className="flex items-center h-16 md:h-20 gap-6 md:gap-8">
-          {/* Logo: wordmark + amber accent */}
+          {/* Logo: wordmark + gold accent */}
           <div className="flex items-center gap-3 flex-shrink-0">
             <Link href="/" className="flex items-center gap-3 group">
-              <div className="w-9 h-9 md:w-10 md:h-10 rounded-full overflow-hidden ring-1 ring-[rgba(212,160,60,0.25)] flex-shrink-0">
+              <div className="w-9 h-9 md:w-10 md:h-10 rounded-full overflow-hidden ring-1 ring-[rgba(201,168,92,0.2)] flex-shrink-0">
                 <img
                   src="https://res.cloudinary.com/dij7s1nbf/image/upload/v1769356927/5453934422802501391_wfkxhr.jpg"
                   alt=""
                   className="w-full h-full object-cover"
                 />
               </div>
-              <span className="font-hero text-[#e8e0d0] text-sm md:text-base tracking-wide antialiased">
+              <span className="font-serif text-[#e8dcc8] text-sm md:text-base tracking-wide font-light">
                 Ирина Головатова
-                <span className="ml-1.5 inline-block w-1 h-1 rounded-full bg-[#d4a03c]" aria-hidden />
+                <span className="ml-1.5 inline-block w-1 h-1 rounded-full bg-[#c9a85c]" aria-hidden />
               </span>
             </Link>
           </div>
@@ -130,13 +130,13 @@ export function SiteHeader() {
             <div className="flex items-center gap-5 flex-shrink-0">
             <Link
               href="/#about"
-              className="text-[#e8e0d0] hover:text-white transition-colors duration-200 text-sm font-light uppercase tracking-[0.12em]"
+              className="text-[#d4a574] hover:text-[#e8dcc8] transition-colors duration-200 text-sm font-light uppercase tracking-[0.12em]"
             >
               О МНЕ
             </Link>
             <Link
               href="/instructions"
-              className="text-[#e8e0d0] hover:text-white transition-colors duration-200 text-sm font-light uppercase tracking-[0.12em]"
+              className="text-[#d4a574] hover:text-[#e8dcc8] transition-colors duration-200 text-sm font-light uppercase tracking-[0.12em]"
             >
               ИНСТРУКЦИИ
             </Link>
@@ -144,7 +144,7 @@ export function SiteHeader() {
               <button
                 type="button"
                 onClick={() => setSessionsOpen((v) => !v)}
-                className="flex items-center gap-1.5 text-[#e8e0d0] hover:text-white transition-colors duration-200 text-sm font-light uppercase tracking-[0.12em]"
+                className="flex items-center gap-1.5 text-[#d4a574] hover:text-[#e8dcc8] transition-colors duration-200 text-sm font-light uppercase tracking-[0.12em]"
               >
                 СЕССИИ
                 <ChevronDownThin open={sessionsOpen} />
@@ -163,7 +163,7 @@ export function SiteHeader() {
                       key={item.href}
                       href={item.href}
                       onClick={() => setSessionsOpen(false)}
-                      className="block px-4 py-2.5 text-sm text-[#e8e0d0] hover:bg-white/5 hover:text-white transition-colors first:rounded-t-xl last:rounded-b-xl"
+                      className="block px-4 py-2.5 text-sm text-[#d4a574] hover:bg-white/5 hover:text-[#e8dcc8] transition-colors first:rounded-t-xl last:rounded-b-xl"
                     >
                       {item.label}
                     </Link>
@@ -176,7 +176,7 @@ export function SiteHeader() {
               <>
                 <Link
                   href="/cabinet"
-                  className="flex items-center gap-1.5 text-[#e8e0d0] hover:text-white transition-colors duration-200 text-sm font-light uppercase tracking-[0.12em]"
+                  className="flex items-center gap-1.5 text-[#d4a574] hover:text-[#e8dcc8] transition-colors duration-200 text-sm font-light uppercase tracking-[0.12em]"
                 >
                   <LayoutDashboard className="w-4 h-4" />
                   Личный кабинет
@@ -188,7 +188,7 @@ export function SiteHeader() {
                     router.push("/");
                     router.refresh();
                   }}
-                  className="flex items-center gap-1.5 text-[#e8e0d0] hover:text-red-300 transition-colors duration-200 text-sm font-light uppercase tracking-[0.12em]"
+                  className="flex items-center gap-1.5 text-[#d4a574] hover:text-red-400 transition-colors duration-200 text-sm font-light uppercase tracking-[0.12em]"
                 >
                   <LogOut className="w-4 h-4" />
                   Выйти
