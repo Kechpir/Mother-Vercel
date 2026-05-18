@@ -194,42 +194,11 @@ export default function CabinetPage() {
   return (
     <main className="min-h-screen bg-gradient-to-b from-zinc-900 via-zinc-800 to-black text-white px-4 py-20">
       <div className="max-w-5xl mx-auto flex flex-col lg:flex-row lg:items-start gap-6 lg:gap-8">
-        {/* Левая колонка: попап, ссылка, карточка с данными */}
+        {/* Левая колонка: ссылка, карточка с данными */}
         <div className="flex-1 min-w-0">
-          {showTelegramPopup && (
-            <div className="mb-6 rounded-2xl border border-[#ffa600]/40 bg-[#ffa600]/10 p-4 relative">
-              <button
-                type="button"
-                aria-label="Закрыть"
-                onClick={() => setTelegramPopupDismissed(true)}
-                className="absolute right-3 top-3 text-zinc-400 hover:text-white transition"
-              >
-                <X className="w-5 h-5" />
-              </button>
-              <div className="flex gap-3 pr-8">
-                <MessageCircle className="w-6 h-6 text-[#ffa600] shrink-0 mt-0.5" />
-                <div>
-                  <p className="font-medium text-white mb-1">Подключить уведомления в Telegram</p>
-                  <p className="text-sm text-zinc-400 mb-3">
-                    После оплаты вы получите ссылку на группу прямо в боте — не нужно искать письмо.
-                  </p>
-                  <a
-                    href={telegramBotLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 py-2 px-4 rounded-xl bg-[#ffa600] text-black font-bold text-sm uppercase tracking-wider hover:bg-white transition"
-                  >
-                    <MessageCircle className="w-4 h-4" />
-                    Подключить в Telegram
-                  </a>
-                </div>
-              </div>
-            </div>
-          )}
-
-          <div className="mb-8">
-            <Link href="/" className="inline-flex items-center gap-2 text-zinc-400 hover:text-[#ffa600] transition-colors text-sm uppercase tracking-widest">
-              ← На главную
+          <div className="mb-8 flex justify-center">
+            <Link href="/" className="text-zinc-400 hover:text-[#ffa600] transition-colors text-base md:text-lg font-bold uppercase tracking-[0.2em]">
+              На главную
             </Link>
           </div>
 
@@ -311,9 +280,9 @@ export default function CabinetPage() {
           </div>
         </div>
 
-        {/* Правая колонка: история покупок — выравниваем по заголовку «Личный кабинет» */}
-        <div className="lg:w-[340px] lg:flex-shrink-0 lg:mt-14">
-          <div className="rounded-2xl border border-zinc-700/50 bg-zinc-800/30 p-6 shadow-xl lg:sticky lg:top-24">
+        {/* Правая колонка: история покупок и Telegram уведомление */}
+        <div className="lg:w-[340px] lg:flex-shrink-0 lg:mt-14 lg:sticky lg:top-24 flex flex-col gap-6">
+          <div className="rounded-2xl border border-zinc-700/50 bg-zinc-800/30 p-6 shadow-xl">
             <h2 className="text-sm font-bold uppercase tracking-wider text-zinc-300 mb-4 flex items-center gap-2">
               <ShoppingBag className="w-4 h-4 text-[#ffa600]" />
               История покупок
@@ -393,6 +362,37 @@ export default function CabinetPage() {
               </p>
             )}
           </div>
+
+          {showTelegramPopup && (
+            <div className="rounded-2xl border border-[#ffa600]/40 bg-[#ffa600]/10 p-5 relative shadow-xl">
+              <button
+                type="button"
+                aria-label="Закрыть"
+                onClick={() => setTelegramPopupDismissed(true)}
+                className="absolute right-3 top-3 text-zinc-400 hover:text-white transition"
+              >
+                <X className="w-4 h-4" />
+              </button>
+              <div className="flex flex-col gap-3">
+                <div className="flex items-center gap-2">
+                  <MessageCircle className="w-5 h-5 text-[#ffa600] shrink-0" />
+                  <p className="font-semibold text-white text-sm">Уведомления в Telegram</p>
+                </div>
+                <p className="text-xs text-zinc-400 leading-relaxed">
+                  После оплаты вы получите ссылку на группу прямо в боте — не нужно искать письмо на почте.
+                </p>
+                <a
+                  href={telegramBotLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-[#ffa600] text-black font-bold text-xs uppercase tracking-wider hover:bg-white transition w-full"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  Подключить Telegram
+                </a>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </main>

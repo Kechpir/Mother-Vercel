@@ -187,7 +187,7 @@ export default function Home() {
     <main className="flex flex-col bg-white text-black font-sans selection:bg-[#ffa600] selection:text-white">
       <SiteHeader />
       {/* --- БЛОК 1: HERO --- */}
-      <section className="relative h-[70vh] md:h-[85vh] flex items-center justify-center text-center px-4 overflow-hidden mt-32 md:mt-36">
+      <section className="relative h-[70vh] md:h-[85vh] flex items-center justify-center text-center px-4 overflow-hidden mt-16 md:mt-20">
         <div className="absolute inset-0 z-0">
           <video autoPlay loop muted playsInline className="w-full h-full object-cover">
             <source src="https://res.cloudinary.com/dij7s1nbf/video/upload/v1769257304/43832-437611758_small_i7pc9s.mp4" type="video/mp4" />
@@ -569,17 +569,20 @@ export default function Home() {
                 <h5 className="text-base md:text-lg font-bold uppercase tracking-widest text-[#ffa600]">
                   Физическое тело
                 </h5>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                  <div className="space-y-2">
-                    <p className="text-base md:text-lg font-semibold text-zinc-800">Напряжение и боли в спине</p>
+                <div className="flex flex-col gap-4">
+                  <div className="flex flex-col md:flex-row md:items-baseline gap-2 pb-3.5 border-b border-zinc-100">
+                    <p className="text-base md:text-lg font-semibold text-zinc-800 shrink-0 whitespace-nowrap">Напряжение и боли в спине</p>
+                    <span className="hidden md:inline text-zinc-300">—</span>
                     <p className="text-sm md:text-base text-zinc-600 font-light leading-relaxed">ощущение скованности, усталости, потери гибкости и опоры</p>
                   </div>
-                  <div className="space-y-2">
-                    <p className="text-base md:text-lg font-semibold text-zinc-800">Головные боли, давление, мигрени</p>
+                  <div className="flex flex-col md:flex-row md:items-baseline gap-2 pb-3.5 border-b border-zinc-100">
+                    <p className="text-base md:text-lg font-semibold text-zinc-800 shrink-0 whitespace-nowrap">Головные боли, давление, мигрени</p>
+                    <span className="hidden md:inline text-zinc-300">—</span>
                     <p className="text-sm md:text-base text-zinc-600 font-light leading-relaxed">как телесная реакция на длительное напряжение</p>
                   </div>
-                  <div className="space-y-2">
-                    <p className="text-base md:text-lg font-semibold text-zinc-800">Перекос таза, ощущение разной длины ног</p>
+                  <div className="flex flex-col md:flex-row md:items-baseline gap-2 pb-3.5 border-b border-zinc-100">
+                    <p className="text-base md:text-lg font-semibold text-zinc-800 shrink-0 whitespace-nowrap">Перекос таза, ощущение разной длины ног</p>
+                    <span className="hidden md:inline text-zinc-300">—</span>
                     <p className="text-sm md:text-base text-zinc-600 font-light leading-relaxed">нарушение устойчивости и баланса в теле</p>
                   </div>
                 </div>
@@ -591,17 +594,20 @@ export default function Home() {
                 <h5 className="text-base md:text-lg font-bold uppercase tracking-widest text-[#ffa600]">
                   Состояние и энергия
                 </h5>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                  <div className="space-y-2">
-                    <p className="text-base md:text-lg font-semibold text-zinc-800">Хроническая тревожность и внутреннее давление</p>
+                <div className="flex flex-col gap-4">
+                  <div className="flex flex-col md:flex-row md:items-baseline gap-2 pb-3.5 border-b border-zinc-100">
+                    <p className="text-base md:text-lg font-semibold text-zinc-800 shrink-0 whitespace-nowrap">Хроническая тревожность и внутреннее давление</p>
+                    <span className="hidden md:inline text-zinc-300">—</span>
                     <p className="text-sm md:text-base text-zinc-600 font-light leading-relaxed">сложность расслабиться и отпустить контроль</p>
                   </div>
-                  <div className="space-y-2">
-                    <p className="text-base md:text-lg font-semibold text-zinc-800">Эмоциональная усталость и истощение</p>
+                  <div className="flex flex-col md:flex-row md:items-baseline gap-2 pb-3.5 border-b border-zinc-100">
+                    <p className="text-base md:text-lg font-semibold text-zinc-800 shrink-0 whitespace-nowrap">Эмоциональная усталость и истощение</p>
+                    <span className="hidden md:inline text-zinc-300">—</span>
                     <p className="text-sm md:text-base text-zinc-600 font-light leading-relaxed">ощущение перегруженности, потери ресурса и живости</p>
                   </div>
-                  <div className="space-y-2">
-                    <p className="text-base md:text-lg font-semibold text-zinc-800">Потеря опоры и устойчивости внутри</p>
+                  <div className="flex flex-col md:flex-row md:items-baseline gap-2 pb-3.5 border-b border-zinc-100">
+                    <p className="text-base md:text-lg font-semibold text-zinc-800 shrink-0 whitespace-nowrap">Потеря опоры и устойчивости внутри</p>
+                    <span className="hidden md:inline text-zinc-300">—</span>
                     <p className="text-sm md:text-base text-zinc-600 font-light leading-relaxed">жизнь в режиме выживания, нестабильный эмоциональный фон</p>
                   </div>
                 </div>
@@ -622,11 +628,11 @@ export default function Home() {
 
               <div className="border-t border-zinc-200 pt-8" />
 
-              <div className="space-y-6 max-w-3xl mx-auto">
+              <div className="space-y-6 max-w-3xl mx-auto text-center">
                 <h4 className="text-sm md:text-base font-bold uppercase tracking-widest text-[#ffa600]">
                   Восстановление оси и телесной согласованности
                 </h4>
-                <ul className="space-y-3 text-left">
+                <ul className="space-y-3 inline-flex flex-col text-left">
                   {[
                     "Выравнивание внутренней оси вдоль позвоночника",
                     "Центрирование опорно-двигательной системы",
@@ -644,11 +650,11 @@ export default function Home() {
 
               <div className="border-t border-zinc-200 pt-8 mt-8" />
 
-              <div className="space-y-6 max-w-3xl mx-auto mt-8">
+              <div className="space-y-6 max-w-3xl mx-auto mt-8 text-center">
                 <h4 className="text-sm md:text-base font-bold uppercase tracking-widest text-[#ffa600]">
                   Работу с энергетическим и психоэмоциональным состоянием
                 </h4>
-                <ul className="space-y-3 text-left">
+                <ul className="space-y-3 inline-flex flex-col text-left">
                   {[
                     "Освобождение от зафиксированных энергетических перегрузок",
                     "Восстановление естественной циркуляции энергии",

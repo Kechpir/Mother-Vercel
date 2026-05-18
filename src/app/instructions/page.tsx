@@ -37,7 +37,6 @@ export default function InstructionsPage() {
               href="/"
               className="flex items-center gap-2 md:gap-2.5 text-white hover:text-[#ffa600] transition-colors text-xs font-semibold md:text-lg uppercase tracking-widest shrink-0 md:absolute md:left-1/2 md:-translate-x-1/2"
             >
-              <ArrowLeft size={18} className="md:w-6 md:h-6 flex-shrink-0" />
               <span className="md:hidden">На главную</span>
               <span className="hidden md:inline">Вернуться на главную</span>
             </Link>
@@ -60,13 +59,13 @@ export default function InstructionsPage() {
           <div className="space-y-12 md:space-y-16">
             {/* Регистрация */}
             <div>
-              <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-zinc-900 uppercase tracking-tight mb-3 md:mb-4 flex items-center gap-2 flex-wrap">
+              <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-zinc-900 uppercase tracking-tight mb-3 md:mb-4 flex items-center justify-center gap-2 flex-wrap">
                 <span className="w-8 h-8 rounded-full bg-[#ffa600]/20 text-[#ffa600] flex items-center justify-center text-sm font-black shrink-0">
                   1
                 </span>
                 Как зарегистрироваться
               </h2>
-              <p className="text-zinc-600 text-xs sm:text-sm md:text-base mb-4 md:mb-6 font-light">
+              <p className="text-zinc-600 text-xs sm:text-sm md:text-base mb-4 md:mb-6 font-light text-center">
                 Следуйте шагам в видео, чтобы создать аккаунт на сайте.
               </p>
               <div className="flex justify-center">
@@ -86,13 +85,13 @@ export default function InstructionsPage() {
 
             {/* Оплата */}
             <div>
-              <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-zinc-900 uppercase tracking-tight mb-3 md:mb-4 flex items-center gap-2 flex-wrap">
+              <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-zinc-900 uppercase tracking-tight mb-3 md:mb-4 flex items-center justify-center gap-2 flex-wrap">
                 <span className="w-8 h-8 rounded-full bg-[#ffa600]/20 text-[#ffa600] flex items-center justify-center text-sm font-black shrink-0">
                   2
                 </span>
                 Как оплатить сессии
               </h2>
-              <p className="text-zinc-600 text-xs sm:text-sm md:text-base mb-4 md:mb-6 font-light">
+              <p className="text-zinc-600 text-xs sm:text-sm md:text-base mb-4 md:mb-6 font-light text-center">
                 В видео показано, как оформить и оплатить запись на сессию.
               </p>
               <div className="flex justify-center">
@@ -116,7 +115,6 @@ export default function InstructionsPage() {
               href="/"
               className="inline-flex items-center gap-2 bg-[#ffa600] text-white px-8 py-3 rounded-full text-sm font-black uppercase tracking-widest hover:bg-black hover:text-white transition-all shadow-lg"
             >
-              <ArrowLeft size={18} />
               Вернуться на главную
             </Link>
           </div>

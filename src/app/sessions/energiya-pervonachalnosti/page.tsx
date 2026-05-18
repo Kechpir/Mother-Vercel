@@ -345,10 +345,7 @@ export default function PersonalEnergyProtocolPage() {
           </BlockRow>
           </div>
 
-          {/* Disclaimer — еле заметно снизу */}
-          <p className="pt-8 text-center text-zinc-400 text-xs md:text-sm font-light max-w-xl mx-auto">
-            Формат не является медицинской или психотерапевтической услугой
-          </p>
+
         </div>
       </section>
       <SiteFooter />
