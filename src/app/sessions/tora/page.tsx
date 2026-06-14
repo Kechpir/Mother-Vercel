@@ -162,7 +162,7 @@ export default function ToraPage() {
 
       {/* Hero */}
       <section
-        className="relative pt-28 md:pt-24 lg:pt-28 pb-12 md:pb-14 lg:pb-16 px-4 md:px-8 lg:px-10 overflow-hidden"
+        className="relative pt-28 md:pt-24 lg:pt-28 pb-12 md:pb-14 lg:pb-16 px-3 sm:px-4 md:px-8 lg:px-10 overflow-hidden"
         style={{
           background: "linear-gradient(165deg, #0f0e0c 0%, #1a1714 45%, #2a2218 100%)",
         }}
@@ -172,18 +172,19 @@ export default function ToraPage() {
           <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-[#ffa600]/10 rounded-full blur-[100px]" />
         </div>
         <div className="relative max-w-7xl mx-auto w-full text-center">
-          <p className="text-[#d4a03c] text-[10px] sm:text-xs md:text-sm tracking-[0.15em] md:tracking-[0.2em] uppercase mb-4 md:mb-5 flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
+          <p className="text-[#d4a03c] text-[11px] sm:text-xs md:text-sm tracking-[0.1em] sm:tracking-[0.15em] md:tracking-[0.2em] uppercase mb-4 md:mb-5 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 px-1">
             <Sparkles className="w-3.5 h-3.5 md:w-4 md:h-4 shrink-0" />
             <span>Перенастройка энергетической архитектуры человека</span>
             <Sparkles className="w-3.5 h-3.5 md:w-4 md:h-4 shrink-0" />
           </p>
-          <h1 className="text-2xl sm:text-3xl md:text-3xl lg:text-4xl xl:text-[2.5rem] font-bold text-white mb-6 md:mb-8 max-w-4xl mx-auto">
-            <span className="block leading-tight">Живое погружение в новую систему</span>
-            <span className="block leading-tight mt-2 md:mt-3">чакр и энергии Нового Времени</span>
+          <h1 className="text-[1.65rem] leading-[1.3] sm:text-3xl md:text-3xl lg:text-4xl xl:text-[2.5rem] font-bold text-white mb-6 md:mb-8 w-full max-w-none md:max-w-4xl md:mx-auto px-1">
+            <span className="md:hidden">Живое погружение в новую систему чакр и энергии Нового Времени</span>
+            <span className="hidden md:block leading-tight">Живое погружение в новую систему</span>
+            <span className="hidden md:block leading-tight mt-2 md:mt-3">чакр и энергии Нового Времени</span>
           </h1>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 md:gap-8 pt-2 md:pt-4 border-t border-[#d4a03c]/15">
-            <p className="text-[#e8e0d0]/80 text-sm md:text-base whitespace-nowrap">
+          <div className="flex flex-row flex-wrap items-center justify-center gap-x-4 gap-y-3 sm:gap-6 md:gap-8 pt-2 md:pt-4 border-t border-[#d4a03c]/15 px-1">
+            <p className="text-[#e8e0d0]/80 text-sm md:text-base text-center">
               Онлайн · Zoom · Групповая работа
             </p>
             <span className="hidden sm:block w-px h-8 bg-[#d4a03c]/25 shrink-0" aria-hidden />
@@ -195,30 +196,30 @@ export default function ToraPage() {
         </div>
       </section>
 
-      <section className="py-14 md:py-20 px-4 md:px-6 bg-[#fafaf9]">
-        <div className="max-w-7xl mx-auto space-y-24 md:space-y-32">
+      <section className="py-12 md:py-20 px-3 sm:px-4 md:px-6 bg-[#fafaf9]">
+        <div className="max-w-7xl mx-auto w-full space-y-20 sm:space-y-24 md:space-y-32">
 
           {/* Что ты получишь */}
           <div>
-            <h2 className="text-3xl md:text-4xl font-bold text-zinc-900 text-center mb-5">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-zinc-900 text-center mb-5 px-1">
               Что ты получишь
             </h2>
-            <p className="text-zinc-600 text-base md:text-lg text-center max-w-3xl mx-auto mb-14 md:mb-16 leading-relaxed">
+            <p className="text-zinc-600 text-base md:text-lg text-left sm:text-center w-full max-w-none sm:max-w-3xl sm:mx-auto mb-10 sm:mb-14 md:mb-16 leading-relaxed px-1">
               Это не очередной курс, который ты пройдёшь и забудешь. Это живая работа с твоей
               энергетической системой — и изменения происходят прямо во время сессий, а потом
               продолжают разворачиваться в жизни.
             </p>
-            <div className="grid gap-8 md:gap-10 lg:gap-12 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-5 sm:gap-8 md:gap-10 lg:gap-12 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
               {BENEFITS.map((item) => (
                 <div
                   key={item.title}
-                  className={`rounded-2xl border bg-gradient-to-br ${item.accent} p-8 md:p-10 shadow-sm hover:shadow-md transition-shadow`}
+                  className={`rounded-2xl border bg-gradient-to-br ${item.accent} p-5 sm:p-7 md:p-10 shadow-sm hover:shadow-md transition-shadow w-full`}
                 >
-                  <div className="flex items-start gap-3 mb-4 md:mb-5">
+                  <div className="flex items-start gap-3 mb-3 sm:mb-4 md:mb-5">
                     <StarBullet />
                     <h3 className="font-bold text-zinc-900 text-base md:text-lg lg:text-xl leading-snug">{item.title}</h3>
                   </div>
-                  <p className="text-zinc-700 text-base md:text-lg leading-relaxed pl-6">{item.text}</p>
+                  <p className="text-zinc-700 text-[15px] sm:text-base md:text-lg leading-relaxed">{item.text}</p>
                 </div>
               ))}
             </div>
@@ -226,19 +227,19 @@ export default function ToraPage() {
 
           {/* Программа */}
           <div>
-            <h2 className="text-2xl md:text-3xl font-bold text-zinc-900 text-center mb-4">
+            <h2 className="text-2xl sm:text-3xl md:text-3xl font-bold text-zinc-900 text-center mb-4 px-1">
               Программа погружения
             </h2>
-            <p className="text-zinc-600 text-center max-w-2xl mx-auto mb-12 leading-relaxed">
+            <p className="text-zinc-600 text-left sm:text-center w-full max-w-none sm:max-w-2xl sm:mx-auto mb-10 sm:mb-12 leading-relaxed px-1">
               Каждая встреча — это живая работа с одной из семи чакр. Глубокая, личная, в группе с
               мощным коллективным полем. Ты не просто слушаешь — ты проживаешь каждую сессию в своём
               теле.
             </p>
-            <div className="space-y-8 md:space-y-10 lg:space-y-12">
+            <div className="space-y-5 sm:space-y-8 md:space-y-10 lg:space-y-12">
               {CHAKRAS.map((chakra) => (
                 <article
                   key={chakra.num}
-                  className={`rounded-2xl border bg-gradient-to-br ${chakra.accent} p-8 md:p-10`}
+                  className={`rounded-2xl border bg-gradient-to-br ${chakra.accent} p-5 sm:p-7 md:p-10 w-full`}
                 >
                   <div className="flex flex-wrap items-baseline gap-3 mb-4">
                     <span className="text-[10px] font-black uppercase tracking-[0.25em] text-[#a65c14]">
@@ -262,11 +263,11 @@ export default function ToraPage() {
           </div>
 
           {/* Это для тебя */}
-          <div className="rounded-3xl bg-zinc-900 text-white p-8 md:p-12">
-            <h2 className="text-2xl md:text-3xl font-bold text-center mb-8 text-[#d4a03c]">
+          <div className="rounded-3xl bg-zinc-900 text-white p-5 sm:p-8 md:p-12 w-full">
+            <h2 className="text-2xl md:text-3xl font-bold text-center mb-6 sm:mb-8 text-[#d4a03c]">
               Это для тебя, если
             </h2>
-            <ul className="space-y-4 max-w-2xl mx-auto">
+            <ul className="space-y-4 w-full max-w-none sm:max-w-2xl sm:mx-auto">
               {FOR_YOU.map((item) => (
                 <li key={item} className="flex items-start gap-3 text-[#e8e0d0] leading-relaxed">
                   <StarBullet />
@@ -277,9 +278,9 @@ export default function ToraPage() {
           </div>
 
           {/* Детали */}
-          <div className="rounded-2xl bg-white border-2 border-[#d4a03c]/25 shadow-lg p-8 md:p-10">
-            <h2 className="text-2xl font-bold text-zinc-900 mb-8 text-center">Детали</h2>
-            <dl className="grid sm:grid-cols-2 gap-4 md:gap-6 max-w-2xl mx-auto mb-8">
+          <div className="rounded-2xl bg-white border-2 border-[#d4a03c]/25 shadow-lg p-5 sm:p-8 md:p-10 w-full">
+            <h2 className="text-2xl font-bold text-zinc-900 mb-6 sm:mb-8 text-center">Детали</h2>
+            <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 w-full max-w-none sm:max-w-2xl sm:mx-auto mb-8">
               {[
                 { label: "Формат", value: "Онлайн, Zoom, групповая работа" },
                 { label: "Количество встреч", value: "21 сессия" },
