@@ -12,38 +12,47 @@ const BENEFITS = [
   {
     title: "Свободу от чужого",
     text: "Коллективные страхи, чужие программы и энергии окружения, которые ты нёс годами, перестанут цепляться к тебе. Не потому что ты от них убежал — а потому что твоя система больше не будет их принимать.",
+    accent: "from-red-500/20 to-orange-500/10 border-red-400/30",
   },
   {
     title: "Своё основание",
     text: "Устойчивость, которая не разрушается под давлением внешних событий. Ты наконец стоишь на своём месте — и это ощущается телом.",
+    accent: "from-orange-500/20 to-amber-500/10 border-orange-400/30",
   },
   {
     title: "Живую радость",
     text: "Не наигранный позитив и не усилием воли, а естественную радость, которая идёт изнутри. Ту, которую многие уже забыли, как ощущается.",
+    accent: "from-amber-500/20 to-yellow-500/10 border-amber-400/30",
   },
   {
     title: "Доверие к себе",
     text: "К своим ощущениям, к своей интуиции, к своим решениям. Больше не нужно искать подтверждение снаружи — ты сам себе источник.",
+    accent: "from-yellow-500/15 to-lime-500/10 border-yellow-500/25",
   },
   {
     title: "Открытый голос и действие",
     text: "Способность говорить своё, делать своё, проявляться — без страха быть непонятым или отвергнутым. Блоки с выражения снимаются.",
+    accent: "from-sky-500/20 to-blue-500/10 border-sky-400/30",
   },
   {
     title: "Новое восприятие",
     text: "Интуиция начинает работать по-другому. Ты начинаешь воспринимать то, что раньше было закрыто. Послания, образы, ощущения — всё это становится яснее.",
+    accent: "from-indigo-500/20 to-violet-500/10 border-indigo-400/30",
   },
   {
     title: "Связь с источником",
     text: "Не абстрактную, а живую. Ощущение, что ты не один, что тебя ведут, что у тебя есть место в этом мире и в этом времени.",
+    accent: "from-violet-500/20 to-purple-500/10 border-violet-400/30",
   },
   {
     title: "Золотую Корону",
     text: "Энергетическую защиту и постоянное питание от высших источников. Она формируется вокруг каждой чакры и работает, даже когда ты этого не осознаёшь.",
+    accent: "from-[#d4a03c]/25 to-amber-400/15 border-[#d4a03c]/40",
   },
   {
     title: "Интеграцию в Новое время",
     text: "Твоя система чакр обновится, адаптируется к новым вибрациям. То, что раньше давалось с усилием — начнёт происходить естественно.",
+    accent: "from-emerald-500/20 to-teal-500/10 border-emerald-400/30",
   },
 ];
 
@@ -153,7 +162,7 @@ export default function ToraPage() {
 
       {/* Hero */}
       <section
-        className="relative pt-36 md:pt-44 pb-16 md:pb-24 px-4 overflow-hidden"
+        className="relative pt-28 md:pt-24 lg:pt-28 pb-12 md:pb-14 lg:pb-16 px-4 md:px-8 lg:px-10 overflow-hidden"
         style={{
           background: "linear-gradient(165deg, #0f0e0c 0%, #1a1714 45%, #2a2218 100%)",
         }}
@@ -162,51 +171,54 @@ export default function ToraPage() {
           <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#d4a03c]/20 rounded-full blur-[120px]" />
           <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-[#ffa600]/10 rounded-full blur-[100px]" />
         </div>
-        <div className="relative max-w-4xl mx-auto text-center px-4">
-          <p className="text-[#d4a03c] text-sm md:text-base tracking-[0.2em] uppercase mb-4 flex items-center justify-center gap-2">
-            <Sparkles className="w-4 h-4" />
-            Перенастройка энергетической архитектуры человека
-            <Sparkles className="w-4 h-4" />
+        <div className="relative max-w-7xl mx-auto w-full text-center">
+          <p className="text-[#d4a03c] text-[10px] sm:text-xs md:text-sm tracking-[0.15em] md:tracking-[0.2em] uppercase mb-4 md:mb-5 flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
+            <Sparkles className="w-3.5 h-3.5 md:w-4 md:h-4 shrink-0" />
+            <span>Перенастройка энергетической архитектуры человека</span>
+            <Sparkles className="w-3.5 h-3.5 md:w-4 md:h-4 shrink-0" />
           </p>
-          <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-white leading-tight mb-6">
-            Живое погружение в новую систему чакр и энергии Нового Времени
+          <h1 className="text-2xl sm:text-3xl md:text-3xl lg:text-4xl xl:text-[2.5rem] font-bold text-white mb-6 md:mb-8 max-w-4xl mx-auto">
+            <span className="block leading-tight">Живое погружение в новую систему</span>
+            <span className="block leading-tight mt-2 md:mt-3">чакр и энергии Нового Времени</span>
           </h1>
-          <p className="text-[#e8e0d0]/80 text-sm md:text-base mb-8">
-            Онлайн · Zoom · Групповая работа
-          </p>
-          <div className="inline-flex flex-wrap items-center justify-center">
-            <div className="px-6 py-3 rounded-xl border border-[#d4a03c]/30 bg-[#d4a03c]/10">
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 md:gap-8 pt-2 md:pt-4 border-t border-[#d4a03c]/15">
+            <p className="text-[#e8e0d0]/80 text-sm md:text-base whitespace-nowrap">
+              Онлайн · Zoom · Групповая работа
+            </p>
+            <span className="hidden sm:block w-px h-8 bg-[#d4a03c]/25 shrink-0" aria-hidden />
+            <div className="px-7 py-3.5 md:px-8 md:py-4 rounded-2xl border border-[#d4a03c]/30 bg-[#d4a03c]/10 text-center shrink-0">
               <p className="text-[10px] uppercase tracking-widest text-[#e8e0d0]/70 mb-1">Старт</p>
-              <p className="text-white font-bold text-lg">22 июня</p>
+              <p className="text-white font-bold text-xl md:text-2xl whitespace-nowrap">22 июня</p>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="py-14 md:py-20 px-4 bg-[#fafaf9]">
-        <div className="max-w-3xl mx-auto space-y-20 md:space-y-28">
+      <section className="py-14 md:py-20 px-4 md:px-6 bg-[#fafaf9]">
+        <div className="max-w-7xl mx-auto space-y-24 md:space-y-32">
 
           {/* Что ты получишь */}
           <div>
-            <h2 className="text-2xl md:text-3xl font-bold text-zinc-900 text-center mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-zinc-900 text-center mb-5">
               Что ты получишь
             </h2>
-            <p className="text-zinc-600 text-center max-w-2xl mx-auto mb-10 leading-relaxed">
+            <p className="text-zinc-600 text-base md:text-lg text-center max-w-3xl mx-auto mb-14 md:mb-16 leading-relaxed">
               Это не очередной курс, который ты пройдёшь и забудешь. Это живая работа с твоей
               энергетической системой — и изменения происходят прямо во время сессий, а потом
               продолжают разворачиваться в жизни.
             </p>
-            <div className="grid gap-4 md:gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-8 md:gap-10 lg:gap-12 sm:grid-cols-2 lg:grid-cols-3">
               {BENEFITS.map((item) => (
                 <div
                   key={item.title}
-                  className="rounded-2xl bg-white border border-zinc-100 p-5 md:p-6 shadow-sm hover:shadow-md hover:border-[#d4a03c]/20 transition-all"
+                  className={`rounded-2xl border bg-gradient-to-br ${item.accent} p-8 md:p-10 shadow-sm hover:shadow-md transition-shadow`}
                 >
-                  <div className="flex items-start gap-2 mb-2">
+                  <div className="flex items-start gap-3 mb-4 md:mb-5">
                     <StarBullet />
-                    <h3 className="font-bold text-zinc-900 text-sm md:text-base">{item.title}</h3>
+                    <h3 className="font-bold text-zinc-900 text-base md:text-lg lg:text-xl leading-snug">{item.title}</h3>
                   </div>
-                  <p className="text-zinc-600 text-sm leading-relaxed pl-5">{item.text}</p>
+                  <p className="text-zinc-700 text-base md:text-lg leading-relaxed pl-6">{item.text}</p>
                 </div>
               ))}
             </div>
@@ -222,11 +234,11 @@ export default function ToraPage() {
               мощным коллективным полем. Ты не просто слушаешь — ты проживаешь каждую сессию в своём
               теле.
             </p>
-            <div className="space-y-6">
+            <div className="space-y-8 md:space-y-10 lg:space-y-12">
               {CHAKRAS.map((chakra) => (
                 <article
                   key={chakra.num}
-                  className={`rounded-2xl border bg-gradient-to-br ${chakra.accent} p-6 md:p-8`}
+                  className={`rounded-2xl border bg-gradient-to-br ${chakra.accent} p-8 md:p-10`}
                 >
                   <div className="flex flex-wrap items-baseline gap-3 mb-4">
                     <span className="text-[10px] font-black uppercase tracking-[0.25em] text-[#a65c14]">
