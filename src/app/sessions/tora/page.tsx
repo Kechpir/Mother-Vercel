@@ -1,5 +1,4 @@
-import Link from "next/link";
-import { Sparkles, Check, Phone } from "lucide-react";
+import { Sparkles, Phone } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 
@@ -175,14 +174,10 @@ export default function ToraPage() {
           <p className="text-[#e8e0d0]/80 text-sm md:text-base mb-8">
             Онлайн · Zoom · Групповая работа
           </p>
-          <div className="inline-flex flex-wrap items-center justify-center gap-4 md:gap-8">
+          <div className="inline-flex flex-wrap items-center justify-center">
             <div className="px-6 py-3 rounded-xl border border-[#d4a03c]/30 bg-[#d4a03c]/10">
               <p className="text-[10px] uppercase tracking-widest text-[#e8e0d0]/70 mb-1">Старт</p>
               <p className="text-white font-bold text-lg">22 июня</p>
-            </div>
-            <div className="px-6 py-3 rounded-xl border border-[#d4a03c]/30 bg-[#d4a03c]/10">
-              <p className="text-[10px] uppercase tracking-widest text-[#e8e0d0]/70 mb-1">Стоимость</p>
-              <p className="text-[#d4a03c] font-bold text-lg">25 000 тенге</p>
             </div>
           </div>
         </div>
@@ -269,50 +264,34 @@ export default function ToraPage() {
             </ul>
           </div>
 
-          {/* Детали + CTA */}
+          {/* Детали */}
           <div className="rounded-2xl bg-white border-2 border-[#d4a03c]/25 shadow-lg p-8 md:p-10">
             <h2 className="text-2xl font-bold text-zinc-900 mb-8 text-center">Детали</h2>
-            <dl className="grid sm:grid-cols-2 gap-4 md:gap-6 max-w-2xl mx-auto mb-10">
+            <dl className="grid sm:grid-cols-2 gap-4 md:gap-6 max-w-2xl mx-auto mb-8">
               {[
                 { label: "Формат", value: "Онлайн, Zoom, групповая работа" },
                 { label: "Количество встреч", value: "21 сессия" },
                 { label: "Старт", value: "с 22 июня по 20 июля" },
-                { label: "Стоимость", value: "25 000 тенге" },
+                { label: "Запись", value: "8 701 250 99 63" },
               ].map(({ label, value }) => (
                 <div key={label} className="rounded-xl bg-zinc-50 px-5 py-4 border border-zinc-100">
                   <dt className="text-xs uppercase tracking-widest text-zinc-500 mb-1">{label}</dt>
-                  <dd className="font-semibold text-zinc-900">{value}</dd>
+                  <dd className="font-semibold text-zinc-900">
+                    {label === "Запись" ? (
+                      <a
+                        href="tel:+77012509963"
+                        className="text-[#a65c14] hover:text-[#ffa600] transition-colors inline-flex items-center gap-1.5"
+                      >
+                        <Phone className="w-4 h-4" />
+                        {value}
+                      </a>
+                    ) : (
+                      value
+                    )}
+                  </dd>
                 </div>
               ))}
             </dl>
-            <div className="text-center space-y-6">
-              <p className="text-zinc-600">
-                Запись по телефону:{" "}
-                <a
-                  href="tel:+77012509963"
-                  className="font-bold text-[#a65c14] hover:text-[#ffa600] transition-colors inline-flex items-center gap-1.5"
-                >
-                  <Phone className="w-4 h-4" />
-                  8 701 250 99 63
-                </a>
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link
-                  href="/#register"
-                  className="inline-flex items-center justify-center gap-2 bg-[#ffa600] text-black px-8 py-4 rounded-xl font-black uppercase tracking-widest text-sm hover:bg-zinc-900 hover:text-white transition-colors"
-                >
-                  <Sparkles className="w-4 h-4" />
-                  Оплатить участие
-                </Link>
-                <a
-                  href="tel:+77012509963"
-                  className="inline-flex items-center justify-center gap-2 border-2 border-zinc-300 text-zinc-700 px-8 py-4 rounded-xl font-bold uppercase tracking-widest text-sm hover:border-[#ffa600] hover:text-[#ffa600] transition-colors"
-                >
-                  <Phone className="w-4 h-4" />
-                  Записаться
-                </a>
-              </div>
-            </div>
           </div>
 
           <p className="text-center text-xl md:text-2xl text-zinc-700 font-light leading-relaxed">
