@@ -1,12 +1,15 @@
-import { Sparkles, Phone } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { TORA_REGISTER_FORM_URL, WHATSAPP_URL } from "@/lib/tora-register";
 
 export const metadata = {
   title: "Перенастройка энергетической архитектуры | Ирина Головатова",
   description:
     "Живое погружение в новую систему чакр и энергии Нового Времени. Онлайн, Zoom, групповая работа. Старт 22 июня. 21 сессия.",
 };
+
+const REGISTER_FORM_URL = TORA_REGISTER_FORM_URL;
 
 const BENEFITS = [
   {
@@ -155,6 +158,19 @@ function StarBullet() {
   return <span className="text-[#d4a03c] font-bold shrink-0 mt-0.5">✦</span>;
 }
 
+function RegisterButton({ className = "" }: { className?: string }) {
+  return (
+    <a
+      href={REGISTER_FORM_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={`inline-flex items-center justify-center gap-2 bg-[#ffa600] text-black px-10 py-4 md:px-14 md:py-5 rounded-xl font-black uppercase tracking-widest text-base md:text-lg hover:bg-[#e8b84c] transition-colors w-full sm:w-auto max-w-md sm:max-w-none shadow-lg shadow-[#ffa600]/20 ${className}`}
+    >
+      Зарегистрироваться
+    </a>
+  );
+}
+
 export default function ToraPage() {
   return (
     <main className="flex flex-col bg-white text-black font-sans min-h-screen selection:bg-[#ffa600] selection:text-white">
@@ -192,6 +208,9 @@ export default function ToraPage() {
               <p className="text-[10px] uppercase tracking-widest text-[#e8e0d0]/70 mb-1">Старт</p>
               <p className="text-white font-bold text-xl md:text-2xl whitespace-nowrap">22 июня</p>
             </div>
+          </div>
+          <div className="mt-6 md:mt-8 flex justify-center px-1">
+            <RegisterButton />
           </div>
         </div>
       </section>
@@ -231,9 +250,9 @@ export default function ToraPage() {
               Программа погружения
             </h2>
             <p className="text-zinc-600 text-left sm:text-center w-full max-w-none sm:max-w-2xl sm:mx-auto mb-10 sm:mb-12 leading-relaxed px-1">
-              Каждая встреча — это живая работа с одной из семи чакр. Глубокая, личная, в группе с
-              мощным коллективным полем. Ты не просто слушаешь — ты проживаешь каждую сессию в своём
-              теле.
+              Каждая встреча — это живая работа со всеми 7ми чакрами. Глубокая, личная, в группе с
+              мощным коллективным полем. Ты посвящаешся, активируешся — ты проживаешь каждую сессию в
+              своём теле.
             </p>
             <div className="space-y-5 sm:space-y-8 md:space-y-10 lg:space-y-12">
               {CHAKRAS.map((chakra) => (
@@ -262,49 +281,57 @@ export default function ToraPage() {
             </div>
           </div>
 
-          {/* Это для тебя */}
-          <div className="rounded-3xl bg-zinc-900 text-white p-5 sm:p-8 md:p-12 w-full">
-            <h2 className="text-2xl md:text-3xl font-bold text-center mb-6 sm:mb-8 text-[#d4a03c]">
-              Это для тебя, если
-            </h2>
-            <ul className="space-y-4 w-full max-w-none sm:max-w-2xl sm:mx-auto">
-              {FOR_YOU.map((item) => (
-                <li key={item} className="flex items-start gap-3 text-[#e8e0d0] leading-relaxed">
-                  <StarBullet />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {/* Это для тебя + регистрация + детали — компактнее между собой */}
+          <div className="space-y-8 sm:space-y-10 md:space-y-12">
+            <div className="rounded-3xl bg-zinc-900 text-white p-5 sm:p-8 md:p-12 w-full">
+              <h2 className="text-2xl md:text-3xl font-bold text-center mb-6 sm:mb-8 text-[#d4a03c]">
+                Это для тебя, если
+              </h2>
+              <ul className="space-y-4 w-full max-w-none sm:max-w-2xl sm:mx-auto">
+                {FOR_YOU.map((item) => (
+                  <li key={item} className="flex items-start gap-3 text-[#e8e0d0] leading-relaxed">
+                    <StarBullet />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-          {/* Детали */}
-          <div className="rounded-2xl bg-white border-2 border-[#d4a03c]/25 shadow-lg p-5 sm:p-8 md:p-10 w-full">
-            <h2 className="text-2xl font-bold text-zinc-900 mb-6 sm:mb-8 text-center">Детали</h2>
-            <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 w-full max-w-none sm:max-w-2xl sm:mx-auto mb-8">
-              {[
-                { label: "Формат", value: "Онлайн, Zoom, групповая работа" },
-                { label: "Количество встреч", value: "21 сессия" },
-                { label: "Старт", value: "с 22 июня по 20 июля" },
-                { label: "Запись", value: "8 701 250 99 63" },
-              ].map(({ label, value }) => (
-                <div key={label} className="rounded-xl bg-zinc-50 px-5 py-4 border border-zinc-100">
-                  <dt className="text-xs uppercase tracking-widest text-zinc-500 mb-1">{label}</dt>
-                  <dd className="font-semibold text-zinc-900">
-                    {label === "Запись" ? (
-                      <a
-                        href="tel:+77012509963"
-                        className="text-[#a65c14] hover:text-[#ffa600] transition-colors inline-flex items-center gap-1.5"
-                      >
-                        <Phone className="w-4 h-4" />
-                        {value}
-                      </a>
-                    ) : (
-                      value
-                    )}
+            <div className="flex justify-center">
+              <RegisterButton />
+            </div>
+
+            <div className="rounded-2xl bg-white border-2 border-[#d4a03c]/25 shadow-lg p-5 sm:p-8 md:p-10 w-full">
+              <h2 className="text-2xl font-bold text-zinc-900 mb-6 sm:mb-8 text-center">Детали</h2>
+              <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 w-full max-w-none sm:max-w-2xl sm:mx-auto mb-8">
+                {[
+                  { label: "Формат", value: "Онлайн, Zoom, групповая работа" },
+                  { label: "Количество встреч", value: "21 сессия" },
+                  { label: "Старт", value: "с 22 июня по 20 июля" },
+                ].map(({ label, value }) => (
+                  <div key={label} className="rounded-xl bg-zinc-50 px-5 py-4 border border-zinc-100 text-center">
+                    <dt className="text-xs uppercase tracking-widest text-zinc-500 mb-1">{label}</dt>
+                    <dd className="font-semibold text-zinc-900">{value}</dd>
+                  </div>
+                ))}
+                <div className="rounded-xl bg-zinc-50 px-5 py-4 border border-zinc-100 flex flex-col justify-center items-center text-center">
+                  <dt className="text-xs uppercase tracking-widest text-zinc-500 mb-3">Написать в WhatsApp</dt>
+                  <dd className="w-full">
+                    <a
+                      href={WHATSAPP_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-2 w-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-semibold text-sm px-4 py-2.5 rounded-xl transition-colors"
+                    >
+                      <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 shrink-0" aria-hidden>
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                      </svg>
+                      Написать
+                    </a>
                   </dd>
                 </div>
-              ))}
-            </dl>
+              </dl>
+            </div>
           </div>
 
           <p className="text-center text-xl md:text-2xl text-zinc-700 font-light leading-relaxed">
