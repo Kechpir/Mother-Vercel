@@ -7,6 +7,7 @@ import { supabase } from "@/lib/supabase";
 import { Menu, LayoutDashboard, LogOut } from "lucide-react";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 import { TORA_REGISTER_FORM_URL, WHATSAPP_URL } from "@/lib/tora-register";
+import { SHOW_MAIN_COURSE_REGISTRATION } from "@/config/home-sections";
 
 // Amber/gold brand border and hover
 const HEADER_BORDER = "rgba(212, 160, 60, 0.2)";
@@ -51,6 +52,7 @@ export function SiteHeader() {
       ? "Приобрести запись"
       : "Забронировать место";
   const bookingExternal = isToraPage;
+  const showBookingCta = pathname !== "/" || SHOW_MAIN_COURSE_REGISTRATION;
   const [sessionsOpen, setSessionsOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [authUser, setAuthUser] = useState<SupabaseUser | null>(null);
@@ -237,7 +239,7 @@ export function SiteHeader() {
             </div>
 
             {/* CTA: amber→gold gradient, справа по шапке */}
-            {bookingExternal ? (
+            {showBookingCta && (bookingExternal ? (
               <a
                 href={bookingHref}
                 target="_blank"
@@ -261,7 +263,7 @@ export function SiteHeader() {
               >
                 {bookingLabel}
               </Link>
-            )}
+            ))}
           </nav>
 
           {/* Мобильная шапка: Личный кабинет / Войти + Меню */}
@@ -403,7 +405,7 @@ export function SiteHeader() {
               </>
             )}
             <div className="border-t border-[#e8e0d0]/20 my-2" />
-            {bookingExternal ? (
+            {showBookingCta && (bookingExternal ? (
               <a
                 href={bookingHref}
                 target="_blank"
@@ -429,7 +431,7 @@ export function SiteHeader() {
               >
                 {bookingLabel}
               </Link>
-            )}
+            ))}
           </nav>
         </div>
       )}

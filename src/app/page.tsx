@@ -6,6 +6,7 @@ import { supabase } from "../lib/supabase";
 import { Sparkles, Zap, Check, User, MessageCircle, ChevronDown, ChevronLeft, ChevronRight, Mail, Phone, MapPin, Info } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { SHOW_MAIN_COURSE_REGISTRATION } from "@/config/home-sections";
 
 export default function Home() {
   const [loading, setLoading] = useState(false);
@@ -203,13 +204,17 @@ export default function Home() {
               Возвращение к первоначальной настройке тела
             </span>
           </h1>
-          <p className="text-base md:text-xl mb-10 font-light tracking-[0.2em] uppercase text-zinc-300 [text-shadow:0_1px_8px_rgba(0,0,0,0.5)]">
-            с 9 марта по 28 марта
-          </p>
-          <a href="#register" className="group relative inline-flex items-center justify-center px-10 py-4 md:px-14 md:py-5 overflow-hidden font-semibold text-white transition-all duration-300 bg-gradient-to-r from-[#ffa600] to-[#ff8c00] rounded-[2rem] hover:from-white hover:to-zinc-100 hover:text-black hover:scale-[1.02] shadow-[0_8px_30px_rgba(255,166,0,0.4)] hover:shadow-[0_12px_40px_rgba(255,166,0,0.6)] border border-[#ffa600]/20">
-            <span className="relative uppercase tracking-[0.15em] text-sm md:text-base font-medium">Принять участие</span>
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
-          </a>
+          {SHOW_MAIN_COURSE_REGISTRATION && (
+            <>
+              <p className="text-base md:text-xl mb-10 font-light tracking-[0.2em] uppercase text-zinc-300 [text-shadow:0_1px_8px_rgba(0,0,0,0.5)]">
+                с 9 марта по 28 марта
+              </p>
+              <a href="#register" className="group relative inline-flex items-center justify-center px-10 py-4 md:px-14 md:py-5 overflow-hidden font-semibold text-white transition-all duration-300 bg-gradient-to-r from-[#ffa600] to-[#ff8c00] rounded-[2rem] hover:from-white hover:to-zinc-100 hover:text-black hover:scale-[1.02] shadow-[0_8px_30px_rgba(255,166,0,0.4)] hover:shadow-[0_12px_40px_rgba(255,166,0,0.6)] border border-[#ffa600]/20">
+                <span className="relative uppercase tracking-[0.15em] text-sm md:text-base font-medium">Принять участие</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+              </a>
+            </>
+          )}
         </div>
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce opacity-30 text-white z-20">
           <ChevronDown size={32} />
@@ -396,6 +401,7 @@ export default function Home() {
       </section>
 
       {/* --- БЛОК 9: ПАКЕТЫ --- */}
+      {SHOW_MAIN_COURSE_REGISTRATION && (
       <section id="packages" className="py-12 md:py-16 px-4 bg-white relative overflow-hidden">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-10">
@@ -460,6 +466,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      )}
 
       {/* --- БЛОК 10: ЗДОРОВЫЙ ПОЗВОНОЧНИК (ПОДРОБНО) --- */}
       <section className="pt-16 md:pt-24 pb-8 md:pb-12 px-4 bg-white border-t border-zinc-100 overflow-hidden">
@@ -700,6 +707,7 @@ export default function Home() {
       </section>
 
       {/* --- БЛОК: ТАЙМЕР (Успей прийти на курс) --- */}
+      {SHOW_MAIN_COURSE_REGISTRATION && (
       <section className="relative min-h-[500px] md:h-[600px] overflow-hidden flex items-center justify-center text-white pt-16 md:pt-20 pb-20 md:pb-28">
         <div 
           className="absolute inset-0 z-0 bg-cover bg-center bg-fixed"
@@ -747,6 +755,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      )}
       {/* --- НОВЫЙ БЛОК: ЗНАКОМСТВО (Ирина Головатова) --- */}
       <section id="about" className="py-16 md:py-20 px-4 bg-white overflow-hidden">
         <div className="max-w-6xl mx-auto">
@@ -836,6 +845,7 @@ export default function Home() {
       </section>
 
       {/* --- БЛОК 15: ФОРМА РЕГИСТРАЦИИ (В САМОМ НИЗУ) --- */}
+      {SHOW_MAIN_COURSE_REGISTRATION && (
       <section id="register" className="pt-4 pb-20 px-6 md:px-8 lg:px-10 bg-gradient-to-b from-zinc-50 via-orange-50/30 to-zinc-50 relative overflow-hidden">
         {/* Фоновые декоративные элементы для глубины */}
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-orange-200/40 rounded-full blur-[120px] opacity-60" />
@@ -985,6 +995,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      )}
 
       <SiteFooter />
     </main>
