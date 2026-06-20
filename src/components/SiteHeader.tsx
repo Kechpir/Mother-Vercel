@@ -113,7 +113,7 @@ export function SiteHeader() {
             </Link>
           </div>
 
-          <nav className="hidden md:flex flex-1 items-center justify-between min-w-0">
+          <nav className="hidden md:grid flex-1 min-w-0 items-center grid-cols-[1fr_auto_1fr] gap-6">
             {/* Соцсети — цветные иконки, по левой части шапки */}
             <div className="flex items-center gap-3 flex-shrink-0">
               <a
@@ -152,7 +152,7 @@ export function SiteHeader() {
             </div>
 
             {/* Навигация: по центру */}
-            <div className="flex items-center gap-5 flex-shrink-0">
+            <div className="flex items-center gap-5 flex-shrink-0 justify-self-center">
             <Link
               href="/#about"
               className="text-[#e8e0d0] hover:text-white transition-colors duration-200 text-sm font-light uppercase tracking-[0.12em]"
@@ -244,7 +244,7 @@ export function SiteHeader() {
                 href={bookingHref}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center px-5 py-2.5 rounded-2xl text-white text-sm font-semibold uppercase tracking-[0.08em] transition-all duration-300 hover:scale-[1.02] hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-[#d4a03c]/50 focus:ring-offset-2 focus:ring-offset-[#0f0e0c] flex-shrink-0"
+                className="flex items-center justify-center px-5 py-2.5 rounded-2xl text-white text-sm font-semibold uppercase tracking-[0.08em] transition-all duration-300 hover:scale-[1.02] hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-[#d4a03c]/50 focus:ring-offset-2 focus:ring-offset-[#0f0e0c] flex-shrink-0 justify-self-end"
                 style={{
                   background: "linear-gradient(135deg, #d4a03c 0%, #c4942e 50%, #b88620 100%)",
                   boxShadow: "0 0 20px rgba(212, 160, 60, 0.25), inset 0 1px 0 rgba(255,255,255,0.15)",
@@ -255,7 +255,7 @@ export function SiteHeader() {
             ) : (
               <Link
                 href={bookingHref}
-                className="flex items-center justify-center px-5 py-2.5 rounded-2xl text-white text-sm font-semibold uppercase tracking-[0.08em] transition-all duration-300 hover:scale-[1.02] hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-[#d4a03c]/50 focus:ring-offset-2 focus:ring-offset-[#0f0e0c] flex-shrink-0"
+                className="flex items-center justify-center px-5 py-2.5 rounded-2xl text-white text-sm font-semibold uppercase tracking-[0.08em] transition-all duration-300 hover:scale-[1.02] hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-[#d4a03c]/50 focus:ring-offset-2 focus:ring-offset-[#0f0e0c] flex-shrink-0 justify-self-end"
                 style={{
                   background: "linear-gradient(135deg, #d4a03c 0%, #c4942e 50%, #b88620 100%)",
                   boxShadow: "0 0 20px rgba(212, 160, 60, 0.25), inset 0 1px 0 rgba(255,255,255,0.15)",
@@ -438,3 +438,4 @@ export function SiteHeader() {
     </header>
   );
 }
+
